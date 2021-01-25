@@ -1,0 +1,14 @@
+{
+	"AllSpelers": [
+
+		{
+			"naam": "AAA",
+			"score": 1
+		},
+		{
+			"naam": "BBB",
+			"score": 2
+		}
+	]
+
+}
