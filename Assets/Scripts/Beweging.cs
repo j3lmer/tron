@@ -229,11 +229,7 @@ public class Beweging : MonoBehaviour
 
 					case "Invincible":
 						setInvincible();
-							break;
-
-					case "RemoveWalls":
-						removeWalls();
-						break;
+							break;					
 
 					case "stopPlayer":
 						stopRandomPlayer();
@@ -241,6 +237,10 @@ public class Beweging : MonoBehaviour
 
 					case "poison":
 						killPlayer();
+						break;
+
+					case "RemoveWalls":
+						removeWalls();
 						break;
 
 					case "shoot":
