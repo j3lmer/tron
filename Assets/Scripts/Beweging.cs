@@ -13,7 +13,6 @@ public class Beweging : MonoBehaviour
 	///einde keycodes	
 
 
-
 	///Speler variables	
 		//snelheid variabel
 		public float speed;
@@ -27,7 +26,6 @@ public class Beweging : MonoBehaviour
 		//laatste directie op bewogen
 		Vector3 lastDirection;
 	///end speler variables
-
 
 
 	///wall variables
@@ -243,9 +241,9 @@ public class Beweging : MonoBehaviour
 						removeWalls();
 						break;
 
-					case "shoot":
-						shooter();
-						break;
+					//case "shoot":
+					//	shooter();
+					//	break;
 				}
 			}
 			else
@@ -268,14 +266,15 @@ public class Beweging : MonoBehaviour
 	}
 
 
-	void shooter()
+	async void removeWalls()
 	{
-
-	}
-
-	void removeWalls()
-	{
-
+		foreach(GameObject wall in GameObject.FindGameObjectsWithTag("playerWall"))
+		{
+			Color color = wall.GetComponent<SpriteRenderer>().color;
+			color.a = 0;
+			wall.GetComponent<SpriteRenderer>().color = color;
+		}
+		await new WaitForSeconds(2);
 	}
 
 	void killPlayer()

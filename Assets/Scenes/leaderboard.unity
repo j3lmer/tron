@@ -854,6 +854,7 @@ MonoBehaviour:
   Streamster: {fileID: 12800000, guid: 2d096deca6c83434d9952dba499f3e3e, type: 3}
   VCR: {fileID: 12800000, guid: d74b1f897a121b34db08d32cd1a44f99, type: 3}
   backButton: {fileID: 219184701}
+  backClip: {fileID: 8300000, guid: 401c2a53d44fa91468ff05e8bb5a2f95, type: 3}
 --- !u!4 &744639080
 Transform:
   m_ObjectHideFlags: 0

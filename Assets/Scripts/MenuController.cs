@@ -12,6 +12,10 @@ public class MenuController : MonoBehaviour
 	List<GameObject> menuList = new List<GameObject>();
 	//end menu blocks
 
+	public AudioClip MenuMusic;
+	public AudioClip buttonClick;
+
+
 	private void Start()
 	{
 		/* 
@@ -19,6 +23,16 @@ public class MenuController : MonoBehaviour
 		 * then sets onclickListeners to all buttons inside.
 		 */
 		getMenuObjects();
+		playMusic();
+	}
+
+	async void playMusic()
+	{
+		await new WaitForSeconds(0.1f);
+		if (SoundManager.Instance.MusicSource.isPlaying == false)
+		{
+			SoundManager.Instance.PlayMusic(MenuMusic);
+		}
 	}
 
 	void getMenuObjects()
@@ -70,6 +84,7 @@ public class MenuController : MonoBehaviour
 
 	void checkBtnTag(Button thisBtn)
 	{
+		SoundManager.Instance.Play(buttonClick);
 		switch (thisBtn.tag)
 		{
 			case "leaderboardTrigger":
@@ -77,6 +92,7 @@ public class MenuController : MonoBehaviour
 				break;
 
 			case "crossScene":
+				SoundManager.Instance.MusicSource.Stop();
 				CrossScene(thisBtn);
 				break;
 

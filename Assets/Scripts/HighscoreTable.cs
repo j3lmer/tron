@@ -17,9 +17,12 @@ public class HighscoreTable : MonoBehaviour
 	public Font Streamster; // leaderboard?
 	public Font VCR;
 
+
 	private List<string> highscores = new List<string>();
 
 	public Button backButton;
+
+	public AudioClip backClip;
 
 	private void Awake()
 	{
@@ -61,6 +64,7 @@ public class HighscoreTable : MonoBehaviour
 
 	private void back()
 	{
+		SoundManager.Instance.Play(backClip);
 		//laad mainscene wanneer getriggered
 		SceneManager.LoadScene("MainMenu");
 	}
