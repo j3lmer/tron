@@ -44,11 +44,17 @@ public class Beweging : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		//zet lastdirection naar inited direction zodat er geen foutje kan zijn aan t begin
+		//init default speed naar 16
 		speed = 16;
+
+		//haal lijst met controls op en zet de juiste bij deze speler
 		List<KeyCode[]> controls = Controls();
 		setControls(controls);
+
+		//zet lastdirection naar de initieel opbewogen directie-vector
 		initDirection();
+
+		//begin met het spawnen vam een muur
 		spawnWall();
 	}
 
@@ -85,15 +91,14 @@ public class Beweging : MonoBehaviour
 
 	void FixedUpdate()
 	{
+		//checken naar keyboard inputs
 		checkInputs();		
 	}
 
 	void checkInputs()
 	{
-		//schrijf zelf hoe je het wil
-		//wat moet er gebeuren
-		//dit is het speler script. het speler script moet de volgende dingen doen:
-		//richtingverandering, zonder dat het mogelijk is om een 180 te doen.
+		//check of er een keyboard input van de lokale keyset word gedaan
+		//als deze input niet het tegenovergestelde is van lastdirection, laat deze speler dan in deze richting bewegen
 		
 		if (Input.GetKey(upKey))
 		{
@@ -128,17 +133,20 @@ public class Beweging : MonoBehaviour
 			}		
 		}
 
+		//reken uit en zet neer waar de collider moet zijn (tussen hier en het einde van de laatste muur)
 		fitColliderBetween(wall, lastWallEnd, transform.position);
 	}
 
 	void directionChanger(Vector3 direction)
 	{
+		//code om van richting te veranderen, richting word veranderd naar de aangegeven richting
 		rb.velocity = direction * speed;
 		lastDirection = direction;
 	}
 
 	List<KeyCode[]> Controls()
 	{
+		//returns a list of key presets
 		KeyCode[] keyset1 = new KeyCode[] {KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D};
 		KeyCode[] keyset2 = new KeyCode[] {KeyCode.UpArrow, KeyCode.LeftArrow, KeyCode.DownArrow, KeyCode.RightArrow};
 		KeyCode[] keyset3 = new KeyCode[] {KeyCode.I, KeyCode.J, KeyCode.K, KeyCode.L};
@@ -160,23 +168,16 @@ public class Beweging : MonoBehaviour
 
 		switch (contInt)
 		{
-			case 0:
-				PlayerPrefs.SetInt("Controls", contInt + 1);
-				break;
-
 			case 1:
 				thisKeyset = controls[1];
-				PlayerPrefs.SetInt("Controls", contInt + 1);
 				break;
 
 			case 2:
 				thisKeyset = controls[2];
-				PlayerPrefs.SetInt("Controls", contInt + 1);
 				break;
 
 			case 3:
 				thisKeyset = controls[3];
-				PlayerPrefs.SetInt("Controls", contInt + 1);
 				break;
 		}
 
@@ -184,6 +185,7 @@ public class Beweging : MonoBehaviour
 		leftKey = thisKeyset[1];
 		downKey = thisKeyset[2];
 		rightKey = thisKeyset[3];
+		PlayerPrefs.SetInt("Controls", contInt + 1);
 	}
 
 	void spawnWall()
@@ -213,12 +215,16 @@ public class Beweging : MonoBehaviour
 	void OnTriggerEnter2D(Collider2D co)
 	{
 		//print(co.name);
-		// Not the current wall?
+		// Not the current wall(die je achter je aan trekt)?
 		if (co != wall)
 		{
+			//als het de tag "Powerup" draagt
 			if(co.tag == "Powerup")
 			{
+				//vernietig de powerup
 				Destroy(co.gameObject);
+
+				//check de naam voor de type powerup
 				switch (co.name)
 				{
 					case "SpeedBoost":
@@ -246,13 +252,17 @@ public class Beweging : MonoBehaviour
 					//	break;
 				}
 			}
+			//als het niet de tag powerup draagt
 			else
 			{
+				//en als de speler niet ondoodbaar is op dit moment
 				if (!Invincible)
 				{
+					//vernietig speler
 					print("Player lost: " + name);
 					Destroy(gameObject);
 				}
+				//als de speler wel ondoodbaar is op dit moment
 				else
 				{
 					if(co.tag == "wall")

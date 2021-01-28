@@ -31,7 +31,6 @@ public class gameController : MonoBehaviour
 
 		PlayerPrefs.SetInt("placedPlayers", 1);
 		PlayerPrefs.SetInt("Controls", 0);
-
 	}
 
 	List<int> getPlayerPrefs()
