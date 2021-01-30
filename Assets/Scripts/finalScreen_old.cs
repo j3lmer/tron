@@ -112,7 +112,6 @@ public class finalScreen_old : MonoBehaviour
 
 	public void ok()
 	{
-		print("test");
 		//wintext weghalen
 		if (winText.text.Contains("heeft gewonnen!") || winText.text.Contains("Gelijkspel!"))
 		{

@@ -1913,6 +1913,11 @@ MonoBehaviour:
   greenwall: {fileID: 2522293427438623185, guid: 9b17c91c610da844e8e6495aba293099,
     type: 3}
   timer: {fileID: 17709320}
+  three: {fileID: 8300000, guid: 78782886a24e4914e8a41627bd7401b3, type: 3}
+  two: {fileID: 8300000, guid: 2b5775d0938a6804395c34b6d01109c8, type: 3}
+  one: {fileID: 8300000, guid: 745dd57d5ec1d2347ad82c0f9b2bcac2, type: 3}
+  zero: {fileID: 8300000, guid: 478dc278656d44443893965514f23919, type: 3}
+  gameplayMusic: {fileID: 8300000, guid: bea107eb5141a9b44a825a13ed63224d, type: 3}
 --- !u!1 &1884116428
 GameObject:
   m_ObjectHideFlags: 0
