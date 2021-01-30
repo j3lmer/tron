@@ -45,16 +45,20 @@ public class gameController : MonoBehaviour
 	{
 		Time.timeScale = 0f;
 		timer.text = "3";
+		timer.color = Color.cyan;
 		await new WaitForSecondsRealtime(1);
 		timer.text = "2";
+		timer.color = Color.red;
 		await new WaitForSecondsRealtime(1);
 		timer.text = "1";
+		timer.color = Color.yellow;
 		await new WaitForSecondsRealtime(1);
 		timer.text = "GO!";
+		timer.color = Color.green;
+		Time.timeScale = 1f;
 		await new WaitForSecondsRealtime(1);
 		timer.text = "";
 
-		Time.timeScale = 1f;
 	}
 
 	List<int> getPlayerPrefs()
