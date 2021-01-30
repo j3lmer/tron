@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class gameController : MonoBehaviour
@@ -16,11 +17,15 @@ public class gameController : MonoBehaviour
 		public GameObject yellowwall;
 		public GameObject greenwall;
 	/// end prefab variables
-	
 
+	//timer variable
+	public TextMeshProUGUI timer;
 
 	void Start()
 	{
+
+		StartingTimer();
+
 		List<int> values = getPlayerPrefs();
 
 		List<Vector3> startPositions = getStartPositions();
@@ -34,6 +39,22 @@ public class gameController : MonoBehaviour
 
 		PlayerPrefs.SetInt("placedPlayers", 1);
 		PlayerPrefs.SetInt("Controls", 0);
+	}
+
+	async void StartingTimer()
+	{
+		Time.timeScale = 0f;
+		timer.text = "3";
+		await new WaitForSecondsRealtime(1);
+		timer.text = "2";
+		await new WaitForSecondsRealtime(1);
+		timer.text = "1";
+		await new WaitForSecondsRealtime(1);
+		timer.text = "GO!";
+		await new WaitForSecondsRealtime(1);
+		timer.text = "";
+
+		Time.timeScale = 1f;
 	}
 
 	List<int> getPlayerPrefs()
