@@ -100,11 +100,10 @@ public class MenuController : MonoBehaviour
 				menuActivator(thisBtn);
 				try
 				{
-					Toggle mute = GameObject.Find("Toggle").GetComponent<Toggle>();
-					if(mute.isOn != SoundManager.Instance.MusicSource.mute)
-					{
-						mute.isOn = SoundManager.Instance.MusicSource.mute;
-					}
+					Toggle mute = GameObject.Find("Toggle").GetComponent<Toggle>();					
+					mute.isOn = SoundManager.Instance.MusicSource.mute;					
+					Slider slider = GameObject.Find("Slider").GetComponent<Slider>();
+					slider.value = SoundManager.Instance.MusicSource.volume;
 				}
 				catch
 				{
@@ -119,10 +118,6 @@ public class MenuController : MonoBehaviour
 			case "exit":
 				exit();
 				break;
-
-			//case "mute":
-			//	mute();
-			//	break;
 		}
 	}
 
