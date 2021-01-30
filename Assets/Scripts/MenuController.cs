@@ -98,6 +98,18 @@ public class MenuController : MonoBehaviour
 
 			case "menuActivator":
 				menuActivator(thisBtn);
+				try
+				{
+					Toggle mute = GameObject.Find("Toggle").GetComponent<Toggle>();
+					if(mute.isOn != SoundManager.Instance.MusicSource.mute)
+					{
+						mute.isOn = SoundManager.Instance.MusicSource.mute;
+					}
+				}
+				catch
+				{
+					break;
+				}
 				break;
 
 			case "backBtn":
@@ -107,6 +119,10 @@ public class MenuController : MonoBehaviour
 			case "exit":
 				exit();
 				break;
+
+			//case "mute":
+			//	mute();
+			//	break;
 		}
 	}
 
@@ -193,6 +209,21 @@ public class MenuController : MonoBehaviour
 	void PVE()
 	{
 		PlayerPrefs.SetInt("PVP", 0);
+	}
+
+	public void mute()
+	{
+		Toggle mute = GameObject.Find("Toggle").GetComponent<Toggle>();				
+		switch (mute.isOn)
+		{
+			case true:
+				SoundManager.Instance.MusicSource.mute = true;
+				break;
+
+			case false:
+				SoundManager.Instance.MusicSource.mute = false;
+				break;
+		}
 	}
 
 	void CrossScene(Button button)
