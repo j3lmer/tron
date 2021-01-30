@@ -35,6 +35,7 @@ public class loadFinal : MonoBehaviour
 					SceneManager.LoadScene("finalScreen");
 					PlayerPrefs.SetInt("placedPlayers", 0);
 					PlayerPrefs.GetInt("controls", 0);
+					PlayerPrefs.SetString("winner", winningName);
 				}
 			} 
 			//als beide spelers dood zijn, geef gelijkspel mee als winnaam
@@ -46,6 +47,7 @@ public class loadFinal : MonoBehaviour
 				SceneManager.LoadScene("finalScreen");
 				PlayerPrefs.SetInt("placedPlayers", 0);
 				PlayerPrefs.GetInt("controls", 0);
+				PlayerPrefs.SetString("winner", winningName);
 			}
 		}
 	}

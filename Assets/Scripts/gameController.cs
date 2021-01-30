@@ -10,10 +10,13 @@ public class gameController : MonoBehaviour
 	 * zet ze op de juiste plek en geef ze de juiste initiele velocity mee
 	 */
 
-	public GameObject pinkwall;
-	public GameObject cyanwall;
-	public GameObject yellowwall;
-	public GameObject greenwall;
+	/// wall prefab variables
+		public GameObject pinkwall;
+		public GameObject cyanwall;
+		public GameObject yellowwall;
+		public GameObject greenwall;
+	/// end prefab variables
+	
 
 
 	void Start()

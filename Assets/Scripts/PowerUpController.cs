@@ -84,7 +84,7 @@ public class PowerUpController : MonoBehaviour
 
 			int powerupNr = Random.Range(0, 4);
 
-			if(j % 1 == 0)
+			if(j % 10 == 0)
 			{
 				thisdot.name = pUps[5];
 				thisdot.GetComponent<SpriteRenderer>().color = colors[5];

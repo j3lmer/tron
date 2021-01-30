@@ -278,6 +278,7 @@ public class Beweging : MonoBehaviour
 
 	async void removeWalls()
 	{
+		//WIP: remove all walls in current scene for fresh start
 		foreach(GameObject wall in GameObject.FindGameObjectsWithTag("playerWall"))
 		{
 			Color color = wall.GetComponent<SpriteRenderer>().color;
@@ -289,11 +290,13 @@ public class Beweging : MonoBehaviour
 
 	void killPlayer()
 	{
+		//destroys this player when hit
 		Destroy(gameObject);
 	}
 
 	async void stopRandomPlayer()
 	{
+		//tries to select a random player, if random player is this player, do thisplayer +1, or thisplayer -1
 		GameObject thisPlayer = gameObject;
 
 		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
@@ -329,6 +332,8 @@ public class Beweging : MonoBehaviour
 
 	async void speedboost()
 	{
+		//temporarily set speed variable higher and call directionchanger so this is actually done
+		//then set speed to original variable
 		speed = 30f;
 		directionChanger(lastDirection);
 		await new WaitForSeconds(4);
@@ -337,6 +342,7 @@ public class Beweging : MonoBehaviour
 
 	async void setInvincible()
 	{
+		//set bool Invincible to true for four seconds
 		Invincible = true;
 		await new WaitForSeconds(4);
 		Invincible = false;		
@@ -344,6 +350,7 @@ public class Beweging : MonoBehaviour
 
 	void doInvincible()
 	{
+		//if Invincible is true, grab all walls and set color to gray
 		if (Invincible)
 		{
 			string wallname = wall.name;
@@ -357,6 +364,7 @@ public class Beweging : MonoBehaviour
 				}
 			}
 		}
+		//if not, if the wall color is still gray, set all walls to the original color
 		else
 		{
 			if(wall.GetComponent<SpriteRenderer>().color == Color.gray)
@@ -377,6 +385,7 @@ public class Beweging : MonoBehaviour
 
 	private void Update()
 	{			
+		//check if Invincible is true every frame
 		doInvincible();	
 	}
 }
