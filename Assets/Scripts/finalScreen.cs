@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-public class FinalScreen : MonoBehaviour
+public class finalScreen : MonoBehaviour
 {
 	public Canvas canvas;
 	public TMP_FontAsset winfont;

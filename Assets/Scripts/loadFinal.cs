@@ -32,12 +32,15 @@ public class loadFinal : MonoBehaviour
 					winningName = player.name;
 					i++; 
 					StaticClass.CrossSceneInformation = winningName;
-					SceneManager.LoadScene("finalScreen");
+					SceneManager.LoadScene("finalScreen1");
 					PlayerPrefs.SetInt("placedPlayers", 0);
 					PlayerPrefs.GetInt("controls", 0);
 					PlayerPrefs.SetString("winner", winningName);
 				}
-				SoundManager.Instance.MusicSource.Stop();
+				if (SoundManager.Instance.MusicSource.isPlaying)
+				{
+					SoundManager.Instance.MusicSource.Stop();
+				}
 			} 
 			//als beide spelers dood zijn, geef gelijkspel mee als winnaam
 			else if(allUsers.Length == 0)
@@ -45,11 +48,14 @@ public class loadFinal : MonoBehaviour
 				winningName = "Gelijkspel!";
 				i++;
 				StaticClass.CrossSceneInformation = winningName;
-				SceneManager.LoadScene("finalScreen");
+				SceneManager.LoadScene("finalScreen1");
 				PlayerPrefs.SetInt("placedPlayers", 0);
 				PlayerPrefs.GetInt("controls", 0);
 				PlayerPrefs.SetString("winner", winningName);
-				SoundManager.Instance.MusicSource.Stop();
+				if (SoundManager.Instance.MusicSource.isPlaying)
+				{
+					SoundManager.Instance.MusicSource.Stop();
+				}
 			}
 		}
 	}

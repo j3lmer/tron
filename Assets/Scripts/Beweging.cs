@@ -150,7 +150,7 @@ public class Beweging : MonoBehaviour
 		KeyCode[] keyset1 = new KeyCode[] {KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D};
 		KeyCode[] keyset2 = new KeyCode[] {KeyCode.UpArrow, KeyCode.LeftArrow, KeyCode.DownArrow, KeyCode.RightArrow};
 		KeyCode[] keyset3 = new KeyCode[] {KeyCode.I, KeyCode.J, KeyCode.K, KeyCode.L};
-		KeyCode[] keyset4 = new KeyCode[] {KeyCode.Alpha8, KeyCode.Alpha4, KeyCode.Alpha5, KeyCode.Alpha6};
+		KeyCode[] keyset4 = new KeyCode[] {KeyCode.Keypad8, KeyCode.Keypad4, KeyCode.Keypad5, KeyCode.Keypad6};
 
 		List<KeyCode[]> keysets = new List<KeyCode[]>();
 		keysets.Add(keyset1);
@@ -180,7 +180,7 @@ public class Beweging : MonoBehaviour
 				thisKeyset = controls[3];
 				break;
 		}
-
+	
 		upKey = thisKeyset[0];
 		leftKey = thisKeyset[1];
 		downKey = thisKeyset[2];
