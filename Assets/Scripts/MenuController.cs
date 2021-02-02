@@ -12,9 +12,10 @@ public class MenuController : MonoBehaviour
 	List<GameObject> menuList = new List<GameObject>();
 	//end menu blocks
 
+	//audioclips
 	public AudioClip MenuMusic;
 	public AudioClip buttonClick;
-
+	//end clips
 
 	private void Start()
 	{
@@ -25,6 +26,7 @@ public class MenuController : MonoBehaviour
 		getMenuObjects();
 		playMusic();
 	}
+
 
 	async void playMusic()
 	{

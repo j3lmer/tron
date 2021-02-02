@@ -111,8 +111,8 @@ public class gameController : MonoBehaviour
 		List<Vector3> startPositions = new List<Vector3>();
 		startPositions.Add(new Vector3(-60.5f, 52.2f, 0));
 		startPositions.Add(new Vector3(65.687f, 52.23f, 0));
-		startPositions.Add(new Vector3(65.639f, -56.006f, 0));
-		startPositions.Add(new Vector3(-60.49f, -55.95f, 0));		
+		startPositions.Add(new Vector3(-60.49f, -55.95f, 0));
+		startPositions.Add(new Vector3(65.639f, -56.006f, 0));			
 
 		return startPositions;
 	}
@@ -351,8 +351,8 @@ public class gameController : MonoBehaviour
 		List<Vector3> dir = new List<Vector3>();
 		dir.Add(Vector3.right);
 		dir.Add(Vector3.down);
-		dir.Add(Vector3.left);
 		dir.Add(Vector3.up);
+		dir.Add(Vector3.left);
 		return dir;
 	}
 	
