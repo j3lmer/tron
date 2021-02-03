@@ -275,7 +275,7 @@ public class MenuController : MonoBehaviour
 
 	void invokeLeaderboard()
 	{
-		SceneManager.LoadScene(3);
+		SceneManager.LoadScene(2);
 	}
 
 	void home(Button button)

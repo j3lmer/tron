@@ -152,14 +152,9 @@ public class HighscoreTable : MonoBehaviour
 			{
 				entryTransform = Instantiate(entryTemplate, entryContainer);
 				var scoretext = entryTransform.GetChild(0);
-				//var naamtext = entryTransform.GetChild(1); KAN DIT WEG? UITZOEKEN.
-				//var postext = entryTransform.GetChild(2);	^^^^^^^^^^^^^^^^^^^^^^^^
 
 				// error weergeven
 				scoretext.GetComponent<UnityEngine.UI.Text>().text = "Gefaald om spelerdata op te halen, Probeer een potje te spelen!";
-
-				//naamtext.GetComponent<UnityEngine.UI.Text>().text = ""; KAN DIT WEG? UITZOEKEN.
-				//postext.GetComponent<UnityEngine.UI.Text>().text = ""; ^^^^^^^^^^^^^^^^^^^^^^^^
 			}
 		}
 	}

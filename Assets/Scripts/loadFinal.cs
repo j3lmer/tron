@@ -25,14 +25,13 @@ public class loadFinal : MonoBehaviour
 		if (i == 0) 
 		{ 
 			if(allUsers.Length < 2 && allUsers.Length > 0)
-			{
-			
+			{			
 				foreach (GameObject player in allUsers)
 				{
 					winningName = player.name;
 					i++; 
 					StaticClass.CrossSceneInformation = winningName;
-					SceneManager.LoadScene("finalScreen1");
+					SceneManager.LoadScene("finalScreen");
 					PlayerPrefs.SetInt("placedPlayers", 0);
 					PlayerPrefs.GetInt("controls", 0);
 					PlayerPrefs.SetString("winner", winningName);
@@ -48,7 +47,7 @@ public class loadFinal : MonoBehaviour
 				winningName = "Gelijkspel!";
 				i++;
 				StaticClass.CrossSceneInformation = winningName;
-				SceneManager.LoadScene("finalScreen1");
+				SceneManager.LoadScene("finalScreen");
 				PlayerPrefs.SetInt("placedPlayers", 0);
 				PlayerPrefs.GetInt("controls", 0);
 				PlayerPrefs.SetString("winner", winningName);
