@@ -106,6 +106,7 @@ public class MenuController : MonoBehaviour
 					mute.isOn = SoundManager.Instance.MusicSource.mute;					
 					Slider slider = GameObject.Find("Slider").GetComponent<Slider>();
 					slider.value = SoundManager.Instance.MusicSource.volume;
+					//slider.onValueChanged.AddListener(delegate { }) // slider werkt niet meer als ik uit scene ben geweest, dontdestroyonload? ander script?
 				}
 				catch
 				{

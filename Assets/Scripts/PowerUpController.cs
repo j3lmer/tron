@@ -14,9 +14,6 @@ public class PowerUpController : MonoBehaviour
 	{
 		holders = fillHolders();
 
-		GameObject outerObj = getOuterWalls(holders);
-		GameObject innerObj = getInnerWalls(holders);
-
 		int timeStamp = randTime();
 
 		List<string> powerups = getPowerups();
@@ -32,14 +29,12 @@ public class PowerUpController : MonoBehaviour
 		Color32 invinciColor = new Color32(251, 184, 41, 255);
 		Color32 poison = new Color32(147, 229, 30, 255);
 		Color stopColor = Color.red;
-		Color shoot = Color.yellow;
 		List<Color> colors = new List<Color>();
 
 		colors.Add(speedColor);
 		colors.Add(invinciColor);		
 		colors.Add(stopColor);
 		colors.Add(poison);
-		colors.Add(shoot);
 
 		colors.Add(Color.magenta);
 
@@ -53,7 +48,6 @@ public class PowerUpController : MonoBehaviour
 		powerupNames.Add("Invincible");
 		powerupNames.Add("stopPlayer");
 		powerupNames.Add("poison");
-		powerupNames.Add("shoot");
 
 		powerupNames.Add("RemoveWalls");
 		return powerupNames;
@@ -80,7 +74,6 @@ public class PowerUpController : MonoBehaviour
 			thisdot.transform.localScale = thisdot.transform.localScale * 2;
 			thisdot.tag = "Powerup";
 			j++;
-			print(j);
 
 			int powerupNr = Random.Range(0, 4);
 
@@ -115,14 +108,5 @@ public class PowerUpController : MonoBehaviour
 		GameObject[] holders = GameObject.FindGameObjectsWithTag("wallHolder");
 		return holders;
 	}
-	GameObject getOuterWalls(GameObject[] holders)
-	{
-		var outerwalls = holders[1];
-		return outerwalls;
-	}
-	GameObject getInnerWalls(GameObject[] holders)
-	{
-		var innerwalls = holders[0];
-		return innerwalls;
-	}
+
 }

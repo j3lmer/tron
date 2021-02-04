@@ -10,8 +10,8 @@ public class Beweging : MonoBehaviour
 		public KeyCode downKey;
 		public KeyCode rightKey;
 		public KeyCode leftKey;
-	///einde keycodes	
-
+	///einde keycodes
+	
 
 	///Speler variables	
 		//snelheid variabel
@@ -246,10 +246,6 @@ public class Beweging : MonoBehaviour
 					case "RemoveWalls":
 						removeWalls();
 						break;
-
-					//case "shoot":
-					//	shooter();
-					//	break;
 				}
 			}
 			//als het niet de tag powerup draagt
@@ -274,7 +270,7 @@ public class Beweging : MonoBehaviour
 			}			
 		}
 	}
-
+	
 
 	async void removeWalls()
 	{
