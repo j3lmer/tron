@@ -53,33 +53,28 @@ public class gameController : MonoBehaviour
 		Time.timeScale = 0f;
 		timer.text = "3";
 		timer.color = Color.cyan;
-		SoundManager.Instance.EffectsSource.clip = three;
-		SoundManager.Instance.EffectsSource.Play();
+		SoundManager.Instance.Play(three);
 
 		await new WaitForSecondsRealtime(1);
 		timer.text = "2";
 		timer.color = Color.red;
-		SoundManager.Instance.EffectsSource.clip = two;
-		SoundManager.Instance.EffectsSource.Play();
+		SoundManager.Instance.Play(two);
 
 		await new WaitForSecondsRealtime(1);
 		timer.text = "1";
 		timer.color = Color.yellow;
-		SoundManager.Instance.EffectsSource.clip = one;
-		SoundManager.Instance.EffectsSource.Play();
+		SoundManager.Instance.Play(one);
 
 		await new WaitForSecondsRealtime(1);
 		timer.text = "GO!";
 		timer.color = Color.green;
 		Time.timeScale = 1f;
-		SoundManager.Instance.EffectsSource.clip = zero;
-		SoundManager.Instance.EffectsSource.Play();
+		SoundManager.Instance.Play(zero);
 
 		await new WaitForSecondsRealtime(1);
 		timer.text = "";
 		SoundManager.Instance.EffectsSource.clip = null;
-		SoundManager.Instance.MusicSource.clip = gameplayMusic;
-		SoundManager.Instance.MusicSource.Play();
+		SoundManager.Instance.PlayMusic(gameplayMusic);
 	}
 
 	List<int> getPlayerPrefs()
@@ -129,8 +124,6 @@ public class gameController : MonoBehaviour
 	{
 		//values[0] = pvp.
 		//values[1] = (amount of) contestants
-
-		//startpos in order = linksboven, rechtsboven, linksonder, rechtsonder.
 
 		int pvp = values[0];
 		int cont = values[1];

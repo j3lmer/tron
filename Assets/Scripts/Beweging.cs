@@ -99,38 +99,38 @@ public class Beweging : MonoBehaviour
 	{
 		//check of er een keyboard input van de lokale keyset word gedaan
 		//als deze input niet het tegenovergestelde is van lastdirection, laat deze speler dan in deze richting bewegen
-		
-		if (Input.GetKey(upKey))
+
+		if (Input.GetKeyDown(upKey))
 		{
-			if(lastDirection != Vector3.down)
+			if (lastDirection != Vector3.down)
 			{
 				directionChanger(Vector3.up);
 				spawnWall();
-			}			
+			}
 		}
-		else if (Input.GetKey(leftKey))
+		else if (Input.GetKeyDown(leftKey))
 		{
-			if(lastDirection != Vector3.right)
+			if (lastDirection != Vector3.right)
 			{
 				directionChanger(Vector3.left);
 				spawnWall();
-			}			
+			}
 		}
-		else if (Input.GetKey(downKey))
+		else if (Input.GetKeyDown(downKey))
 		{
-			if(lastDirection != Vector3.up)
+			if (lastDirection != Vector3.up)
 			{
 				directionChanger(Vector3.down);
 				spawnWall();
-			}			
-		}		
-		else if (Input.GetKey(rightKey))
+			}
+		}
+		else if (Input.GetKeyDown(rightKey))
 		{
-			if(lastDirection != Vector3.left)
+			if (lastDirection != Vector3.left)
 			{
 				directionChanger(Vector3.right);
 				spawnWall();
-			}		
+			}
 		}
 
 		//reken uit en zet neer waar de collider moet zijn (tussen hier en het einde van de laatste muur)
@@ -382,6 +382,7 @@ public class Beweging : MonoBehaviour
 	private void Update()
 	{			
 		//check if Invincible is true every frame
-		doInvincible();	
+		doInvincible();
+		checkInputs();
 	}
 }
