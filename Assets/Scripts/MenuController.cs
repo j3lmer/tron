@@ -28,7 +28,6 @@ public class MenuController : MonoBehaviour
 	}
 
 
-
 	async void playMusic()
 	{
 		await new WaitForSeconds(0.1f);

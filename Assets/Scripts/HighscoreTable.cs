@@ -71,7 +71,7 @@ public class HighscoreTable : MonoBehaviour
 
 	private void makeLeaderboard()
 	{
-		float templateHeight = 30f; // ruimte tussen entrys
+		float templateHeight = 35f; // ruimte tussen entrys
 
 		string jsonPath = Application.dataPath + "/json/saveFile.json"; // path waar de json file moet (gaan) staan
 		string json; // initialised empty string voor json conversion
