@@ -17,6 +17,10 @@ public class MenuController : MonoBehaviour
 	public AudioClip buttonClick;
 	//end clips
 
+
+	Slider slider;
+	private bool sliderActive = false;
+
 	private void Start()
 	{
 		/* 
@@ -104,9 +108,11 @@ public class MenuController : MonoBehaviour
 				{
 					Toggle mute = GameObject.Find("Toggle").GetComponent<Toggle>();					
 					mute.isOn = SoundManager.Instance.MusicSource.mute;					
-					Slider slider = GameObject.Find("Slider").GetComponent<Slider>();
+					slider = GameObject.Find("Slider").GetComponent<Slider>();
 					slider.value = SoundManager.Instance.MusicSource.volume;
-					//slider.onValueChanged.AddListener(delegate { }) // slider werkt niet meer als ik uit scene ben geweest, dontdestroyonload? ander script?
+					slider.value = SoundManager.Instance.MusicSource.volume;
+					sliderActive = true;
+					//DontDestroySlider dds = new DontDestroySlider(slider);
 				}
 				catch
 				{
@@ -116,11 +122,21 @@ public class MenuController : MonoBehaviour
 
 			case "backBtn":
 				home(thisBtn);
+				sliderActive = false;
 				break;
 
 			case "exit":
+				sliderActive = false;
 				exit();
 				break;
+		}
+	}
+
+	private void Update()
+	{
+		if (sliderActive)
+		{
+			GameObject.Find("SoundManager").GetComponent<VolumeValueChange>().SetVolume(slider.value);
 		}
 	}
 

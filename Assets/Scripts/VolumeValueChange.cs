@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class VolumeValueChange : MonoBehaviour {
 
@@ -9,12 +10,14 @@ public class VolumeValueChange : MonoBehaviour {
     // by dragging slider knob
     private float musicVolume = 1f;
 
+
 	// Use this for initialization
 	void Start () {
 
         // Assign Audio Source component to control it
-        audioSrc = SoundManager.Instance.MusicSource;
+        audioSrc = SoundManager.Instance.MusicSource;        
 	}
+
 	
 	// Update is called once per frame
 	void Update () {
@@ -31,3 +34,23 @@ public class VolumeValueChange : MonoBehaviour {
         musicVolume = vol;
     }
 }
+
+//public class DontDestroySlider : MonoBehaviour
+//{
+
+//    public Slider slider;
+
+//	public DontDestroySlider(Slider Slider)
+//	{
+//        slider = Slider;
+//        slider.onValueChanged.AddListener(delegate { setSetter(slider); });
+
+//	}
+
+//    void setSetter(Slider slider)
+//	{
+//        GameObject.Find("");
+//	}
+
+    
+//}
