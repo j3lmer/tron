@@ -18,7 +18,7 @@ public class BotBeweging : MonoBehaviour
     {
         path = new NavMeshPath();
         elapsed = 0.0f;
-        target = GameObject.FindObjectOfType<Beweging>();
+        target = FindObjectOfType<Beweging>();
     }
 
     void Update()
