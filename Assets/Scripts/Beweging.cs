@@ -40,6 +40,10 @@ public class Beweging : MonoBehaviour
 	///end wall variables
 
 
+	//derezz sound
+	private AudioClip derezz;
+
+
 
 	// Start is called before the first frame update
 	void Start()
@@ -56,6 +60,8 @@ public class Beweging : MonoBehaviour
 
 		//begin met het spawnen vam een muur
 		spawnWall();
+		derezz = Resources.Load<AudioClip>("/music/derezz/");
+		print(derezz);
 	}
 
 	void initDirection()

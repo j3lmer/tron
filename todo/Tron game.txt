@@ -1,0 +1,14 @@
+Tron game:
+product om te realiseren:
+2d game met kleine motortjes(met mannetjes?) die een lijn achter zich laten in de primaire kleur van het motortje zelf
+wanneer een motor tegen de lijn van een andere motor aan rijd is de crasher geelimineerd
+
+
+benodigheden:
+een map (random gegenereerd?)
+motor sprites
+collision detection
+vooruit bewegende kracht toevoegen
+
+
+
