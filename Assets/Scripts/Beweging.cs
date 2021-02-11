@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Networking;
+using System;
 
 public class Beweging : MonoBehaviour
 {
@@ -60,8 +62,10 @@ public class Beweging : MonoBehaviour
 
 		//begin met het spawnen vam een muur
 		spawnWall();
-		derezz = Resources.Load<AudioClip>("/music/derezz/");
-		print(derezz);
+		
+		
+		//print(derezz);
+		
 	}
 
 	void initDirection()
@@ -262,21 +266,64 @@ public class Beweging : MonoBehaviour
 				{
 					//vernietig speler
 					print("Player lost: " + name);
-					Destroy(gameObject);
+					StartCoroutine(LoadAudio());
 				}
 				//als de speler wel ondoodbaar is op dit moment
 				else
 				{
-					if(co.tag == "wall")
+					if (co.tag == "wall")
 					{
 						print("Player lost: " + name);
-						Destroy(gameObject);
+						StartCoroutine(LoadAudio());
 					}
 				}				
 			}			
 		}
 	}
-	
+
+
+	IEnumerator LoadAudio()
+	{
+		string link = "file://" + Application.dataPath + "/Resources/music/derezz.ogg";
+		using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(link, AudioType.OGGVORBIS))
+		{
+			yield return www.SendWebRequest();
+
+			if (www.error != null)
+			{
+				Debug.Log(www.error);
+
+			}
+			else
+			{
+				SoundManager.Instance.MusicSource.Stop();
+				derezz = DownloadHandlerAudioClip.GetContent(www);
+				print(derezz);
+				SoundManager.Instance.Play(derezz);
+
+				//haal deze speler op, en de lightwall die daar aan vast zit, en zet de lightwalls op inactive en de speler invisible
+				GameObject player = gameObject;
+				Color o = player.GetComponent<SpriteRenderer>().color;
+				o.a = 0;
+				player.GetComponent<SpriteRenderer>().color = o;
+
+				string prefabname = wallprefab.name;
+				var walls = GameObject.FindGameObjectsWithTag("playerWall");
+
+				foreach(GameObject wall in walls)
+				{
+					if (wall.name.Contains(prefabname))
+					{
+						wall.SetActive(false);
+					}
+				}
+
+				yield return new WaitForSeconds(1);
+				Destroy(gameObject);
+			}
+		}
+	}
+
 
 	async void removeWalls()
 	{
@@ -292,6 +339,7 @@ public class Beweging : MonoBehaviour
 
 	void killPlayer()
 	{
+		SoundManager.Instance.Play(derezz);
 		//destroys this player when hit
 		Destroy(gameObject);
 	}
@@ -303,7 +351,7 @@ public class Beweging : MonoBehaviour
 
 		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 
-		var random = Random.Range(0, players.Length-1);
+		var random = UnityEngine.Random.Range(0, players.Length-1);
 
 		var selectedplayer = players[random];
 

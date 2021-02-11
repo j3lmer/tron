@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class gameController : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class gameController : MonoBehaviour
 	 * maak nieuwe spelers aan volgens deze variabelen
 	 * zet ze op de juiste plek en geef ze de juiste initiele velocity mee
 	 */
+	public GameObject plane;
 
 	/// wall prefab variables
 		public GameObject pinkwall;
@@ -30,6 +32,7 @@ public class gameController : MonoBehaviour
 	//end clips
 	void Start()
 	{
+		setPlane();		
 
 		StartingTimer();
 
@@ -46,6 +49,14 @@ public class gameController : MonoBehaviour
 
 		PlayerPrefs.SetInt("placedPlayers", 1);
 		PlayerPrefs.SetInt("Controls", 0);
+	}
+
+	void setPlane()
+	{
+		plane = GameObject.Find("surface");
+
+		plane.transform.rotation = Quaternion.Euler(90, 0, 0);
+		plane.AddComponent<NavMeshSurface>().BuildNavMesh();
 	}
 
 	async void StartingTimer()
@@ -137,7 +148,7 @@ public class gameController : MonoBehaviour
 					case 2:	
 						for (var i = 0; i < cont; i++)
 						{
-							GameObject thisPlayer = Instantiate<GameObject>(player);
+							GameObject thisPlayer = Instantiate(player);
 							thisPlayer.transform.position = startPos[i];
 							thisPlayer.SetActive(true);
 							names.Add($"Speler {i+1}");
@@ -150,7 +161,7 @@ public class gameController : MonoBehaviour
 					case 3:
 						for (var i = 0; i < cont; i++)
 						{
-							GameObject thisPlayer = Instantiate<GameObject>(player);
+							GameObject thisPlayer = Instantiate(player);
 							thisPlayer.transform.position = startPos[i];
 							thisPlayer.SetActive(true);
 							names.Add($"Speler {i + 1}");
@@ -163,7 +174,7 @@ public class gameController : MonoBehaviour
 					case 4:
 						for (var i = 0; i < cont; i++)
 						{
-							GameObject thisPlayer = Instantiate<GameObject>(player);
+							GameObject thisPlayer = Instantiate(player);
 							thisPlayer.transform.position = startPos[i];
 							thisPlayer.SetActive(true);
 							names.Add($"Speler {i + 1}");
@@ -184,7 +195,7 @@ public class gameController : MonoBehaviour
 						{
 							if(i == 0)
 							{
-								GameObject thisPlayer = Instantiate<GameObject>(player);
+								GameObject thisPlayer = Instantiate(player);
 								thisPlayer.transform.position = startPos[i];
 								thisPlayer.SetActive(true);
 								names.Add($"Speler {i + 1}");
@@ -194,7 +205,7 @@ public class gameController : MonoBehaviour
 							}
 							else
 							{
-								GameObject thisBot = Instantiate<GameObject>(player);
+								GameObject thisBot = Instantiate(player);
 								thisBot.transform.position = startPos[i];
 								thisBot.SetActive(true);
 								names.Add($"Bot {i + 1}");
@@ -209,7 +220,7 @@ public class gameController : MonoBehaviour
 						{
 							if (i == 0)
 							{
-								GameObject thisPlayer = Instantiate<GameObject>(player);
+								GameObject thisPlayer = Instantiate(player);
 								thisPlayer.transform.position = startPos[i];
 								thisPlayer.SetActive(true);
 								names.Add($"Speler {i + 1}");
@@ -219,7 +230,7 @@ public class gameController : MonoBehaviour
 							}
 							else
 							{
-								GameObject thisBot = Instantiate<GameObject>(player);
+								GameObject thisBot = Instantiate(player);
 								thisBot.transform.position = startPos[i];
 								thisBot.SetActive(true);
 								names.Add($"Bot {i + 1}");
@@ -234,7 +245,7 @@ public class gameController : MonoBehaviour
 						{
 							if (i == 0)
 							{
-								GameObject thisPlayer = Instantiate<GameObject>(player);
+								GameObject thisPlayer = Instantiate(player);
 								thisPlayer.transform.position = startPos[i];
 								thisPlayer.SetActive(true);
 								names.Add($"Speler {i + 1}");
@@ -244,7 +255,7 @@ public class gameController : MonoBehaviour
 							}
 							else
 							{
-								GameObject thisBot = Instantiate<GameObject>(player);
+								GameObject thisBot = Instantiate(player);
 								thisBot.transform.position = startPos[i];
 								thisBot.SetActive(true);
 								names.Add($"Bot {i + 1}");
@@ -291,8 +302,8 @@ public class gameController : MonoBehaviour
 					}
 					else
 					{
-						//thisplayer.AddComponent<botBeweging>(); //UNCOMMENT WHEN NESSECARY
-						print("hier moet je het botbeweging script aan toevoegen");
+						thisplayer.AddComponent<BotBeweging>(); //UNCOMMENT WHEN NESSECARY
+						//print("hier moet je het botbeweging script aan toevoegen");
 					}
 					break;
 			}
@@ -335,7 +346,16 @@ public class gameController : MonoBehaviour
 			var thisplayer = players[i];
 			//MOGELIJK LATER DIT VERANDEREN ALS JE JE EIGEN KLEUR MOET KIEZEN
 			var beweeg = thisplayer.GetComponent<Beweging>();
-			beweeg.wallprefab = walls[i];
+			if(beweeg != null)
+			{
+				beweeg.wallprefab = walls[i];
+			}
+			else
+			{
+				var botbeweeg = thisplayer.GetComponent<BotBeweging>();
+				botbeweeg.wallprefab = walls[i];
+			}
+
 		}
 	}
 
