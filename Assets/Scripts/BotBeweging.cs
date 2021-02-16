@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Networking;
 
-public class BotBeweging : MonoBehaviour
+public class BotBeweging : common
 {
     public Beweging target;
 

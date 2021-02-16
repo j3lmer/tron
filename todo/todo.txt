@@ -54,8 +54,9 @@ Possible additions
 
 todo short
 {
-	compatible maken met touchscreen (windows) (touchscreenbuttons?)	
+	maak common class voor powerups en beweging
 
+	compatible maken met touchscreen (windows) (touchscreenbuttons?)	
 
 	(shared) beweging code in botbeweging toevoegen
 	

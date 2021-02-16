@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine.Networking;
 using System;
 
-public class Beweging : MonoBehaviour
+public class Beweging : common
 {
 	///keycodes voor deze speler
 		public KeyCode upKey;
@@ -50,6 +50,8 @@ public class Beweging : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
+
+
 		//init default speed naar 16
 		speed = 16;
 

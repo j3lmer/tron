@@ -147,41 +147,22 @@ public class gameController : MonoBehaviour
 				{
 					case 2:	
 						for (var i = 0; i < cont; i++)
-						{
-							GameObject thisPlayer = Instantiate(player);
-							thisPlayer.transform.position = startPos[i];
-							thisPlayer.SetActive(true);
-							names.Add($"Speler {i+1}");
-							thisPlayer.name = names[i];
-							thisPlayer.tag = "Player";
-							setInitVelocity(thisPlayer, startPos);
+						{							
+							addPlayer(player, startPos, i, names);
 						}
 						break;
 
 					case 3:
 						for (var i = 0; i < cont; i++)
 						{
-							GameObject thisPlayer = Instantiate(player);
-							thisPlayer.transform.position = startPos[i];
-							thisPlayer.SetActive(true);
-							names.Add($"Speler {i + 1}");
-							thisPlayer.name = names[i];
-							thisPlayer.tag = "Player";
-							setInitVelocity(thisPlayer, startPos);
+							addPlayer(player, startPos, i, names);
 						}
 						break;
 
 					case 4:
 						for (var i = 0; i < cont; i++)
 						{
-							GameObject thisPlayer = Instantiate(player);
-							thisPlayer.transform.position = startPos[i];
-							thisPlayer.SetActive(true);
-							names.Add($"Speler {i + 1}");
-							thisPlayer.name = names[i];
-							thisPlayer.tag = "Player";
-							setInitVelocity(thisPlayer, startPos);
-
+							addPlayer(player, startPos, i, names);
 						}
 						break;
 				}
@@ -195,23 +176,11 @@ public class gameController : MonoBehaviour
 						{
 							if(i == 0)
 							{
-								GameObject thisPlayer = Instantiate(player);
-								thisPlayer.transform.position = startPos[i];
-								thisPlayer.SetActive(true);
-								names.Add($"Speler {i + 1}");
-								thisPlayer.name = names[i];
-								thisPlayer.tag = "Player";
-								setInitVelocity(thisPlayer, startPos);
+								addPlayer(player, startPos, i, names);
 							}
 							else
 							{
-								GameObject thisBot = Instantiate(player);
-								thisBot.transform.position = startPos[i];
-								thisBot.SetActive(true);
-								names.Add($"Bot {i + 1}");
-								thisBot.name = names[i];
-								thisBot.tag = "Player";
-								setInitVelocity(thisBot, startPos);
+								addBot(player, startPos, i, names);
 							}
 						}
 						break;
@@ -220,23 +189,11 @@ public class gameController : MonoBehaviour
 						{
 							if (i == 0)
 							{
-								GameObject thisPlayer = Instantiate(player);
-								thisPlayer.transform.position = startPos[i];
-								thisPlayer.SetActive(true);
-								names.Add($"Speler {i + 1}");
-								thisPlayer.name = names[i];
-								thisPlayer.tag = "Player";
-								setInitVelocity(thisPlayer, startPos);
+								addPlayer(player, startPos, i, names);
 							}
 							else
 							{
-								GameObject thisBot = Instantiate(player);
-								thisBot.transform.position = startPos[i];
-								thisBot.SetActive(true);
-								names.Add($"Bot {i + 1}");
-								thisBot.name = names[i];
-								thisBot.tag = "Player";
-								setInitVelocity(thisBot, startPos);
+								addBot(player, startPos, i, names);
 							}
 						}
 						break;
@@ -245,23 +202,11 @@ public class gameController : MonoBehaviour
 						{
 							if (i == 0)
 							{
-								GameObject thisPlayer = Instantiate(player);
-								thisPlayer.transform.position = startPos[i];
-								thisPlayer.SetActive(true);
-								names.Add($"Speler {i + 1}");
-								thisPlayer.name = names[i];
-								thisPlayer.tag = "Player";
-								setInitVelocity(thisPlayer, startPos);
+								addPlayer(player, startPos, i, names);
 							}
 							else
 							{
-								GameObject thisBot = Instantiate(player);
-								thisBot.transform.position = startPos[i];
-								thisBot.SetActive(true);
-								names.Add($"Bot {i + 1}");
-								thisBot.name = names[i];
-								thisBot.tag = "Player";
-								setInitVelocity(thisBot, startPos);
+								addBot(player, startPos, i, names);
 							}
 						}
 						break;
@@ -273,13 +218,7 @@ public class gameController : MonoBehaviour
 				cont = 2;
 				for (var i = 0; i < cont; i++)
 				{
-					GameObject thisPlayer = Instantiate<GameObject>(player);
-					thisPlayer.transform.position = startPos[i];
-					thisPlayer.SetActive(true);
-					names.Add($"Speler {i + 1}");
-					thisPlayer.name = names[i];
-					thisPlayer.tag = "Player";
-					setInitVelocity(thisPlayer, startPos);
+					addPlayer(player, startPos, i, names);
 				}
 				break;
 		}
@@ -308,6 +247,28 @@ public class gameController : MonoBehaviour
 					break;
 			}
 		}
+	}
+
+	void addPlayer(GameObject player, List<Vector3> startPos, int i, List<string> names)
+	{
+		GameObject thisPlayer = Instantiate(player);
+		thisPlayer.transform.position = startPos[i];
+		thisPlayer.SetActive(true);
+		names.Add($"Speler {i + 1}");
+		thisPlayer.name = names[i];
+		thisPlayer.tag = "Player";
+		setInitVelocity(thisPlayer, startPos);
+	}
+
+	void addBot(GameObject player, List<Vector3> startPos, int i, List<string> names)
+	{
+		GameObject thisBot = Instantiate(player);
+		thisBot.transform.position = startPos[i];
+		thisBot.SetActive(true);
+		names.Add($"Bot {i + 1}");
+		thisBot.name = names[i];
+		thisBot.tag = "Player";
+		setInitVelocity(thisBot, startPos);
 	}
 	
 	void setInitVelocity(GameObject player, List<Vector3> startPos)
