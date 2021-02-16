@@ -184,6 +184,7 @@ public class gameController : MonoBehaviour
 							}
 						}
 						break;
+
 					case 3:
 						for (var i = 0; i < cont; i++)
 						{
@@ -197,6 +198,7 @@ public class gameController : MonoBehaviour
 							}
 						}
 						break;
+
 					case 4:
 						for (var i = 0; i < cont; i++)
 						{
@@ -222,31 +224,6 @@ public class gameController : MonoBehaviour
 				}
 				break;
 		}
-
-		GameObject[] pMAdder = GameObject.FindGameObjectsWithTag("Player");
-		for (var j = 0; j < pMAdder.Length; j++)
-		{
-			var thisplayer = pMAdder[j];
-			//var test = thisplayer.AddComponent<color>();
-			switch (pvp)
-			{
-				case 1://PVP
-					thisplayer.AddComponent<Beweging>();
-					break;
-
-				case 0://PVE
-					if(thisplayer == pMAdder[0])
-					{
-						thisplayer.AddComponent<Beweging>();
-					}
-					else
-					{
-						thisplayer.AddComponent<BotBeweging>(); //UNCOMMENT WHEN NESSECARY
-						//print("hier moet je het botbeweging script aan toevoegen");
-					}
-					break;
-			}
-		}
 	}
 
 	void addPlayer(GameObject player, List<Vector3> startPos, int i, List<string> names)
@@ -258,6 +235,8 @@ public class gameController : MonoBehaviour
 		thisPlayer.name = names[i];
 		thisPlayer.tag = "Player";
 		setInitVelocity(thisPlayer, startPos);
+		thisPlayer.AddComponent<Beweging>();
+
 	}
 
 	void addBot(GameObject player, List<Vector3> startPos, int i, List<string> names)
@@ -269,6 +248,7 @@ public class gameController : MonoBehaviour
 		thisBot.name = names[i];
 		thisBot.tag = "Player";
 		setInitVelocity(thisBot, startPos);
+		thisBot.AddComponent<BotBeweging>();
 	}
 	
 	void setInitVelocity(GameObject player, List<Vector3> startPos)
