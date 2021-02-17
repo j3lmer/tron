@@ -60,46 +60,15 @@ public class Beweging : common
 		setControls(controls);
 
 		//zet lastdirection naar de initieel opbewogen directie-vector
-		initDirection();
+		lastDirection = initDirection();
+
+		wallPrefab = wallprefab;//set wallprefab in common class
 
 		//begin met het spawnen vam een muur
-		spawnWall();
-		
-		
-		//print(derezz);
-		
+		spawnWall();		
 	}
 
-	void initDirection()
-	{
-		rb = gameObject.GetComponent<Rigidbody2D>();
-		Vector3 vDir = rb.transform.InverseTransformDirection(rb.velocity);
 
-		if(vDir.x > 0)
-		{
-			//rechts
-			//print($"{rb.name} vdir.x groter = {vDir.x}");
-			lastDirection = Vector3.right;
-		}
-		else if(vDir.x < 0)
-		{
-			//links
-			//print($"{rb.name} vdir.x groter = {vDir.x}");
-			lastDirection = Vector3.left;
-		}
-		else if(vDir.y > 0) 
-		{
-			//omhoog
-			//print($"{rb.name} vdir.y groter = {vDir.y}");
-			lastDirection = Vector3.up;
-		}
-		else if(vDir.y < 0) 
-		{
-			//beneden
-			//print($"{rb.name} vdir.y kleiner = {vDir.y}");
-			lastDirection = Vector3.down;
-		}
-	}
 
 	void FixedUpdate()
 	{
@@ -116,7 +85,7 @@ public class Beweging : common
 		{
 			if (lastDirection != Vector3.down)
 			{
-				directionChanger(Vector3.up);
+				lastDirection = directionChanger(Vector3.up);
 				spawnWall();
 			}
 		}
@@ -124,7 +93,7 @@ public class Beweging : common
 		{
 			if (lastDirection != Vector3.right)
 			{
-				directionChanger(Vector3.left);
+				lastDirection = directionChanger(Vector3.left);
 				spawnWall();
 			}
 		}
@@ -132,7 +101,7 @@ public class Beweging : common
 		{
 			if (lastDirection != Vector3.up)
 			{
-				directionChanger(Vector3.down);
+				lastDirection = directionChanger(Vector3.down);
 				spawnWall();
 			}
 		}
@@ -140,7 +109,7 @@ public class Beweging : common
 		{
 			if (lastDirection != Vector3.left)
 			{
-				directionChanger(Vector3.right);
+				lastDirection = directionChanger(Vector3.right);
 				spawnWall();
 			}
 		}
@@ -149,12 +118,7 @@ public class Beweging : common
 		fitColliderBetween(wall, lastWallEnd, transform.position);
 	}
 
-	void directionChanger(Vector3 direction)
-	{
-		//code om van richting te veranderen, richting word veranderd naar de aangegeven richting
-		rb.velocity = direction * speed;
-		lastDirection = direction;
-	}
+	
 
 	List<KeyCode[]> Controls()
 	{
@@ -268,7 +232,7 @@ public class Beweging : common
 				{
 					//vernietig speler
 					print("Player lost: " + name);
-					StartCoroutine(LoadAudio());
+					StartCoroutine(deathAudio());
 				}
 				//als de speler wel ondoodbaar is op dit moment
 				else
@@ -276,7 +240,7 @@ public class Beweging : common
 					if (co.tag == "wall")
 					{
 						print("Player lost: " + name);
-						StartCoroutine(LoadAudio());
+						StartCoroutine(deathAudio());
 					}
 				}				
 			}			
@@ -284,156 +248,8 @@ public class Beweging : common
 	}
 
 
-	IEnumerator LoadAudio()
-	{
-		string link = "file://" + Application.dataPath + "/Resources/music/derezz.ogg";
-		using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(link, AudioType.OGGVORBIS))
-		{
-			yield return www.SendWebRequest();
+	
 
-			if (www.error != null)
-			{
-				Debug.Log(www.error);
-
-			}
-			else
-			{
-				SoundManager.Instance.MusicSource.Stop();
-				derezz = DownloadHandlerAudioClip.GetContent(www);
-				print(derezz);
-				SoundManager.Instance.Play(derezz);
-
-				//haal deze speler op, en de lightwall die daar aan vast zit, en zet de lightwalls op inactive en de speler invisible
-				GameObject player = gameObject;
-				Color o = player.GetComponent<SpriteRenderer>().color;
-				o.a = 0;
-				player.GetComponent<SpriteRenderer>().color = o;
-
-				string prefabname = wallprefab.name;
-				var walls = GameObject.FindGameObjectsWithTag("playerWall");
-
-				foreach(GameObject wall in walls)
-				{
-					if (wall.name.Contains(prefabname))
-					{
-						wall.SetActive(false);
-					}
-				}
-
-				yield return new WaitForSeconds(1);
-				Destroy(gameObject);
-			}
-		}
-	}
-
-
-	async void removeWalls()
-	{
-		//WIP: remove all walls in current scene for fresh start
-		foreach(GameObject wall in GameObject.FindGameObjectsWithTag("playerWall"))
-		{
-			Color color = wall.GetComponent<SpriteRenderer>().color;
-			color.a = 0;
-			wall.GetComponent<SpriteRenderer>().color = color;
-		}
-		await new WaitForSeconds(2);
-	}
-
-	void killPlayer()
-	{
-		SoundManager.Instance.Play(derezz);
-		//destroys this player when hit
-		Destroy(gameObject);
-	}
-
-	async void stopRandomPlayer()
-	{
-		//tries to select a random player, if random player is this player, do thisplayer +1, or thisplayer -1
-		GameObject thisPlayer = gameObject;
-
-		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-
-		var random = UnityEngine.Random.Range(0, players.Length-1);
-
-		var selectedplayer = players[random];
-
-		if(selectedplayer == thisPlayer)
-		{
-			for(var i=0; i< players.Length; i++)
-			{
-				var t = players[i];
-				if(t == selectedplayer)
-				{
-					selectedplayer = players[i + 1];
-					if(selectedplayer == null)
-					{
-						selectedplayer = players[i - 1];
-					}
-					break;
-				}
-			}
-		}
-
-		var selectedVelocity = selectedplayer.GetComponent<Rigidbody2D>().velocity;
-		selectedplayer.GetComponent<Rigidbody2D>().velocity = new Vector3();
-
-		await new WaitForSeconds(2);
-
-		selectedplayer.GetComponent<Rigidbody2D>().velocity = selectedVelocity;
-	}
-
-	async void speedboost()
-	{
-		//temporarily set speed variable higher and call directionchanger so this is actually done
-		//then set speed to original variable
-		speed = 30f;
-		directionChanger(lastDirection);
-		await new WaitForSeconds(4);
-		speed = 16f;
-	}
-
-	async void setInvincible()
-	{
-		//set bool Invincible to true for four seconds
-		Invincible = true;
-		await new WaitForSeconds(4);
-		Invincible = false;		
-	}
-
-	void doInvincible()
-	{
-		//if Invincible is true, grab all walls and set color to gray
-		if (Invincible)
-		{
-			string wallname = wall.name;
-			List<GameObject> allwalls = GameObject.FindGameObjectsWithTag("playerWall").ToList();
-
-			foreach (GameObject wall in allwalls)
-			{
-				if (wall.name == wallname)
-				{
-					wall.GetComponent<SpriteRenderer>().color = Color.gray;
-				}
-			}
-		}
-		//if not, if the wall color is still gray, set all walls to the original color
-		else
-		{
-			if(wall.GetComponent<SpriteRenderer>().color == Color.gray)
-			{
-				string wallname = wall.name;
-				List<GameObject> allwalls = GameObject.FindGameObjectsWithTag("playerWall").ToList();
-
-				foreach (GameObject wall in allwalls)
-				{
-					if (wall.name == wallname)
-					{
-						wall.GetComponent<SpriteRenderer>().color = wallprefab.GetComponent<SpriteRenderer>().color;
-					}
-				}
-			}
-		}			
-	}
 
 	private void Update()
 	{			

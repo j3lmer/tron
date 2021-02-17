@@ -59,42 +59,14 @@ public class BotBeweging : common
         speed = 16;
 
         //zet lastdirection naar de initieel opbewogen directie-vector
-        initDirection();
+        lastDirection = initDirection();
+
+        wallPrefab = wallprefab;
 
         spawnWall();
     }
 
-    void initDirection()
-    {
-        rb = gameObject.GetComponent<Rigidbody2D>();
-        Vector3 vDir = rb.transform.InverseTransformDirection(rb.velocity);
-
-        if (vDir.x > 0)
-        {
-            //rechts
-            //print($"{rb.name} vdir.x groter = {vDir.x}");
-            lastDirection = Vector3.right;
-        }
-        else if (vDir.x < 0)
-        {
-            //links
-            //print($"{rb.name} vdir.x groter = {vDir.x}");
-            lastDirection = Vector3.left;
-        }
-        else if (vDir.y > 0)
-        {
-            //omhoog
-            //print($"{rb.name} vdir.y groter = {vDir.y}");
-            lastDirection = Vector3.up;
-        }
-        else if (vDir.y < 0)
-        {
-            //beneden
-            //print($"{rb.name} vdir.y kleiner = {vDir.y}");
-            lastDirection = Vector3.down;
-        }
-    }
-
+   
 
     void spawnWall()
     {
@@ -108,12 +80,7 @@ public class BotBeweging : common
     }
 
 
-    void directionChanger(Vector3 direction)
-    {
-        //code om van richting te veranderen, richting word veranderd naar de aangegeven richting
-        rb.velocity = direction * speed;
-        lastDirection = direction;
-    }
+   
 
     void fitColliderBetween(Collider2D co, Vector2 a, Vector2 b)
     {
@@ -196,7 +163,7 @@ public class BotBeweging : common
                 {
                     //vernietig speler
                     print("Player lost: " + name);
-                    StartCoroutine(LoadAudio());
+                    StartCoroutine(deathAudio());
                 }
                 //als de speler wel ondoodbaar is op dit moment
                 else
@@ -204,55 +171,12 @@ public class BotBeweging : common
                     if (co.tag == "wall")
                     {
                         print("Player lost: " + name);
-                        StartCoroutine(LoadAudio());
+                        StartCoroutine(deathAudio());
                     }
                 }
             }
         }
     }
-
-    IEnumerator LoadAudio()
-    {
-        string link = "file://" + Application.dataPath + "/Resources/music/derezz.ogg";
-        using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(link, AudioType.OGGVORBIS))
-        {
-            yield return www.SendWebRequest();
-
-            if (www.error != null)
-            {
-                Debug.Log(www.error);
-
-            }
-            else
-            {
-                SoundManager.Instance.MusicSource.Stop();
-                derezz = DownloadHandlerAudioClip.GetContent(www);
-                print(derezz);
-                SoundManager.Instance.Play(derezz);
-
-                //haal deze speler op, en de lightwall die daar aan vast zit, en zet de lightwalls op inactive en de speler invisible
-                GameObject player = gameObject;
-                Color o = player.GetComponent<SpriteRenderer>().color;
-                o.a = 0;
-                player.GetComponent<SpriteRenderer>().color = o;
-
-                string prefabname = wallprefab.name;
-                var walls = GameObject.FindGameObjectsWithTag("playerWall");
-
-                foreach (GameObject wall in walls)
-                {
-                    if (wall.name.Contains(prefabname))
-                    {
-                        wall.SetActive(false);
-                    }
-                }
-
-                yield return new WaitForSeconds(1);
-                Destroy(gameObject);
-            }
-        }
-    }
-
 
     async void removeWalls()
     {
@@ -314,7 +238,7 @@ public class BotBeweging : common
         //temporarily set speed variable higher and call directionchanger so this is actually done
         //then set speed to original variable
         speed = 30f;
-        directionChanger(lastDirection);
+        lastDirection = directionChanger(lastDirection);
         await new WaitForSeconds(4);
         speed = 16f;
     }
