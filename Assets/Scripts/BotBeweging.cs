@@ -178,18 +178,7 @@ public class BotBeweging : common
         }
     }
 
-    async void removeWalls()
-    {
-        //WIP: remove all walls in current scene for fresh start
-        foreach (GameObject wall in GameObject.FindGameObjectsWithTag("playerWall"))
-        {
-            Color color = wall.GetComponent<SpriteRenderer>().color;
-            color.a = 0;
-            wall.GetComponent<SpriteRenderer>().color = color;
-        }
-        await new WaitForSeconds(2);
-    }
-
+   
     void killPlayer()
     {
         SoundManager.Instance.Play(derezz);
@@ -197,41 +186,7 @@ public class BotBeweging : common
         Destroy(gameObject);
     }
 
-    async void stopRandomPlayer()
-    {
-        //tries to select a random player, if random player is this player, do thisplayer +1, or thisplayer -1
-        GameObject thisPlayer = gameObject;
-
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-
-        var random = UnityEngine.Random.Range(0, players.Length - 1);
-
-        var selectedplayer = players[random];
-
-        if (selectedplayer == thisPlayer)
-        {
-            for (var i = 0; i < players.Length; i++)
-            {
-                var t = players[i];
-                if (t == selectedplayer)
-                {
-                    selectedplayer = players[i + 1];
-                    if (selectedplayer == null)
-                    {
-                        selectedplayer = players[i - 1];
-                    }
-                    break;
-                }
-            }
-        }
-
-        var selectedVelocity = selectedplayer.GetComponent<Rigidbody2D>().velocity;
-        selectedplayer.GetComponent<Rigidbody2D>().velocity = new Vector3();
-
-        await new WaitForSeconds(2);
-
-        selectedplayer.GetComponent<Rigidbody2D>().velocity = selectedVelocity;
-    }
+    
 
     async void speedboost()
     {

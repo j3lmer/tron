@@ -6,7 +6,7 @@ public class PowerUps : MonoBehaviour
 {
 
 
-	async void removeWalls()
+	protected async void removeWalls()
 	{
 		//WIP: remove all walls in current scene for fresh start
 		foreach (GameObject wall in GameObject.FindGameObjectsWithTag("playerWall"))
@@ -18,14 +18,14 @@ public class PowerUps : MonoBehaviour
 		await new WaitForSeconds(2);
 	}
 
-	void killPlayer()
-	{
-		SoundManager.Instance.Play(derezz);
-		//destroys this player when hit
-		Destroy(gameObject);
-	}
+	//void killPlayer()
+	//{
+	//	SoundManager.Instance.Play(derezz);
+	//	//destroys this player when hit
+	//	Destroy(gameObject);
+	//}
 
-	async void stopRandomPlayer()
+	protected async void stopRandomPlayer()
 	{
 		//tries to select a random player, if random player is this player, do thisplayer +1, or thisplayer -1
 		GameObject thisPlayer = gameObject;
@@ -61,56 +61,56 @@ public class PowerUps : MonoBehaviour
 		selectedplayer.GetComponent<Rigidbody2D>().velocity = selectedVelocity;
 	}
 
-	async void speedboost()
-	{
-		//temporarily set speed variable higher and call directionchanger so this is actually done
-		//then set speed to original variable
-		speed = 30f;
-		lastDirection = directionChanger(lastDirection);
-		await new WaitForSeconds(4);
-		speed = 16f;
-	}
+	//async void speedboost()
+	//{
+	//	//temporarily set speed variable higher and call directionchanger so this is actually done
+	//	//then set speed to original variable
+	//	speed = 30f;
+	//	lastDirection = directionChanger(lastDirection);
+	//	await new WaitForSeconds(4);
+	//	speed = 16f;
+	//}
 
-	async void setInvincible()
-	{
-		//set bool Invincible to true for four seconds
-		Invincible = true;
-		await new WaitForSeconds(4);
-		Invincible = false;
-	}
+	//async void setInvincible()
+	//{
+	//	//set bool Invincible to true for four seconds
+	//	Invincible = true;
+	//	await new WaitForSeconds(4);
+	//	Invincible = false;
+	//}
 
-	void doInvincible()
-	{
-		//if Invincible is true, grab all walls and set color to gray
-		if (Invincible)
-		{
-			string wallname = wall.name;
-			List<GameObject> allwalls = GameObject.FindGameObjectsWithTag("playerWall").ToList();
+	//void doInvincible()
+	//{
+	//	//if Invincible is true, grab all walls and set color to gray
+	//	if (Invincible)
+	//	{
+	//		string wallname = wall.name;
+	//		List<GameObject> allwalls = GameObject.FindGameObjectsWithTag("playerWall").ToList();
 
-			foreach (GameObject wall in allwalls)
-			{
-				if (wall.name == wallname)
-				{
-					wall.GetComponent<SpriteRenderer>().color = Color.gray;
-				}
-			}
-		}
-		//if not, if the wall color is still gray, set all walls to the original color
-		else
-		{
-			if (wall.GetComponent<SpriteRenderer>().color == Color.gray)
-			{
-				string wallname = wall.name;
-				List<GameObject> allwalls = GameObject.FindGameObjectsWithTag("playerWall").ToList();
+	//		foreach (GameObject wall in allwalls)
+	//		{
+	//			if (wall.name == wallname)
+	//			{
+	//				wall.GetComponent<SpriteRenderer>().color = Color.gray;
+	//			}
+	//		}
+	//	}
+	//	//if not, if the wall color is still gray, set all walls to the original color
+	//	else
+	//	{
+	//		if (wall.GetComponent<SpriteRenderer>().color == Color.gray)
+	//		{
+	//			string wallname = wall.name;
+	//			List<GameObject> allwalls = GameObject.FindGameObjectsWithTag("playerWall").ToList();
 
-				foreach (GameObject wall in allwalls)
-				{
-					if (wall.name == wallname)
-					{
-						wall.GetComponent<SpriteRenderer>().color = wallprefab.GetComponent<SpriteRenderer>().color;
-					}
-				}
-			}
-		}
-	}
+	//			foreach (GameObject wall in allwalls)
+	//			{
+	//				if (wall.name == wallname)
+	//				{
+	//					wall.GetComponent<SpriteRenderer>().color = wallprefab.GetComponent<SpriteRenderer>().color;
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 }

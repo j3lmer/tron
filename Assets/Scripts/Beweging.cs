@@ -203,21 +203,21 @@ public class Beweging : common
 				//check de naam voor de type powerup
 				switch (co.name)
 				{
-					case "SpeedBoost":
-						speedboost();
-						break;
+					//case "SpeedBoost":
+					//	speedboost();
+					//	break;
 
-					case "Invincible":
-						setInvincible();
-							break;					
+					//case "Invincible":
+					//	setInvincible();
+					//		break;					
 
 					case "stopPlayer":
 						stopRandomPlayer();
 						break;
 
-					case "poison":
-						killPlayer();
-						break;
+					//case "poison":
+					//	killPlayer();
+					//	break;
 
 					case "RemoveWalls":
 						removeWalls();
