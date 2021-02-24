@@ -4,13 +4,20 @@ using UnityEngine;
 
 public class Speler : MonoBehaviour, IMovable
 {
-    //this player variables
+    //                  this player variables
     Vector3 LastDirection;
+    public Vector3 lastdir 
+    {
+        get { return LastDirection; }
+        set { LastDirection = value; }
+    }
     Rigidbody2D rb;
     int speed;
-    //end player variables
+    //                  end player variables
 
-    // Wall variables
+
+
+    //                  Wall variables
     GameObject wallPrefab;
     public GameObject wallprefab
     {
@@ -21,7 +28,10 @@ public class Speler : MonoBehaviour, IMovable
     Collider2D wall;
     //LOCATION WHERE THE LAST WALL ENDED
     Vector2 lastWallEnd;
-    //end wall variables
+    //                  end wall variables
+
+
+
 
     private void Awake()
     {
@@ -58,8 +68,8 @@ public class Speler : MonoBehaviour, IMovable
         // Scale it (horizontally or vertically)
         float dist = Vector2.Distance(a, b);
         if (a.x != b.x)
-            co.transform.localScale = new Vector2(dist, 1);
+            co.transform.localScale = new Vector2(dist+1, 1);
         else
-            co.transform.localScale = new Vector2(1, dist);
+            co.transform.localScale = new Vector2(1, dist+1);
     }
 }

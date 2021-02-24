@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ISpelerControllable 
 {
-    void setKeyCodes(List<KeyCode> keycodes);
+    void setKeyCodes(KeyCode[] keycodes);
 }

@@ -21,6 +21,8 @@ public class GameController : MonoBehaviour
 
     List<GameObject> wallPrefabs;
 
+    List<KeyCode> keyset;
+
 
 
 
@@ -94,8 +96,8 @@ public class GameController : MonoBehaviour
         {
             SpelerController controller = player.AddComponent<SpelerController>();
             player.name = $"Speler {i+1}";
-
-            //controller.setKeyCodes();
+            var thiskeyset = Controls()[i];
+            controller.setKeyCodes(thiskeyset);
         }
         else
         {
@@ -138,6 +140,23 @@ public class GameController : MonoBehaviour
         prefabs.Add(Resources.Load<GameObject>("Prefabs/lightwall_yellow"));
         prefabs.Add(Resources.Load<GameObject>("Prefabs/lightwall_green"));
         return prefabs;
+    }
+
+    List<KeyCode[]> Controls()
+    {
+        //returns a list of key presets
+        KeyCode[] keyset1 = new KeyCode[] { KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D };
+        KeyCode[] keyset2 = new KeyCode[] { KeyCode.UpArrow, KeyCode.LeftArrow, KeyCode.DownArrow, KeyCode.RightArrow };
+        KeyCode[] keyset3 = new KeyCode[] { KeyCode.I, KeyCode.J, KeyCode.K, KeyCode.L };
+        KeyCode[] keyset4 = new KeyCode[] { KeyCode.Keypad8, KeyCode.Keypad4, KeyCode.Keypad5, KeyCode.Keypad6 };
+
+        List<KeyCode[]> keysets = new List<KeyCode[]>();
+        keysets.Add(keyset1);
+        keysets.Add(keyset2);
+        keysets.Add(keyset3);
+        keysets.Add(keyset4);
+
+        return keysets;
     }
 
     void getPlayerPrefs()
