@@ -64,7 +64,7 @@ public class HighscoreTable : MonoBehaviour
 
 	private void back()
 	{
-		SoundManager.Instance.Play(backClip);
+		sm.Instance.Play(backClip);
 		//laad mainscene wanneer getriggered
 		SceneManager.LoadScene("MainMenu");
 	}

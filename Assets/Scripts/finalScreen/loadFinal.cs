@@ -37,9 +37,9 @@ public class loadFinal : MonoBehaviour
 					PlayerPrefs.GetInt("controls", 0);
 					PlayerPrefs.SetString("winner", winningName);
 				}
-				if (SoundManager.Instance.MusicSource.isPlaying)
+				if (sm.Instance.MusicSource.isPlaying)
 				{
-					SoundManager.Instance.MusicSource.Stop();
+					sm.Instance.MusicSource.Stop();
 				}
 			} 
 			//als beide spelers dood zijn, geef gelijkspel mee als winnaam
@@ -52,9 +52,9 @@ public class loadFinal : MonoBehaviour
 				PlayerPrefs.SetInt("placedPlayers", 0);
 				PlayerPrefs.GetInt("controls", 0);
 				PlayerPrefs.SetString("winner", winningName);
-				if (SoundManager.Instance.MusicSource.isPlaying)
+				if (sm.Instance.MusicSource.isPlaying)
 				{
-					SoundManager.Instance.MusicSource.Stop();
+					sm.Instance.MusicSource.Stop();
 				}
 			}
 		}

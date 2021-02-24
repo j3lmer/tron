@@ -15,7 +15,7 @@ public class VolumeValueChange : MonoBehaviour {
 	void Start () {
 
         // Assign Audio Source component to control it
-        audioSrc = SoundManager.Instance.MusicSource;        
+        audioSrc = sm.Instance.MusicSource;        
 	}
 
 	

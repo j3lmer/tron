@@ -21,7 +21,6 @@ public class GameController : MonoBehaviour
 
     List<GameObject> wallPrefabs;
 
-    List<KeyCode> keyset;
 
 
 
@@ -39,6 +38,10 @@ public class GameController : MonoBehaviour
         getPlayerPrefs();
 
         setupPlayers();
+
+        gameObject.AddComponent<Timer>();
+
+        gameObject.AddComponent<PowerupPlacer>();
 
     }
 

@@ -29,9 +29,9 @@ public class finalScreen : MonoBehaviour
 		List<GameObject> mainCh = getMainChildren();
 		setWinner(mainCh);
 		init(mainCh);
-		SoundManager.Instance.MusicSource.clip = finalMusic;
-		SoundManager.Instance.EffectsSource.clip = click;
-		SoundManager.Instance.MusicSource.Play();
+		sm.Instance.MusicSource.clip = finalMusic;
+		sm.Instance.EffectsSource.clip = click;
+		sm.Instance.MusicSource.Play();
 	}
 
 	private void Update()
@@ -70,7 +70,7 @@ public class finalScreen : MonoBehaviour
 
 	private void setNameInput(List<GameObject> UI)
 	{
-		SoundManager.Instance.EffectsSource.Play();
+		sm.Instance.EffectsSource.Play();
 		listLoop(UI, "nameInput").SetActive(true);
 		listLoop(UI, "okKnop").SetActive(false);
 		listLoop(UI, "Message").transform.Find("winText").gameObject.SetActive(false);
@@ -99,7 +99,7 @@ public class finalScreen : MonoBehaviour
 
 	private void nextLetter()
 	{
-		SoundManager.Instance.EffectsSource.Play();
+		sm.Instance.EffectsSource.Play();
 		char[] Alphabet = letters.ToCharArray();
 		GameObject A = GameObject.Find("A");
 		GameObject B = GameObject.Find("B");
@@ -147,7 +147,7 @@ public class finalScreen : MonoBehaviour
 
 	private void prevLetter()
 	{
-		SoundManager.Instance.EffectsSource.Play();
+		sm.Instance.EffectsSource.Play();
 		char[] Alphabet = letters.ToCharArray();
 		GameObject A = GameObject.Find("A");
 		GameObject B = GameObject.Find("B");
@@ -195,7 +195,7 @@ public class finalScreen : MonoBehaviour
 
 	private void selectNext()
 	{
-		SoundManager.Instance.EffectsSource.Play();
+		sm.Instance.EffectsSource.Play();
 		GameObject A = GameObject.Find("A");
 		GameObject B = GameObject.Find("B");
 		GameObject C = GameObject.Find("C");
@@ -283,7 +283,7 @@ public class finalScreen : MonoBehaviour
 
 	private void saveAndTransition()
 	{
-		SoundManager.Instance.EffectsSource.Play();
+		sm.Instance.EffectsSource.Play();
 		TMP_Text A = GameObject.Find("A").GetComponent<TMP_Text>();
 		TMP_Text B = GameObject.Find("B").GetComponent<TMP_Text>();
 		TMP_Text C = GameObject.Find("C").GetComponent<TMP_Text>();

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoundManager : MonoBehaviour
+public class sm : MonoBehaviour
 {
 	// Audio players components.
 	public AudioSource EffectsSource;
@@ -13,7 +13,7 @@ public class SoundManager : MonoBehaviour
 	public float HighPitchRange = 1.05f;
 
 	// Singleton instance.
-	public static SoundManager Instance = null;
+	public static sm Instance = null;
 
 	// Initialize the singleton instance.
 	private void Awake()

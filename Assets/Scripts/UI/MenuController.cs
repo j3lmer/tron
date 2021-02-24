@@ -35,9 +35,9 @@ public class MenuController : MonoBehaviour
 	async void playMusic()
 	{
 		await new WaitForSeconds(0.1f);
-		if (SoundManager.Instance.MusicSource.isPlaying == false)
+		if (sm.Instance.MusicSource.isPlaying == false)
 		{
-			SoundManager.Instance.PlayMusic(MenuMusic);
+			sm.Instance.PlayMusic(MenuMusic);
 		}
 	}
 
@@ -90,7 +90,7 @@ public class MenuController : MonoBehaviour
 
 	void checkBtnTag(Button thisBtn)
 	{
-		SoundManager.Instance.Play(buttonClick);
+		sm.Instance.Play(buttonClick);
 		switch (thisBtn.tag)
 		{
 			case "leaderboardTrigger":
@@ -98,7 +98,7 @@ public class MenuController : MonoBehaviour
 				break;
 
 			case "crossScene":
-				SoundManager.Instance.MusicSource.Stop();
+				sm.Instance.MusicSource.Stop();
 				CrossScene(thisBtn);
 				break;
 
@@ -107,10 +107,10 @@ public class MenuController : MonoBehaviour
 				try
 				{
 					Toggle mute = GameObject.Find("Toggle").GetComponent<Toggle>();					
-					mute.isOn = SoundManager.Instance.MusicSource.mute;					
+					mute.isOn = sm.Instance.MusicSource.mute;					
 					slider = GameObject.Find("Slider").GetComponent<Slider>();
-					slider.value = SoundManager.Instance.MusicSource.volume;
-					slider.value = SoundManager.Instance.MusicSource.volume;
+					slider.value = sm.Instance.MusicSource.volume;
+					slider.value = sm.Instance.MusicSource.volume;
 					sliderActive = true;
 					//DontDestroySlider dds = new DontDestroySlider(slider);
 				}
@@ -231,11 +231,11 @@ public class MenuController : MonoBehaviour
 		switch (mute.isOn)
 		{
 			case true:
-				SoundManager.Instance.MusicSource.mute = true;
+				sm.Instance.MusicSource.mute = true;
 				break;
 
 			case false:
-				SoundManager.Instance.MusicSource.mute = false;
+				sm.Instance.MusicSource.mute = false;
 				break;
 		}
 	}
