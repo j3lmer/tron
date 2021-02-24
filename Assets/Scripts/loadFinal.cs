@@ -18,6 +18,7 @@ public class loadFinal : MonoBehaviour
 	{
 		//alle gebruikers opslaan
 		GameObject[] allUsers = GameObject.FindGameObjectsWithTag("Player");
+		
 
 		//als alle gebruikers kleiner zijn dan 2, geef de juiste informatie mee aan het finalscreen script
 		//laad de final screen
@@ -44,8 +45,8 @@ public class loadFinal : MonoBehaviour
 			//als beide spelers dood zijn, geef gelijkspel mee als winnaam
 			else if(allUsers.Length == 0)
 			{
+				print(allUsers.Length);
 				winningName = "Gelijkspel!";
-				i++;
 				StaticClass.CrossSceneInformation = winningName;
 				SceneManager.LoadScene("finalScreen");
 				PlayerPrefs.SetInt("placedPlayers", 0);

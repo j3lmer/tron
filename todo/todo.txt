@@ -1,137 +1,14 @@
-Async Await Support, Debug Drawing Extension, DOTween (HOTween v2), [Graphy] - Ultimate FPS Counter - Stats Monitor & Debugger, JSON .NET for Unity, Naughty Attributes, and Play Mode Save.
-
-^^research and claim unity asset store
-
 todo:
 
-Possible additions
-{
-	je eigen kleur kiezen
-		-textkleur placenames linken aan naam van speler(om later je eigen kleuren te kunnen kiezen)
-		-textkleur finalscreen baseren op spelerkleur
 
 
-	muziek fade ipv stop
-
-	leaderboard add lines around entrys
-
-
-	powerups		
-		-3x projectiles om te schieten
-		-reverse controls voor random tegenspeler
-		-switchen van plek
-		
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-todo short
-{
-	maak common class voor powerups en beweging
-
-	compatible maken met touchscreen (windows) (touchscreenbuttons?)	
-
-	(shared) beweging code in botbeweging toevoegen
 	
-}
-
-
-
-
-
-		(shared) beweging code in botbeweging toevoegen
-		-of los of een common class maken voor beide(waar ze van inheriten(?))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 
 -------
 doing:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
