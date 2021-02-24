@@ -92,13 +92,15 @@ public class GameController : MonoBehaviour
 
         if (tag == "Player")
         {
-            player.AddComponent<SpelerController>();
+            SpelerController controller = player.AddComponent<SpelerController>();
             player.name = $"Speler {i+1}";
+
+            //controller.setKeyCodes();
         }
         else
         {
             //player.AddComponent<BotController>()
-            player.name = $"Bot {i}";
+            player.name = $"Bot {i+1}";
         }
 
     }
