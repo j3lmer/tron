@@ -27,6 +27,7 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+                
         tempPlayer = getRemoveTempPlayer();
 
         startpos = getStartPositions();
@@ -43,7 +44,13 @@ public class GameController : MonoBehaviour
 
         gameObject.AddComponent<PowerupPlacer>();
 
+        if(PVP == 0)
+        {
+            gameObject.AddComponent<NavController>();
+        }
     }
+
+
 
     void setupPlayers()
     {
