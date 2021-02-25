@@ -135,7 +135,14 @@ public class Speler : MonoBehaviour, IMovable
             sm.Instance.Play(derezz);
         }
 
-        GetComponent<SpelerController>().enabled = false;
+        try
+        {
+          GetComponent<SpelerController>().enabled = false;
+        }
+        catch
+        {
+          GetComponent<BotController>().enabled = false;
+        }
 
         Color c = GetComponent<SpriteRenderer>().color;
         c.a = 0;

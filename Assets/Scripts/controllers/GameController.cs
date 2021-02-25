@@ -111,7 +111,7 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            //player.AddComponent<BotController>()
+            player.AddComponent<BotController>();
             player.name = $"Bot {i+1}";
         }
 

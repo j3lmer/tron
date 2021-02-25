@@ -6,15 +6,24 @@ using UnityEngine.AI;
 public class NavController : MonoBehaviour
 {
     GameObject plane;
-    GameObject[] Bots;
-
+    BotController[] Bots;
+    Transform Target;
 
 
     private void Start()
     {
         makeSurface();
 
-        getBots();
+        Bots = FindObjectsOfType<BotController>();
+
+        Target = FindObjectOfType<SpelerController>().GetComponent<Transform>();
+
+       
+        foreach (BotController bot in Bots)
+        {
+            bot.Target = Target;
+            bot.findPath();
+        }
 
     }
 
@@ -25,9 +34,5 @@ public class NavController : MonoBehaviour
         surface.BuildNavMesh();
     }
 
-    void getBots()
-    {
-
-    }
 
 }
