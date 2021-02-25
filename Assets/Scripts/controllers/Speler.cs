@@ -33,6 +33,7 @@ public class Speler : MonoBehaviour, IMovable
         get { return invincible; }
         set { invincible = value; }
     }    
+
     //------------------------------------end player variables
 
 
@@ -71,14 +72,11 @@ public class Speler : MonoBehaviour, IMovable
     }    
 
     public void directionChanger(Vector3 direction)
-    {
+    {        
         rb.velocity = direction * speed;
-		LastDirection = direction;
-        spawnWall();
+        LastDirection = direction;
+        spawnWall();             
     }
-
-
-
 
 
     private void Update()

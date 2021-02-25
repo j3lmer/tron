@@ -49,8 +49,8 @@ public class PowerupPlacer : MonoBehaviour
 			}
 			else
 			{
-				thisdot.name = pUps[1];
-				thisdot.GetComponent<SpriteRenderer>().color = colors[1];
+				thisdot.name = pUps[2];
+				thisdot.GetComponent<SpriteRenderer>().color = colors[2];
 			}
 
 

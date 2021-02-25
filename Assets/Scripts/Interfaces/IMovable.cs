@@ -8,5 +8,5 @@ public interface IMovable
     void spawnWall();
     void fitColliderBetween(Collider2D co, Vector2 a, Vector2 b);
 
-    
+    //IEnumerator die();    
 }

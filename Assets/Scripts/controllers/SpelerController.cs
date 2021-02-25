@@ -10,7 +10,6 @@ public class SpelerController : MonoBehaviour, ISpelerControllable
 
 
 
-
     private void Start()
     {
         speler = gameObject.GetComponent<Speler>();
@@ -22,7 +21,7 @@ public class SpelerController : MonoBehaviour, ISpelerControllable
     }
 
     void checkInputs()
-    {
+    {        
         if (Input.GetKeyDown(up))
         {
             if (speler.lastdir != Vector3.down)
@@ -52,7 +51,7 @@ public class SpelerController : MonoBehaviour, ISpelerControllable
             {
                 speler.directionChanger(Vector3.right);
             }
-        }
+        }               
     }
 
 

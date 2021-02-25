@@ -21,9 +21,10 @@ public class Powerup : MonoBehaviour
 
                 break;
 
-                //case "stopPlayer":
-                //	stopRandomPlayer();
-                //	break;
+            case "stopPlayer":
+                var cont = speler.GetComponent<SpelerController>();
+                stopRandomPlayer(speler);
+                break;
 
                 //case "poison":
                 //	killPlayer();
@@ -47,8 +48,7 @@ public class Powerup : MonoBehaviour
 
 		speler.Speed = 16;
 		speler.directionChanger(speler.lastdir);
-	}
-    
+	}    
 
     async void setInvincible(Speler speler)
     {
@@ -57,9 +57,6 @@ public class Powerup : MonoBehaviour
         await new WaitForSeconds(4);
         speler.Invincible = false;
     }
-
-
-  
 
     async void doInvincible(Speler speler)
     {
@@ -87,5 +84,43 @@ public class Powerup : MonoBehaviour
                 wall.GetComponent<SpriteRenderer>().color = speler.wallprefab.GetComponent<SpriteRenderer>().color;
             }
         }
+    }
+
+    async void stopRandomPlayer(Speler speler)
+    {
+        GameObject thisPlayer = speler.gameObject;
+
+        GameObject[] spelers = GameObject.FindGameObjectsWithTag("Player");
+
+        int random = Random.Range(0, spelers.Length - 1);
+
+        GameObject selectedplayer = spelers[random];
+
+        if (selectedplayer == thisPlayer)
+        {
+            for (var i = 0; i < spelers.Length; i++)
+            {
+                var t = spelers[i];
+                if (t == selectedplayer)
+                {
+                    selectedplayer = spelers[i + 1];
+                    if (selectedplayer == null)
+                    {
+                        selectedplayer = spelers[i - 1];
+                    }
+                    break;
+                }
+            }
+        }
+
+        Vector2 selectedVelocity = selectedplayer.GetComponent<Rigidbody2D>().velocity;
+        selectedplayer.GetComponent<Rigidbody2D>().velocity = new Vector2();
+        selectedplayer.GetComponent<SpelerController>().enabled = false;
+
+        await new WaitForSeconds(2);
+
+        selectedplayer.GetComponent<Rigidbody2D>().velocity = selectedVelocity;
+        selectedplayer.GetComponent<SpelerController>().enabled = true;
+
     }
 }
