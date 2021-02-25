@@ -15,7 +15,7 @@ public class PowerupPlacer : MonoBehaviour
 
 		List<Color> colors = getColors();
 
-		int timeStamp = randTime();
+		int timeStamp = randomTime();
 
 		StartCoroutine(setRandomDot(timeStamp, powerups, colors));
 	}
@@ -63,7 +63,7 @@ public class PowerupPlacer : MonoBehaviour
 	}
 
 
-	int randTime()
+	int randomTime()
 	{
 		int rndRange = Random.Range(2, 10);
 		return rndRange;
