@@ -37,6 +37,7 @@ public class PowerupPlacer : MonoBehaviour
 			GameObject thisdot = Instantiate(Dot, p, Quaternion.identity);
 			thisdot.transform.localScale = thisdot.transform.localScale * 2;
 			thisdot.tag = "Powerup";
+			thisdot.AddComponent<Powerup>();
 			j++;
 
 			int powerupNr = Random.Range(0, 4);
@@ -48,8 +49,8 @@ public class PowerupPlacer : MonoBehaviour
 			}
 			else
 			{
-				thisdot.name = pUps[powerupNr];
-				thisdot.GetComponent<SpriteRenderer>().color = colors[powerupNr];
+				thisdot.name = pUps[1];
+				thisdot.GetComponent<SpriteRenderer>().color = colors[1];
 			}
 
 

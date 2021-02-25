@@ -22,8 +22,13 @@ public class Timer : MonoBehaviour
 		sm = sm.Instance;
 		timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
 
-		startTimer();
-    }
+		if(sm != null)
+        {
+			startTimer();
+		}
+		timer.text = "";
+		enabled = false;
+	}
 
 	async void startTimer()
     {
@@ -49,10 +54,8 @@ public class Timer : MonoBehaviour
 		sm.Play(zero);
 
 		await new WaitForSecondsRealtime(1);
-		timer.text = "";
 		sm.EffectsSource.clip = null;
-		sm.PlayMusic(gameplayMusic);
-		this.enabled = false;
+		sm.PlayMusic(gameplayMusic);		
 	}
 
 

@@ -2,24 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpelerController : MonoBehaviour, ISpelerControllable, IPowerupUser
+public class SpelerController : MonoBehaviour, ISpelerControllable
 {
     Speler speler;
 
     KeyCode up, left, down, right;
 
+
+
+
     private void Start()
     {
         speler = gameObject.GetComponent<Speler>();
-    }
-
-    public void setKeyCodes(KeyCode[] keycodes)
-    {
-        up = keycodes[0];
-        left = keycodes[1];
-        down = keycodes[2];
-        right = keycodes[3];
-    }
+    }   
 
     private void Update()
     {
@@ -58,5 +53,14 @@ public class SpelerController : MonoBehaviour, ISpelerControllable, IPowerupUser
                 speler.directionChanger(Vector3.right);
             }
         }
+    }
+
+
+    public void setKeyCodes(KeyCode[] keycodes)
+    {
+        up = keycodes[0];
+        left = keycodes[1];
+        down = keycodes[2];
+        right = keycodes[3];
     }
 }
