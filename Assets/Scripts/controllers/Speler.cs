@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class Speler : MonoBehaviour, IMovable
 {
@@ -33,6 +34,7 @@ public class Speler : MonoBehaviour, IMovable
         get { return invincible; }
         set { invincible = value; }
     }    
+   
 
     //------------------------------------end player variables
 
@@ -107,8 +109,6 @@ public class Speler : MonoBehaviour, IMovable
 
 
 
-
-
     public void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider != wall)
@@ -118,10 +118,43 @@ public class Speler : MonoBehaviour, IMovable
                 if(collider.tag != "Powerup")
                 {
                     print("Player lost: " + name);
-                    Destroy(gameObject);
+                    die();
                 }               
-            }
-                    
+            }                    
         }
     }
+
+
+    public async void die()
+    {
+        AudioClip derezz = Resources.Load<AudioClip>("music/derezz");
+
+        if(sm.Instance != null)
+        {
+            sm.Instance.MusicSource.Stop();
+            sm.Instance.Play(derezz);
+        }
+
+        GetComponent<SpelerController>().enabled = false;
+
+        Color c = GetComponent<SpriteRenderer>().color;
+        c.a = 0;
+        GetComponent<SpriteRenderer>().color = c;
+
+        string wallname = wallprefab.name;
+        GameObject[] walls = GameObject.FindGameObjectsWithTag("playerWall");
+
+        foreach(GameObject wall in walls)
+        {
+            if (wall.name.Contains(wallname))
+            {
+                wall.SetActive(false);
+            }
+        }
+
+        await new WaitForSeconds(1);
+
+        Destroy(gameObject);
+    }
+
 }

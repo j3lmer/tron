@@ -12,29 +12,31 @@ public class Powerup : MonoBehaviour
         Speler speler = co.gameObject.GetComponent<Speler>();
         switch (gameObject.name)
         {
-			case "SpeedBoost":
-				speedboost(speler);
-				break;
+            case "SpeedBoost":
+                speedboost(speler);
+                break;
 
             case "Invincible":
                 setInvincible(speler);
-
                 break;
 
             case "stopPlayer":
-                var cont = speler.GetComponent<SpelerController>();
                 stopRandomPlayer(speler);
                 break;
 
-                //case "poison":
-                //	killPlayer();
-                //	break;
+            case "poison":
+                speler.die();
+                break;
 
-                //case "RemoveWalls":
-                //	removeWalls();
-                //	break;
+            case "RemoveWalls":
+                removeWalls();
+                break;
         }
-
+        if (sm.Instance != null && gameObject.name !="poison")
+        {
+            AudioClip powerUp = Resources.Load<AudioClip>("music/powerup");
+            sm.Instance.Play(powerUp);
+        }
         Destroy(gameObject);
     }
 
@@ -122,5 +124,22 @@ public class Powerup : MonoBehaviour
         selectedplayer.GetComponent<Rigidbody2D>().velocity = selectedVelocity;
         selectedplayer.GetComponent<SpelerController>().enabled = true;
 
+    }
+
+    void removeWalls()
+    {
+        GameObject[] walls = GameObject.FindGameObjectsWithTag("playerWall");
+
+        foreach(GameObject wall in walls)
+        {
+            Destroy(wall);
+        }
+
+        Speler[] spelers = FindObjectsOfType<MonoBehaviour>().OfType<Speler>().ToArray();
+
+        foreach(Speler speler in spelers)
+        {
+            speler.directionChanger(speler.lastdir);
+        }
     }
 }

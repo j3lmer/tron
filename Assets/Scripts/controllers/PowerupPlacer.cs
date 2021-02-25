@@ -44,13 +44,13 @@ public class PowerupPlacer : MonoBehaviour
 
 			if (j % 10 == 0)
 			{
-				thisdot.name = pUps[5];
-				thisdot.GetComponent<SpriteRenderer>().color = colors[5];
+				thisdot.name = pUps[4];
+				thisdot.GetComponent<SpriteRenderer>().color = colors[4];
 			}
 			else
 			{
-				thisdot.name = pUps[2];
-				thisdot.GetComponent<SpriteRenderer>().color = colors[2];
+				thisdot.name = pUps[powerupNr];
+				thisdot.GetComponent<SpriteRenderer>().color = colors[powerupNr];
 			}
 
 

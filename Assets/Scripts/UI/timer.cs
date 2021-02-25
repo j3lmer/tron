@@ -25,9 +25,12 @@ public class Timer : MonoBehaviour
 		if(sm != null)
         {
 			startTimer();
-		}
-		timer.text = "";
-		enabled = false;
+        }
+        else
+        {
+			timer.text = "";
+			enabled = false;
+		}		
 	}
 
 	async void startTimer()
@@ -55,7 +58,9 @@ public class Timer : MonoBehaviour
 
 		await new WaitForSecondsRealtime(1);
 		sm.EffectsSource.clip = null;
-		sm.PlayMusic(gameplayMusic);		
+		sm.PlayMusic(gameplayMusic);
+		timer.text = "";
+		
 	}
 
 

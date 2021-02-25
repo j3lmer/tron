@@ -29,9 +29,12 @@ public class finalScreen : MonoBehaviour
 		List<GameObject> mainCh = getMainChildren();
 		setWinner(mainCh);
 		init(mainCh);
-		sm.Instance.MusicSource.clip = finalMusic;
-		sm.Instance.EffectsSource.clip = click;
-		sm.Instance.MusicSource.Play();
+		if(sm.Instance != null)
+        {
+			sm.Instance.MusicSource.clip = finalMusic;
+			sm.Instance.EffectsSource.clip = click;
+			sm.Instance.MusicSource.Play();
+		}		
 	}
 
 	private void Update()

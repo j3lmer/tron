@@ -7,6 +7,5 @@ public interface IMovable
     void directionChanger(Vector3 direction);
     void spawnWall();
     void fitColliderBetween(Collider2D co, Vector2 a, Vector2 b);
-
-    //IEnumerator die();    
+    void die();    
 }

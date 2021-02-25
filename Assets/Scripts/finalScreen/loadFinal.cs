@@ -37,10 +37,13 @@ public class loadFinal : MonoBehaviour
 					PlayerPrefs.GetInt("controls", 0);
 					PlayerPrefs.SetString("winner", winningName);
 				}
-				if (sm.Instance.MusicSource.isPlaying)
-				{
-					sm.Instance.MusicSource.Stop();
-				}
+				if (sm.Instance != null)
+                {
+					if (sm.Instance.MusicSource.isPlaying)
+					{
+						sm.Instance.MusicSource.Stop();
+					}
+				}				
 			} 
 			//als beide spelers dood zijn, geef gelijkspel mee als winnaam
 			else if(allUsers.Length == 0)
