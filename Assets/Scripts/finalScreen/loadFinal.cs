@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,15 +18,19 @@ public class loadFinal : MonoBehaviour
 	void checkforFinal()
 	{
 		//alle gebruikers opslaan
-		GameObject[] allUsers = GameObject.FindGameObjectsWithTag("Player");
-		
+		List<GameObject> allUsers = GameObject.FindGameObjectsWithTag("Player").ToList();
+		var bots = GameObject.FindGameObjectsWithTag("Bot");
+		foreach(GameObject bot in bots)
+        {
+			allUsers.Add(bot);
+        }
 
 		//als alle gebruikers kleiner zijn dan 2, geef de juiste informatie mee aan het finalscreen script
 		//laad de final screen
 		int i = 0;
 		if (i == 0) 
 		{ 
-			if(allUsers.Length < 2 && allUsers.Length > 0)
+			if(allUsers.Count < 2 && allUsers.Count > 0)
 			{			
 				foreach (GameObject player in allUsers)
 				{
@@ -46,9 +51,9 @@ public class loadFinal : MonoBehaviour
 				}				
 			} 
 			//als beide spelers dood zijn, geef gelijkspel mee als winnaam
-			else if(allUsers.Length == 0)
+			else if(allUsers.Count == 0)
 			{
-				print(allUsers.Length);
+				print(allUsers.Count);
 				winningName = "Gelijkspel!";
 				StaticClass.CrossSceneInformation = winningName;
 				SceneManager.LoadScene("finalScreen");

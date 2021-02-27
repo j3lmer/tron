@@ -54,6 +54,8 @@ public class GameController : MonoBehaviour
 
     void setupPlayers()
     {
+        print(contenders);
+        
         switch (PVP)
         {
             case 1: //PVP MODE
@@ -70,7 +72,10 @@ public class GameController : MonoBehaviour
                     {
                         makePlayer("Player", i);
                     }
-                    makePlayer("Bot", i);
+                    else
+                    {
+                        makePlayer("Bot", i);
+                    }
                 }
                 break;
         }

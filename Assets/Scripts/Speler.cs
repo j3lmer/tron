@@ -117,7 +117,7 @@ public class Speler : MonoBehaviour, IMovable
             {
                 if(collider.tag != "Powerup")
                 {
-                    print("Player lost: " + name);
+                    print($"Player lost: {name}, lost to {collider}");
                     die();
                 }               
             }                    
