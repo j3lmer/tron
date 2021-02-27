@@ -10,34 +10,39 @@ public class Powerup : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D co)
     {
         Speler speler = co.gameObject.GetComponent<Speler>();
-        switch (gameObject.name)
+        if (speler)
         {
-            case "SpeedBoost":
-                speedboost(speler);
-                break;
+            switch (gameObject.name)
+            {
+                case "SpeedBoost":
+                    speedboost(speler);
+                    break;
 
-            case "Invincible":
-                setInvincible(speler);
-                break;
+                case "Invincible":
+                    setInvincible(speler);
+                    break;
 
-            case "stopPlayer":
-                stopRandomPlayer(speler);
-                break;
+                case "stopPlayer":
+                    stopRandomPlayer(speler);
+                    break;
 
-            case "poison":
-                speler.die();
-                break;
+                case "poison":
+                    speler.die();
+                    break;
 
-            case "RemoveWalls":
-                removeWalls();
-                break;
-        }
-        if (sm.Instance != null && gameObject.name !="poison")
-        {
-            AudioClip powerUp = Resources.Load<AudioClip>("music/powerup");
-            sm.Instance.Play(powerUp);
-        }
-        Destroy(gameObject);
+                case "RemoveWalls":
+                    removeWalls();
+                    break;
+            }
+
+            if (sm.Instance != null && gameObject.name != "poison")
+            {
+                AudioClip powerUp = Resources.Load<AudioClip>("music/powerup");
+                sm.Instance.Play(powerUp);
+            }
+
+            Destroy(gameObject);
+        }       
     }
 
 

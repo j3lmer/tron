@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -41,8 +42,14 @@ public class placeNames : MonoBehaviour
 	void setNames()
 	{
 		//grab all players and the length of the array
-		GameObject[] contestants = GameObject.FindGameObjectsWithTag("Player");
-		int contLength = contestants.Length;
+		List<GameObject> contestants = GameObject.FindGameObjectsWithTag("Player").ToList();
+		var bots = GameObject.FindGameObjectsWithTag("Bot");
+		foreach (GameObject bot in bots)
+		{
+			contestants.Add(bot);
+		}
+
+		int contLength = contestants.Count;
 
 
 		//make list of texts and fill it

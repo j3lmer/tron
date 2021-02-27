@@ -19,6 +19,7 @@ public class GameController : MonoBehaviour
     //STARTDIRECTION
     Vector3 dir;
 
+    //WALLPREFABS
     List<GameObject> wallPrefabs;
 
 
@@ -53,9 +54,7 @@ public class GameController : MonoBehaviour
 
 
     void setupPlayers()
-    {
-        print(contenders);
-        
+    {        
         switch (PVP)
         {
             case 1: //PVP MODE
@@ -180,6 +179,9 @@ public class GameController : MonoBehaviour
         if (!PlayerPrefs.HasKey("PVP") | !PlayerPrefs.HasKey("contestants"))
         {
             print("going to default mode. either no PVP or contestants value");
+
+            PlayerPrefs.SetInt("PVP", 1);
+            PlayerPrefs.SetInt("contestants", 2);
 
             PVP = 1;
             contenders = 2;

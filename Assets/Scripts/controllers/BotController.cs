@@ -37,6 +37,7 @@ public class BotController : MonoBehaviour, IBotControllable
     {
         thisBot = GetComponent<Speler>();
         Path = new NavMeshPath();
+        Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
     }
 
 
@@ -45,8 +46,11 @@ public class BotController : MonoBehaviour, IBotControllable
     {
         while (true)
         {
-            NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
-            await new WaitForSeconds(1);
+            if(thisBot != null)
+            {
+                NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
+                await new WaitForSeconds(1);
+            }           
         }
     }
 
@@ -74,14 +78,12 @@ public class BotController : MonoBehaviour, IBotControllable
 
             var o = offset;
 
-
+            //up&down
             if (o.x > o.y && Path.corners[currentPathIndex].y < t.y)
             {
                 thisBot.directionChanger(Vector3.down);
                 //yield return new WaitForSeconds(randomTime);
             }
-
-
 
             else if (o.x <= o.y && Path.corners[currentPathIndex].y >= t.y)
             {
@@ -89,16 +91,12 @@ public class BotController : MonoBehaviour, IBotControllable
                 //yield return new WaitForSeconds(randomTime);
             }
 
-
             //left&right
             else if (o.x <= o.y && Path.corners[currentPathIndex].x < t.x)
             {
                 thisBot.directionChanger(Vector3.left);
                 //yield return new WaitForSeconds(randomTime);
             }
-
-
-
 
             else if (o.x > o.y && Path.corners[currentPathIndex].x >= t.x)
             {

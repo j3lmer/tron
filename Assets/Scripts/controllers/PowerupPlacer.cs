@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PowerupPlacer : MonoBehaviour
@@ -30,7 +31,15 @@ public class PowerupPlacer : MonoBehaviour
         }
         var j = 0;
 
-		while (GameObject.FindGameObjectsWithTag("Player").Length > 1)
+
+		List<GameObject> contestants = GameObject.FindGameObjectsWithTag("Player").ToList();
+		var bots = GameObject.FindGameObjectsWithTag("Bot");
+		foreach (GameObject bot in bots)
+		{
+			contestants.Add(bot);
+		}
+
+		while (contestants.Count > 1)
 		{
 
 			Vector3 p = new Vector3(Random.Range(-65, 70), Random.Range(60, -60), 0);
@@ -40,7 +49,7 @@ public class PowerupPlacer : MonoBehaviour
 			thisdot.AddComponent<Powerup>();
 			j++;
 
-			int powerupNr = Random.Range(0, 4);
+			int powerupNr = Random.Range(0, 3);
 
 			if (j % 10 == 0)
 			{
