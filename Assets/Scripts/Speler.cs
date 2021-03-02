@@ -71,6 +71,7 @@ public class Speler : MonoBehaviour, IMovable
         //fill in some local variables
         rb = GetComponent<Rigidbody2D>();
         speed = 16;
+        
     }    
 
     public void directionChanger(Vector3 direction)
@@ -161,6 +162,7 @@ public class Speler : MonoBehaviour, IMovable
 
         await new WaitForSeconds(1);
 
+        PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") -1);
         Destroy(gameObject);
     }
 

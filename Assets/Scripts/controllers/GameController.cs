@@ -28,6 +28,7 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        PlayerPrefs.SetInt("AlivePlayers", 0);
                 
         tempPlayer = getRemoveTempPlayer();
 
@@ -45,6 +46,8 @@ public class GameController : MonoBehaviour
 
         gameObject.AddComponent<PowerupPlacer>();
 
+        gameObject.AddComponent<loadFinal>();
+
         if(PVP == 0)
         {
             gameObject.AddComponent<NavController>();
@@ -61,6 +64,7 @@ public class GameController : MonoBehaviour
                 for (var i = 0; i < contenders; i++)
                 {                    
                     makePlayer("Player", i);
+                    PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers")+1);
                 }
                 break;
 
@@ -75,6 +79,7 @@ public class GameController : MonoBehaviour
                     {
                         makePlayer("Bot", i);
                     }
+                    PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") + 1);
                 }
                 break;
         }

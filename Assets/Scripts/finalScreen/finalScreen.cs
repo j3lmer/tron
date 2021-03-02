@@ -21,15 +21,20 @@ public class finalScreen : MonoBehaviour
 	private int bl = 0;
 	private int cl = 0;
 
+	string Winner;
+
 	private readonly string letters = "ABCDEFGHIJKLMNOPQRSTUVWQXYZ0123456789!?";
+
+	List<GameObject> Invisible;
 
 	// Start is called before the first frame update
 	private void Start()
 	{
-		List<GameObject> mainCh = getMainChildren();
-		setWinner(mainCh);
-		init(mainCh);
-		if(sm.Instance != null)
+		canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+		setWinner();
+
+		init();
+		if(sm.Instance)
         {
 			sm.Instance.MusicSource.clip = finalMusic;
 			sm.Instance.EffectsSource.clip = click;
@@ -45,204 +50,14 @@ public class finalScreen : MonoBehaviour
 		}
 	}
 
-	private void blinkLetter()
+
+	private void setWinner()
 	{
-		timer = timer + Time.deltaTime;
-		if (timer >= 0.5)
-		{
-			Color color = Selected.GetComponent<TMP_Text>().color;
-			color.a = Mathf.Clamp(1, 0, 1);
-			Selected.GetComponent<TMP_Text>().color = color;
-		}
-		if (timer >= 1)
-		{
-			Color color = Selected.GetComponent<TMP_Text>().color;
-			color.a = Mathf.Clamp(0.5f, 0, 1);
-			Selected.GetComponent<TMP_Text>().color = color;
-			timer = 0;
-		}
-	}
-
-	private void init(List<GameObject> UI)
-	{
-		listLoop(UI, "nameInput").SetActive(false);
-		listLoop(UI, "okKnop2").SetActive(false);
-
-		listLoop(UI, "okKnop").GetComponent<Button>().onClick.AddListener(delegate { setNameInput(UI); });
-	}
-
-	private void setNameInput(List<GameObject> UI)
-	{
-		sm.Instance.EffectsSource.Play();
-		listLoop(UI, "nameInput").SetActive(true);
-		listLoop(UI, "okKnop").SetActive(false);
-		listLoop(UI, "Message").transform.Find("winText").gameObject.SetActive(false);
-
-		var ok2 = listLoop(UI, "okKnop2");
-		ok2.SetActive(true);
-		ok2.GetComponent<Button>().onClick.AddListener(saveAndTransition);
-
-
-
-		Button nextLetterButton = GameObject.Find("nBtn") . gameObject . GetComponent<Button>();
-		nextLetterButton.onClick.AddListener(nextLetter);
-
-		Button prevLetterButton = GameObject.Find("pBtn") . gameObject . GetComponent<Button>();
-		prevLetterButton.onClick.AddListener(prevLetter);
-
-		Button selectNextButton = GameObject.Find("fBtn") . gameObject . GetComponent<Button>();
-		selectNextButton.onClick.AddListener(selectNext);
-
-
-
-		Selected = listLoop(UI, "Message").transform.Find("A").gameObject;
-		blinking = true;
-		fillLetters(UI);
-	}	
-
-	private void nextLetter()
-	{
-		sm.Instance.EffectsSource.Play();
-		char[] Alphabet = letters.ToCharArray();
-		GameObject A = GameObject.Find("A");
-		GameObject B = GameObject.Find("B");
-		GameObject C = GameObject.Find("C");
-
-		if (Selected == A)
-		{
-			if (al == 39)
-			{
-				al = 0;
-			}
-			al++;
-
-			char currentChar = Alphabet[al];
-			string currentLetter = currentChar.ToString();
-			A.GetComponent<TMP_Text>().text = currentLetter;
-		}
-
-		if (Selected == B)
-		{
-			if (bl == 39)
-			{
-				bl = 0;
-			}
-			bl++;
-
-			char currentChar = Alphabet[bl];
-			string currentLetter = currentChar.ToString();
-			B.GetComponent<TMP_Text>().text = currentLetter;
-		}
-
-		if (Selected == C)
-		{
-			if (cl == 39)
-			{
-				cl = 0;
-			}
-			cl++;
-
-			char currentChar = Alphabet[cl];
-			string currentLetter = currentChar.ToString();
-			C.GetComponent<TMP_Text>().text = currentLetter;
-		}
-	}
-
-	private void prevLetter()
-	{
-		sm.Instance.EffectsSource.Play();
-		char[] Alphabet = letters.ToCharArray();
-		GameObject A = GameObject.Find("A");
-		GameObject B = GameObject.Find("B");
-		GameObject C = GameObject.Find("C");
-
-		if (Selected == A)
-		{
-			if (al == 0)
-			{
-				al = 39;
-			}
-			al--;
-
-			char currentChar = Alphabet[al];
-			string currentLetter = currentChar.ToString();
-			A.GetComponent<TMP_Text>().text = currentLetter;
-		}
-
-		if (Selected == B)
-		{
-			if (bl == 0)
-			{
-				bl = 39;
-			}
-			bl--;
-
-			char currentChar = Alphabet[bl];
-			string currentLetter = currentChar.ToString();
-			B.GetComponent<TMP_Text>().text = currentLetter;
-		}
-
-		if (Selected == C)
-		{
-			if (cl == 0)
-			{
-				cl = 39;
-			}
-			cl--;
-
-			char currentChar = Alphabet[cl];
-			string currentLetter = currentChar.ToString();
-			C.GetComponent<TMP_Text>().text = currentLetter;
-		}
-	}
-
-	private void selectNext()
-	{
-		sm.Instance.EffectsSource.Play();
-		GameObject A = GameObject.Find("A");
-		GameObject B = GameObject.Find("B");
-		GameObject C = GameObject.Find("C");
-
-		var color = Selected.GetComponent<TMP_Text>().color;
-		color.a = Mathf.Clamp(1, 0, 1);
-		Selected.GetComponent<TMP_Text>().color = color;
-
-		if (Selected == A)
-		{
-			Selected = B;
-		}
-		else if (Selected == B)
-		{
-			Selected = C;
-		}
-		else if (Selected == C)
-		{
-			Selected = A;
-		}
-	}
-
-	private void fillLetters(List<GameObject> UI)
-	{
-		Transform messageTransform = listLoop(UI, "Message").transform;
-
-		for (var i = 0; i < messageTransform.childCount; i++)
-		{
-			var thisKid = messageTransform.GetChild(i);
-			if (thisKid.name != "winText")
-			{
-				thisKid.GetComponent<TMP_Text>().text = "A";
-			}
-		}
-	}
-
-	private void setWinner(List<GameObject> UI)
-	{
-		//var winner = StaticClass.CrossSceneInformation;
 		var winner = PlayerPrefs.GetString("winner");
 		print(winner);
 
 		//message ophalenen hier uit wintext
-		var message = listLoop(UI, "Message");
+		var message = GameObject.Find("Message");
 		var wintext = message.transform.Find("winText").gameObject.GetComponent<TMP_Text>();
 		wintext.font = winfont;
 
@@ -254,39 +69,89 @@ public class finalScreen : MonoBehaviour
 		{
 			wintext.text = winner;
 		}
+
+		Winner = winner;
+		
 	}
 
-	private GameObject listLoop(List<GameObject> menuL, string stop)
+
+
+	private void init()
 	{
-		for (var i = 0; i < menuL.Count; i++)
-		{
-			var thisitem = menuL[i];
-			if (thisitem.name == stop)
-			{
-				return thisitem;
+		List<GameObject> invis = new List<GameObject>();
+		Invisible = invis;
+
+		var nInp = GameObject.Find("nameInput");
+		var ok2 = GameObject.Find("okKnop2");
+		
+
+		Invisible.Add(nInp);
+		Invisible.Add(ok2);
+
+		nInp.SetActive(false);
+		ok2.SetActive(false);
+
+
+		GameObject.Find("okKnop").GetComponent<Button>().onClick.AddListener(delegate { setNameInput(); });
+		
+
+	}
+
+	private void setNameInput()
+	{
+		
+		if (Winner.ToLower().Contains("speler"))
+		{			
+            if (sm.Instance)
+            {
+				sm.Instance.EffectsSource.Play();
 			}
-		}
-		return null;
-	}
+			Invisible[0].SetActive(true);
+			GameObject.Find("okKnop").SetActive(false);
+			GameObject.Find("Message").transform.Find("winText").gameObject.SetActive(false);
 
-	private List<GameObject> getMainChildren()
-	{
-		// List<GameObject> canvasKids = getCanvasChildren();
-		List<GameObject> mainCh = new List<GameObject>();
-		var mainObj = GameObject.Find("MainMenu");
+			var ok2 = Invisible[1];
+			ok2.SetActive(true);
+			ok2.GetComponent<Button>().onClick.AddListener(saveAndTransition);
 
-		for (var i = 0; i < mainObj.transform.childCount; i++)
-		{
-			var thisGObj = mainObj.transform.GetChild(i).gameObject;
-			mainCh.Add(thisGObj);
-			//print(thisGObj);
+
+
+			Button nextLetterButton = GameObject.Find("nBtn").gameObject.GetComponent<Button>();
+			nextLetterButton.onClick.AddListener(nextLetter);
+
+			Button prevLetterButton = GameObject.Find("pBtn").gameObject.GetComponent<Button>();
+			prevLetterButton.onClick.AddListener(prevLetter);
+
+			Button selectNextButton = GameObject.Find("fBtn").gameObject.GetComponent<Button>();
+			selectNextButton.onClick.AddListener(selectNext);
+
+
+
+			Selected = GameObject.Find("Message").transform.Find("A").gameObject;
+			blinking = true;
+			fillLetters();
+			
 		}
-		return mainCh;
-	}
+        else
+        {
+			print("bot found, not setting");
+			if (sm.Instance)
+			{
+				sm.Instance.MusicSource.Stop();
+			}
+
+			SceneManager.LoadScene(0);
+		}		
+	}	
+
+	
 
 	private void saveAndTransition()
 	{
-		sm.Instance.EffectsSource.Play();
+		if (sm.Instance)
+		{
+			sm.Instance.EffectsSource.Play();
+		}
 		TMP_Text A = GameObject.Find("A").GetComponent<TMP_Text>();
 		TMP_Text B = GameObject.Find("B").GetComponent<TMP_Text>();
 		TMP_Text C = GameObject.Find("C").GetComponent<TMP_Text>();
@@ -305,7 +170,7 @@ public class finalScreen : MonoBehaviour
 
 		if (File.Exists(jsonPath))
 		{
-			print($"File fount @ {jsonPath}, Reading..");
+			print($"File found @ {jsonPath}, Reading..");
 
 			json = File.ReadAllText(jsonPath);
 			spelerObj = JsonUtility.FromJson<spelers>(json);
@@ -369,6 +234,169 @@ public class finalScreen : MonoBehaviour
 		string SaveToString(spelers Spelers)
 		{
 			return JsonUtility.ToJson(Spelers);
+		}
+	}
+
+
+	private void blinkLetter()
+	{
+		timer = timer + Time.deltaTime;
+		if (timer >= 0.5)
+		{
+			Color color = Selected.GetComponent<TMP_Text>().color;
+			color.a = Mathf.Clamp(1, 0, 1);
+			Selected.GetComponent<TMP_Text>().color = color;
+		}
+		if (timer >= 1)
+		{
+			Color color = Selected.GetComponent<TMP_Text>().color;
+			color.a = Mathf.Clamp(0.5f, 0, 1);
+			Selected.GetComponent<TMP_Text>().color = color;
+			timer = 0;
+		}
+	}
+
+	private void nextLetter()
+	{
+        if (sm.Instance)
+        {
+			sm.Instance.EffectsSource.Play();
+		}		
+		char[] Alphabet = letters.ToCharArray();
+		GameObject A = GameObject.Find("A");
+		GameObject B = GameObject.Find("B");
+		GameObject C = GameObject.Find("C");
+
+		if (Selected == A)
+		{
+			if (al == 39)
+			{
+				al = 0;
+			}
+			al++;
+
+			char currentChar = Alphabet[al];
+			string currentLetter = currentChar.ToString();
+			A.GetComponent<TMP_Text>().text = currentLetter;
+		}
+
+		if (Selected == B)
+		{
+			if (bl == 39)
+			{
+				bl = 0;
+			}
+			bl++;
+
+			char currentChar = Alphabet[bl];
+			string currentLetter = currentChar.ToString();
+			B.GetComponent<TMP_Text>().text = currentLetter;
+		}
+
+		if (Selected == C)
+		{
+			if (cl == 39)
+			{
+				cl = 0;
+			}
+			cl++;
+
+			char currentChar = Alphabet[cl];
+			string currentLetter = currentChar.ToString();
+			C.GetComponent<TMP_Text>().text = currentLetter;
+		}
+	}
+
+	private void prevLetter()
+	{
+		if (sm.Instance)
+		{
+			sm.Instance.EffectsSource.Play();
+		}
+		char[] Alphabet = letters.ToCharArray();
+		GameObject A = GameObject.Find("A");
+		GameObject B = GameObject.Find("B");
+		GameObject C = GameObject.Find("C");
+
+		if (Selected == A)
+		{
+			if (al == 0)
+			{
+				al = 39;
+			}
+			al--;
+
+			char currentChar = Alphabet[al];
+			string currentLetter = currentChar.ToString();
+			A.GetComponent<TMP_Text>().text = currentLetter;
+		}
+
+		if (Selected == B)
+		{
+			if (bl == 0)
+			{
+				bl = 39;
+			}
+			bl--;
+
+			char currentChar = Alphabet[bl];
+			string currentLetter = currentChar.ToString();
+			B.GetComponent<TMP_Text>().text = currentLetter;
+		}
+
+		if (Selected == C)
+		{
+			if (cl == 0)
+			{
+				cl = 39;
+			}
+			cl--;
+
+			char currentChar = Alphabet[cl];
+			string currentLetter = currentChar.ToString();
+			C.GetComponent<TMP_Text>().text = currentLetter;
+		}
+	}
+
+	private void selectNext()
+	{
+		if (sm.Instance)
+		{
+			sm.Instance.EffectsSource.Play();
+		}
+		GameObject A = GameObject.Find("A");
+		GameObject B = GameObject.Find("B");
+		GameObject C = GameObject.Find("C");
+
+		var color = Selected.GetComponent<TMP_Text>().color;
+		color.a = Mathf.Clamp(1, 0, 1);
+		Selected.GetComponent<TMP_Text>().color = color;
+
+		if (Selected == A)
+		{
+			Selected = B;
+		}
+		else if (Selected == B)
+		{
+			Selected = C;
+		}
+		else if (Selected == C)
+		{
+			Selected = A;
+		}
+	}
+
+	private void fillLetters()
+	{
+		Transform messageTransform = GameObject.Find("Message").transform;
+
+		for (var i = 0; i < messageTransform.childCount; i++)
+		{
+			var thisKid = messageTransform.GetChild(i);
+			if (thisKid.name != "winText")
+			{
+				thisKid.GetComponent<TMP_Text>().text = "A";
+			}
 		}
 	}
 }

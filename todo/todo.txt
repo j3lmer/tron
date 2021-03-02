@@ -1,22 +1,26 @@
 todo:
 
-
+	find out why unity crashes when entering finalscreen
 
 	
-
+	make setting for touchscreen
 
 
 
 -------
 doing:
+	making a bot (with navmesh)
 
-
+	
 
 
 
 -------
 done:
 
+	
+
+	refactored with interfaces
 
 
 	probleem:

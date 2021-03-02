@@ -6,71 +6,64 @@ using UnityEngine.SceneManagement;
 
 public class loadFinal : MonoBehaviour
 {
-	private string winningName;
+	string winningName;
 
-	// Update is called once per frame
-	void Update()
+	private void Start()
 	{
-		//elke frame kijken of het al is afgelopen
 		checkforFinal();
 	}
 
-	void checkforFinal()
+	// Update is called once per frame
+
+	async void checkforFinal()
 	{
-		//alle gebruikers opslaan
-		List<GameObject> allUsers = GameObject.FindGameObjectsWithTag("Player").ToList();
-		var bots = GameObject.FindGameObjectsWithTag("Bot");
-		foreach(GameObject bot in bots)
+		while(PlayerPrefs.GetInt("AlivePlayers") != 1)
         {
-			allUsers.Add(bot);
+			print("test tijdens");
+			await new WaitForSeconds(0.2f);
         }
 
-		//als alle gebruikers kleiner zijn dan 2, geef de juiste informatie mee aan het finalscreen script
-		//laad de final screen
-		int i = 0;
-		if (i == 0) 
-		{ 
-			if(allUsers.Count < 2 && allUsers.Count > 0)
-			{			
-				foreach (GameObject player in allUsers)
-				{
-					winningName = player.name;
-					i++; 
-					StaticClass.CrossSceneInformation = winningName;
-					SceneManager.LoadScene("finalScreen");
-					PlayerPrefs.SetInt("placedPlayers", 0);
-					PlayerPrefs.GetInt("controls", 0);
-					PlayerPrefs.SetString("winner", winningName);
-				}
-				if (sm.Instance != null)
-                {
-					if (sm.Instance.MusicSource.isPlaying)
-					{
-						sm.Instance.MusicSource.Stop();
-					}
-				}				
-			} 
-			//als beide spelers dood zijn, geef gelijkspel mee als winnaam
-			else if(allUsers.Count == 0)
+		if(PlayerPrefs.GetInt("AlivePlayers") == 0)
+        {
+			winningName = "Gelijkspel!";
+			setWinner();
+        }
+        else
+        {			
+			var player = GameObject.FindGameObjectWithTag("Player");
+			var bot = GameObject.FindGameObjectWithTag("Bot");
+
+			if (player)
+            {
+				winningName = player.name;
+			}
+
+            if (bot)
 			{
-				print(allUsers.Count);
-				winningName = "Gelijkspel!";
-				StaticClass.CrossSceneInformation = winningName;
-				SceneManager.LoadScene("finalScreen");
-				PlayerPrefs.SetInt("placedPlayers", 0);
-				PlayerPrefs.GetInt("controls", 0);
-				PlayerPrefs.SetString("winner", winningName);
-				if (sm.Instance.MusicSource.isPlaying)
-				{
-					sm.Instance.MusicSource.Stop();
-				}
+				winningName = bot.name;
+			}
+			setWinner();
+		}
+	}
+
+
+	void setWinner()
+    {
+		PlayerPrefs.SetString("winner", winningName);
+
+
+		SceneManager.LoadScene("finalScreen");
+		PlayerPrefs.SetInt("placedPlayers", 0);
+		PlayerPrefs.GetInt("controls", 0);
+
+		if (sm.Instance != null)
+		{
+			if (sm.Instance.MusicSource.isPlaying)
+			{
+				sm.Instance.MusicSource.Stop();
 			}
 		}
 	}
 }
-public static class StaticClass
-{
-	//nodig om informatie cross scene mee te geven
-	public static string CrossSceneInformation { get; set; }
-}
+
 
