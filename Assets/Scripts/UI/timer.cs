@@ -60,7 +60,8 @@ public class Timer : MonoBehaviour
 		sm.EffectsSource.clip = null;
 		sm.PlayMusic(gameplayMusic);
 		timer.text = "";
-		
+
+		enabled = false;		
 	}
 
 

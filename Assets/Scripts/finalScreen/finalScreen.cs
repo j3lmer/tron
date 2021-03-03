@@ -93,8 +93,6 @@ public class finalScreen : MonoBehaviour
 
 
 		GameObject.Find("okKnop").GetComponent<Button>().onClick.AddListener(delegate { setNameInput(); });
-		
-
 	}
 
 	private void setNameInput()

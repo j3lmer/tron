@@ -69,6 +69,8 @@ public class PowerupPlacer : MonoBehaviour
 
 		yield return null;
 		print("finished");
+
+		enabled = false;
 	}
 
 
@@ -90,7 +92,6 @@ public class PowerupPlacer : MonoBehaviour
 		colors.Add(invinciColor);
 		colors.Add(stopColor);
 		colors.Add(poison);
-
 		colors.Add(Color.magenta);
 
 		return colors;
@@ -103,7 +104,6 @@ public class PowerupPlacer : MonoBehaviour
 		powerupNames.Add("Invincible");
 		powerupNames.Add("stopPlayer");
 		powerupNames.Add("poison");
-
 		powerupNames.Add("RemoveWalls");
 		return powerupNames;
 	}

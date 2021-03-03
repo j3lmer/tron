@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.AI;
 
 public class Speler : MonoBehaviour, IMovable
 {
@@ -93,6 +94,9 @@ public class Speler : MonoBehaviour, IMovable
         GameObject w = Instantiate(wallPrefab, transform.position, Quaternion.identity);
         wall = w.GetComponent<Collider2D>();
         w.tag = "playerWall";
+        var obs = w.AddComponent<NavMeshObstacle>();
+        obs.carving = true;
+        obs.carveOnlyStationary = false;
     }
 
     public void fitColliderBetween(Collider2D co, Vector2 a, Vector2 b)

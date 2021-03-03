@@ -13,13 +13,10 @@ public class loadFinal : MonoBehaviour
 		checkforFinal();
 	}
 
-	// Update is called once per frame
-
 	async void checkforFinal()
 	{
 		while(PlayerPrefs.GetInt("AlivePlayers") != 1)
         {
-			print("test tijdens");
 			await new WaitForSeconds(0.2f);
         }
 
@@ -49,12 +46,9 @@ public class loadFinal : MonoBehaviour
 
 	void setWinner()
     {
-		PlayerPrefs.SetString("winner", winningName);
-
-
-		SceneManager.LoadScene("finalScreen");
+		PlayerPrefs.SetString("winner", winningName);		
 		PlayerPrefs.SetInt("placedPlayers", 0);
-		PlayerPrefs.GetInt("controls", 0);
+		PlayerPrefs.SetInt("controls", 0);
 
 		if (sm.Instance != null)
 		{
@@ -63,6 +57,8 @@ public class loadFinal : MonoBehaviour
 				sm.Instance.MusicSource.Stop();
 			}
 		}
+		
+		SceneManager.LoadScene("finalScreen");
 	}
 }
 

@@ -24,7 +24,6 @@ public class NavController : MonoBehaviour
             bot.Target = Target;
             bot.findPath();
         }
-
     }
 
     void makeSurface()
@@ -33,6 +32,4 @@ public class NavController : MonoBehaviour
         NavMeshSurface surface = plane.AddComponent<NavMeshSurface>();
         surface.BuildNavMesh();
     }
-
-
 }

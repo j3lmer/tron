@@ -48,7 +48,7 @@ public class GameController : MonoBehaviour
 
         gameObject.AddComponent<loadFinal>();
 
-        if(PVP == 0)
+        if (PVP == 0)
         {
             gameObject.AddComponent<NavController>();
         }

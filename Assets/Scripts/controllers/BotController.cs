@@ -48,7 +48,9 @@ public class BotController : MonoBehaviour, IBotControllable
         {
             if(thisBot != null)
             {
-                NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
+                var foundPath = NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, Path);
+                print($"path: {foundPath}");
+                print(Path.corners.Length);
                 await new WaitForSeconds(1);
             }           
         }
@@ -59,13 +61,17 @@ public class BotController : MonoBehaviour, IBotControllable
 
     private void Update()
     {
+
+        //Debug.DrawLine(transform.position, path.corners[0]);
+        
         if (Path != null)
         {
             hoekenLengte = Path.corners.Length;
         }
 
+
         for (int i = 0; i < Path.corners.Length - 1; i++)
-        {
+        { 
             Debug.DrawLine(Path.corners[i], Path.corners[i + 1], Color.red);
         }
 
