@@ -18,6 +18,8 @@ public class BotController : MonoBehaviour, IBotControllable
 
     Speler thisBot;
 
+    bool foundPath;
+
 
 
     //GETTERS/SETTERS
@@ -48,9 +50,10 @@ public class BotController : MonoBehaviour, IBotControllable
         {
             if(thisBot != null)
             {
-                var foundPath = NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, Path);
-                print($"path: {foundPath}");
-                print(Path.corners.Length);
+              ;
+                foundPath = NavMesh.CalculatePath(transform.position, Target.position, NavMesh.AllAreas, Path);
+                //print($"path: {foundPath}");
+                //print(Path.corners.Length);
                 await new WaitForSeconds(1);
             }           
         }
@@ -62,56 +65,53 @@ public class BotController : MonoBehaviour, IBotControllable
     private void Update()
     {
 
-        //Debug.DrawLine(transform.position, path.corners[0]);
-        
-        if (Path != null)
+        if (Path.status != NavMeshPathStatus.PathPartial)
         {
             hoekenLengte = Path.corners.Length;
-        }
 
-
-        for (int i = 0; i < Path.corners.Length - 1; i++)
-        { 
-            Debug.DrawLine(Path.corners[i], Path.corners[i + 1], Color.red);
-        }
-
-        if (Path.corners != null && Path.corners.Length > 0)
-        {
-            offset = (Path.corners[currentPathIndex] - transform.position);
-            offset.y = 0;
-
-            var t = transform.position;
-
-            var o = offset;
-
-            //up&down
-            if (o.x > o.y && Path.corners[currentPathIndex].y < t.y)
+            for (int i = 0; i < Path.corners.Length - 1; i++)
             {
-                thisBot.directionChanger(Vector3.down);
-                //yield return new WaitForSeconds(randomTime);
+                Debug.DrawLine(Path.corners[i], Path.corners[i + 1], Color.red);
             }
 
-            else if (o.x <= o.y && Path.corners[currentPathIndex].y >= t.y)
+            if (Path.corners != null && Path.corners.Length > 0)
             {
-                thisBot.directionChanger(Vector3.up);
-                //yield return new WaitForSeconds(randomTime);
-            }
+                offset = (Path.corners[currentPathIndex] - transform.position);
+                offset.y = 0;
 
-            //left&right
-            else if (o.x <= o.y && Path.corners[currentPathIndex].x < t.x)
-            {
-                thisBot.directionChanger(Vector3.left);
-                //yield return new WaitForSeconds(randomTime);
-            }
+                var t = transform.position;
 
-            else if (o.x > o.y && Path.corners[currentPathIndex].x >= t.x)
-            {
-                thisBot.directionChanger(Vector3.right);
-                //yield return new WaitForSeconds(randomTime);
-            }
+                var o = offset;
 
-            //randomTime = Random.Range(0, 0.75f);
-            Debug.DrawLine(transform.position, transform.position + offset, Color.green);
+                //up&down
+                if (o.x > o.y && Path.corners[currentPathIndex].y < t.y)
+                {
+                    thisBot.directionChanger(Vector3.down);
+                    //yield return new WaitForSeconds(randomTime);
+                }
+
+                else if (o.x <= o.y && Path.corners[currentPathIndex].y >= t.y)
+                {
+                    thisBot.directionChanger(Vector3.up);
+                    //yield return new WaitForSeconds(randomTime);
+                }
+
+                //left&right
+                else if (o.x <= o.y && Path.corners[currentPathIndex].x < t.x)
+                {
+                    thisBot.directionChanger(Vector3.left);
+                    //yield return new WaitForSeconds(randomTime);
+                }
+
+                else if (o.x > o.y && Path.corners[currentPathIndex].x >= t.x)
+                {
+                    thisBot.directionChanger(Vector3.right);
+                    //yield return new WaitForSeconds(randomTime);
+                }
+
+                //randomTime = Random.Range(0, 0.75f);
+                Debug.DrawLine(transform.position, transform.position + offset, Color.green);
+            }
         }
     }
 }

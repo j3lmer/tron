@@ -167,7 +167,8 @@ public class Speler : MonoBehaviour, IMovable
         await new WaitForSeconds(1);
 
         PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") -1);
-        Destroy(gameObject);
+        print(PlayerPrefs.GetInt("AlivePlayers"));
+        //Destroy(gameObject);
     }
 
 }

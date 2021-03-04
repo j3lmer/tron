@@ -29,6 +29,7 @@ public class GameController : MonoBehaviour
     void Start()
     {
         PlayerPrefs.SetInt("AlivePlayers", 0);
+        print(PlayerPrefs.GetInt("AlivePlayers"));
                 
         tempPlayer = getRemoveTempPlayer();
 
@@ -65,6 +66,7 @@ public class GameController : MonoBehaviour
                 {                    
                     makePlayer("Player", i);
                     PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers")+1);
+                    print(PlayerPrefs.GetInt("AlivePlayers"));
                 }
                 break;
 
@@ -80,6 +82,7 @@ public class GameController : MonoBehaviour
                         makePlayer("Bot", i);
                     }
                     PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") + 1);
+                    print(PlayerPrefs.GetInt("AlivePlayers"));
                 }
                 break;
         }

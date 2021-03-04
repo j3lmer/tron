@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.AI;
 
 public class loadFinal : MonoBehaviour
 {
@@ -10,15 +11,19 @@ public class loadFinal : MonoBehaviour
 
 	private void Start()
 	{
-		checkforFinal();
+		StartCoroutine(checkforFinal());
 	}
 
-	async void checkforFinal()
-	{
-		while(PlayerPrefs.GetInt("AlivePlayers") != 1)
+	IEnumerator checkforFinal()
+	{	
+		
+		while(PlayerPrefs.GetInt("AlivePlayers") > 1)
         {
-			await new WaitForSeconds(0.2f);
+			print("routining");
+			yield return new WaitForEndOfFrame();
         }
+
+		NavMesh.RemoveAllNavMeshData();
 
 		if(PlayerPrefs.GetInt("AlivePlayers") == 0)
         {
@@ -41,6 +46,8 @@ public class loadFinal : MonoBehaviour
 			}
 			setWinner();
 		}
+		
+		
 	}
 
 
@@ -57,8 +64,10 @@ public class loadFinal : MonoBehaviour
 				sm.Instance.MusicSource.Stop();
 			}
 		}
+
 		
 		SceneManager.LoadScene("finalScreen");
+
 	}
 }
 
