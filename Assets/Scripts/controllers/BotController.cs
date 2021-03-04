@@ -46,7 +46,7 @@ public class BotController : MonoBehaviour, IBotControllable
 
     public async void findPath()
     {
-        while (true)
+        while (PlayerPrefs.GetInt("AlivePlayers") > 1)
         {
             if(thisBot != null)
             {
