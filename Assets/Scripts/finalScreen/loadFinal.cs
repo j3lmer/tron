@@ -18,7 +18,8 @@ public class loadFinal : MonoBehaviour
 	{	
 		
 		while(PlayerPrefs.GetInt("AlivePlayers") > 1)
-        {			
+        {
+			print("routining");
 			await new WaitForEndOfFrame();
         }
 
