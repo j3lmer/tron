@@ -79,13 +79,13 @@ public class Speler : MonoBehaviour, IMovable
     {        
         rb.velocity = direction * speed;
         LastDirection = direction;
-        //spawnWall();             
+        spawnWall();             
     }
 
 
     private void Update()
     {
-        //fitColliderBetween(wall, lastWallEnd, transform.position);
+        fitColliderBetween(wall, lastWallEnd, transform.position);
     }
 
     public void spawnWall()
@@ -95,7 +95,6 @@ public class Speler : MonoBehaviour, IMovable
         wall = w.GetComponent<Collider2D>();
         w.tag = "playerWall";
         var obs = w.AddComponent<NavMeshObstacle>();
-        obs.size = w.transform.localScale;
         obs.carving = true;
         obs.carveOnlyStationary = false;
     }

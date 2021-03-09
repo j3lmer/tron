@@ -10,7 +10,6 @@ public class Powerup : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D co)
     {
         Speler speler = co.gameObject.GetComponent<Speler>();
-
         if (speler)
         {
             switch (gameObject.name)
@@ -98,17 +97,15 @@ public class Powerup : MonoBehaviour
     {
         GameObject thisPlayer = speler.gameObject;
 
-        List<GameObject> spelers = GameObject.FindGameObjectsWithTag("Player").ToList();
-        List<GameObject> bots = GameObject.FindGameObjectsWithTag("Player").ToList();
-        spelers.AddRange(bots);
+        GameObject[] spelers = GameObject.FindGameObjectsWithTag("Player");
 
-        int random = Random.Range(0, spelers.Count - 1);
+        int random = Random.Range(0, spelers.Length - 1);
 
         GameObject selectedplayer = spelers[random];
 
         if (selectedplayer == thisPlayer)
         {
-            for (var i = 0; i < spelers.Count; i++)
+            for (var i = 0; i < spelers.Length; i++)
             {
                 var t = spelers[i];
                 if (t == selectedplayer)

@@ -11,16 +11,16 @@ public class loadFinal : MonoBehaviour
 
 	private void Start()
 	{
-		checkforFinal();
+		StartCoroutine(checkforFinal());
 	}
 
-	async void checkforFinal()
+	IEnumerator checkforFinal()
 	{	
 		
 		while(PlayerPrefs.GetInt("AlivePlayers") > 1)
         {
 			print("routining");
-			await new WaitForEndOfFrame();
+			yield return new WaitForEndOfFrame();
         }
 
 		NavMesh.RemoveAllNavMeshData();

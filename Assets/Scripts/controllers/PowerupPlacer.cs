@@ -33,8 +33,11 @@ public class PowerupPlacer : MonoBehaviour
 
 
 		List<GameObject> contestants = GameObject.FindGameObjectsWithTag("Player").ToList();
-		var bots = GameObject.FindGameObjectsWithTag("Bot").ToList();
-		contestants.AddRange(bots);
+		var bots = GameObject.FindGameObjectsWithTag("Bot");
+		foreach (GameObject bot in bots)
+		{
+			contestants.Add(bot);
+		}
 
 		while (contestants.Count > 1)
 		{
