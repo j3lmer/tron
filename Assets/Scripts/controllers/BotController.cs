@@ -51,8 +51,8 @@ public class BotController : MonoBehaviour, IBotControllable
             if(thisBot != null)
             {
                 foundPath = NavMesh.CalculatePath(transform.position, Target.position, NavMesh.AllAreas, Path);
-                //print($"path: {foundPath}");
-                //print(Path.corners.Length);
+                print($"path: {foundPath}");
+                print(Path.corners.Length);
                 await new WaitForSeconds(1);
             }           
         }
@@ -64,7 +64,7 @@ public class BotController : MonoBehaviour, IBotControllable
     private void Update()
     {
 
-        if (Path.status != NavMeshPathStatus.PathPartial)
+        if (Path.status != NavMeshPathStatus.PathInvalid)
         {
             hoekenLengte = Path.corners.Length;
 
