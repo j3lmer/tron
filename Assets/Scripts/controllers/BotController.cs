@@ -46,11 +46,10 @@ public class BotController : MonoBehaviour, IBotControllable
 
     public async void findPath()
     {
-        while (true)
+        while (PlayerPrefs.GetInt("AlivePlayers") > 1)        
         {
             if(thisBot != null)
             {
-              ;
                 foundPath = NavMesh.CalculatePath(transform.position, Target.position, NavMesh.AllAreas, Path);
                 //print($"path: {foundPath}");
                 //print(Path.corners.Length);
