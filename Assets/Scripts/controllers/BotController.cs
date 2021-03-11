@@ -11,7 +11,18 @@ public class BotController : MonoBehaviour, IBotControllable
 
     NavMeshPath path;
     private int currentPathIndex = 1;
+<<<<<<< HEAD
     int cornersLength = 0;
+=======
+
+    Vector3 offset;
+
+    int hoekenLengte = 0;
+
+
+    Speler thisBot;
+
+>>>>>>> parent of a44c57e (basis3)
     bool foundPath;
 
     Vector3 offset;
@@ -31,7 +42,7 @@ public class BotController : MonoBehaviour, IBotControllable
         get { return target; }
         set { target = value; }
     }
-    public NavMeshPath Path
+    NavMeshPath Path
     {
         get { return path; }
         set { path = value; }
@@ -83,7 +94,11 @@ private void Start()
 
             if (thisBot != null)
             {
+<<<<<<< HEAD
                 foundPath = NavMesh.CalculatePath(transform.position, targetpos, NavMesh.AllAreas, Path);
+=======
+                foundPath = NavMesh.CalculatePath(transform.position, Target.position, NavMesh.AllAreas, Path);
+>>>>>>> parent of a44c57e (basis3)
                 //print($"path: {foundPath}");
                 //print(Path.corners.Length);
                 await new WaitForSeconds(1);
@@ -93,6 +108,7 @@ private void Start()
 
 
 
+<<<<<<< HEAD
     async void moveToObjective()
     {
         if (Path.status != NavMeshPathStatus.PathInvalid)
@@ -172,5 +188,59 @@ private void Start()
     private void Update()
     {
         moveToObjective();       
+=======
+
+    private void Update()
+    {
+
+        if (Path.status != NavMeshPathStatus.PathPartial)
+        {
+            hoekenLengte = Path.corners.Length;
+
+            for (int i = 0; i < Path.corners.Length - 1; i++)
+            {
+                Debug.DrawLine(Path.corners[i], Path.corners[i + 1], Color.red);
+            }
+
+            if (Path.corners != null && Path.corners.Length > 0)
+            {
+                offset = (Path.corners[currentPathIndex] - transform.position);
+                offset.y = 0;
+
+                var t = transform.position;
+
+                var o = offset;
+
+                //up&down
+                if (o.x > o.y && Path.corners[currentPathIndex].y < t.y)
+                {
+                    thisBot.directionChanger(Vector3.down);
+                    //yield return new WaitForSeconds(randomTime);
+                }
+
+                else if (o.x <= o.y && Path.corners[currentPathIndex].y >= t.y)
+                {
+                    thisBot.directionChanger(Vector3.up);
+                    //yield return new WaitForSeconds(randomTime);
+                }
+
+                //left&right
+                else if (o.x <= o.y && Path.corners[currentPathIndex].x < t.x)
+                {
+                    thisBot.directionChanger(Vector3.left);
+                    //yield return new WaitForSeconds(randomTime);
+                }
+
+                else if (o.x > o.y && Path.corners[currentPathIndex].x >= t.x)
+                {
+                    thisBot.directionChanger(Vector3.right);
+                    //yield return new WaitForSeconds(randomTime);
+                }
+
+                //randomTime = Random.Range(0, 0.75f);
+                Debug.DrawLine(transform.position, transform.position + offset, Color.green);
+            }
+        }
+>>>>>>> parent of a44c57e (basis3)
     }
 }
