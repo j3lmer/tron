@@ -11,9 +11,6 @@ public class BotController : MonoBehaviour, IBotControllable
 
     NavMeshPath path;
     private int currentPathIndex = 1;
-<<<<<<< HEAD
-    int cornersLength = 0;
-=======
 
     Vector3 offset;
 
@@ -21,8 +18,6 @@ public class BotController : MonoBehaviour, IBotControllable
 
 
     Speler thisBot;
-
->>>>>>> parent of a44c57e (basis3)
     bool foundPath;
 
     Vector3 offset;
@@ -94,11 +89,7 @@ private void Start()
 
             if (thisBot != null)
             {
-<<<<<<< HEAD
-                foundPath = NavMesh.CalculatePath(transform.position, targetpos, NavMesh.AllAreas, Path);
-=======
-                foundPath = NavMesh.CalculatePath(transform.position, Target.position, NavMesh.AllAreas, Path);
->>>>>>> parent of a44c57e (basis3)
+            
                 //print($"path: {foundPath}");
                 //print(Path.corners.Length);
                 await new WaitForSeconds(1);
@@ -107,8 +98,6 @@ private void Start()
     }
 
 
-
-<<<<<<< HEAD
     async void moveToObjective()
     {
         if (Path.status != NavMeshPathStatus.PathInvalid)
@@ -184,15 +173,6 @@ private void Start()
         }
     }
 
-
-    private void Update()
-    {
-        moveToObjective();       
-=======
-
-    private void Update()
-    {
-
         if (Path.status != NavMeshPathStatus.PathPartial)
         {
             hoekenLengte = Path.corners.Length;
@@ -241,6 +221,5 @@ private void Start()
                 Debug.DrawLine(transform.position, transform.position + offset, Color.green);
             }
         }
->>>>>>> parent of a44c57e (basis3)
     }
-}
+
