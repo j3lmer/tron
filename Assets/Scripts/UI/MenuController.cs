@@ -99,6 +99,27 @@ public class MenuController : MonoBehaviour
 
 			case "crossScene":
 				sm.Instance.MusicSource.Stop();
+
+
+				switch (thisBtn.name)
+				{
+					case "makkelijk":
+						PlayerPrefs.SetInt("difficulty", 0);
+						break;
+
+					case "normaal":
+						PlayerPrefs.SetInt("difficulty", 1);
+						break;
+
+					case "moeilijk":
+						PlayerPrefs.SetInt("difficulty", 2);
+						break;
+
+					default:
+						PlayerPrefs.SetInt("difficulty", 1);
+						break;
+				}
+
 				CrossScene(thisBtn);
 				break;
 
@@ -118,6 +139,7 @@ public class MenuController : MonoBehaviour
 				{
 					break;
 				}
+
 				break;
 
 			case "backBtn":
@@ -129,6 +151,7 @@ public class MenuController : MonoBehaviour
 				sliderActive = false;
 				exit();
 				break;
+
 		}
 	}
 
@@ -166,8 +189,8 @@ public class MenuController : MonoBehaviour
 						listLoop(menuList, "BotsKiezen");
 						break;
 				}
-
 				break;
+
 
 			case "OptionsKnop":
 				listLoop(menuList, "OptionsMenu");
@@ -191,9 +214,16 @@ public class MenuController : MonoBehaviour
 				listLoop(menuList, "BotsKiezen");
 				break;
 
+			case "Bot":
+				listLoop(menuList, "moeilijkheidsgraad");
+				break;
+
+
 			case "home":
 				SceneManager.LoadScene(0);
 				break;
+
+
 
 		}
 	}
@@ -227,7 +257,7 @@ public class MenuController : MonoBehaviour
 
 	public void mute()
 	{
-		Toggle mute = GameObject.Find("Toggle").GetComponent<Toggle>();				
+		Toggle mute = GameObject.Find("Toggle").GetComponent<Toggle>();
 		switch (mute.isOn)
 		{
 			case true:
@@ -238,6 +268,25 @@ public class MenuController : MonoBehaviour
 				sm.Instance.MusicSource.mute = false;
 				break;
 		}
+	}
+
+	public void touch()
+	{
+		Toggle Touch = GameObject.Find("Touch").GetComponent<Toggle>();
+
+		switch (Touch.isOn)
+		{
+			case true:
+				PlayerPrefs.SetInt("Touch", 1);
+				break;
+
+			case false:
+
+				PlayerPrefs.SetInt("Touch", 0);
+				break;
+		}
+
+		print(PlayerPrefs.GetInt("Touch"));
 	}
 
 	void CrossScene(Button button)

@@ -29,9 +29,11 @@ public class GameController : MonoBehaviour
     void Start()
     {
         PlayerPrefs.SetInt("AlivePlayers", 0);
-        print(PlayerPrefs.GetInt("AlivePlayers"));
-                
+        //print(PlayerPrefs.GetInt("AlivePlayers"));
+                        
         tempPlayer = getRemoveTempPlayer();
+
+        setOverlayCamera();
 
         startpos = getStartPositions();
 
@@ -54,6 +56,14 @@ public class GameController : MonoBehaviour
             gameObject.AddComponent<NavController>();
         }
     }
+
+    void setOverlayCamera()
+	{
+        var camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+
+
+	}
+
 
 
 
@@ -82,7 +92,7 @@ public class GameController : MonoBehaviour
                         makePlayer("Bot", i);
                     }
                     PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") + 1);
-                    print(PlayerPrefs.GetInt("AlivePlayers"));
+                    //print(PlayerPrefs.GetInt("AlivePlayers"));
                 }
                 break;
         }
@@ -135,8 +145,8 @@ public class GameController : MonoBehaviour
 
         startPositions.Add(new Vector3(-60.5f, 52.2f, 0), Vector3.right);
         startPositions.Add(new Vector3(65.687f, 52.23f, 0), Vector3.down);
-        startPositions.Add(new Vector3(-60.49f, -55.95f, 0), Vector3.left);
-        startPositions.Add(new Vector3(65.639f, -56.006f, 0), Vector3.up);
+        startPositions.Add(new Vector3(-60.49f, -55.95f, 0), Vector3.up);
+        startPositions.Add(new Vector3(65.639f, -56.006f, 0), Vector3.left);
 
         return startPositions;
     }
