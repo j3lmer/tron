@@ -29,7 +29,6 @@ public class GameController : MonoBehaviour
     void Start()
     {
         PlayerPrefs.SetInt("AlivePlayers", 0);
-        print(PlayerPrefs.GetInt("AlivePlayers"));
                 
         tempPlayer = getRemoveTempPlayer();
 
@@ -64,7 +63,24 @@ public class GameController : MonoBehaviour
 
     void checkTouchScreen()
 	{
+        var tmode = PlayerPrefs.GetInt("Touch");
 
+		switch (tmode)
+		{
+            case 0:
+               var t =  GameObject.Find("template");
+                for(var i=0; i<t.transform.childCount; i++)
+				{
+                    var thistemp = t.transform.GetChild(i);
+                    thistemp.gameObject.SetActive(false);
+				}
+
+                break;
+
+            case 1:
+                gameObject.AddComponent<TouchScreenModule>();
+                break;
+		}
 	}
 
 
@@ -78,7 +94,7 @@ public class GameController : MonoBehaviour
                 {                    
                     makePlayer("Player", i);
                     PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers")+1);
-                    print(PlayerPrefs.GetInt("AlivePlayers"));
+                    //print(PlayerPrefs.GetInt("AlivePlayers"));
                 }
                 break;
 

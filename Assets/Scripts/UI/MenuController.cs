@@ -251,7 +251,7 @@ public class MenuController : MonoBehaviour
 				break;
 
 			case 1:
-				PlayerPrefs.SetInt("Touch", 0);
+				PlayerPrefs.SetInt("Touch", 0);	
 				break;
 		}
 
