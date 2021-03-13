@@ -93,11 +93,11 @@ public class Speler : MonoBehaviour, IMovable
         lastWallEnd = transform.position;
         GameObject w = Instantiate(wallPrefab, transform.position, Quaternion.identity);
         wall = w.GetComponent<Collider2D>();
-        w.tag = "playerWall";
-        var obs = w.AddComponent<NavMeshObstacle>();
-        obs.carving = true;
-        obs.carveOnlyStationary = false;
-    }
+		w.tag = "playerWall";
+		var obs = w.AddComponent<NavMeshObstacle>();
+		obs.carving = true;
+		obs.carveOnlyStationary = false;
+	}
 
     public void fitColliderBetween(Collider2D co, Vector2 a, Vector2 b)
     {
@@ -116,18 +116,18 @@ public class Speler : MonoBehaviour, IMovable
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider != wall)
-        {
-            if (!Invincible)
-            {
-                if(collider.tag != "Powerup")
-                {
-                    print($"Player lost: {name}, lost to {collider}");
-                    die();
-                }               
-            }                    
-        }
-    }
+		if (collider != wall)
+		{
+			if (!Invincible)
+			{
+				if (collider.tag != "Powerup")
+				{
+					print($"Player lost: {name}, lost to {collider}");
+					die();
+				}
+			}
+		}
+	}
 
 
     public async void die()
@@ -168,7 +168,7 @@ public class Speler : MonoBehaviour, IMovable
 
         PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") -1);
         print(PlayerPrefs.GetInt("AlivePlayers"));
-        //Destroy(gameObject);
+        Destroy(gameObject);
     }
 
 }
