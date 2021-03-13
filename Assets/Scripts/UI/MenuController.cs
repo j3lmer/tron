@@ -240,6 +240,24 @@ public class MenuController : MonoBehaviour
 		}
 	}
 
+	public void touchScreen()
+	{
+		var tmode = PlayerPrefs.GetInt("Touch");
+
+		switch (tmode)
+		{
+			case 0:
+				PlayerPrefs.SetInt("Touch", 1);
+				break;
+
+
+			case 1:
+				PlayerPrefs.SetInt("Touch", 0);
+				break;
+		}
+		print(PlayerPrefs.GetInt("Touch"));
+	}
+
 	void CrossScene(Button button)
 	{
 		//button is button clicked
