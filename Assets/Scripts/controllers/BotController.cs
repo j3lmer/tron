@@ -17,10 +17,8 @@ public class BotController : MonoBehaviour, IBotControllable
     int hoekenLengte = 0;
 
 
-    Speler thisBot;
     bool foundPath;
 
-    Vector3 offset;
 
     float randomTime;
 
@@ -102,15 +100,15 @@ private void Start()
     {
         if (Path.status != NavMeshPathStatus.PathInvalid)
         {
-            cornersLength = Path.corners.Length;
+            hoekenLengte = Path.corners.Length;
 
             //print(cornersLength);
 
 
 
-            if (Path.corners != null && cornersLength > 0)
+            if (Path.corners != null && hoekenLengte > 0)
             {
-                for (int i = 0; i < cornersLength - 1; i++)
+                for (int i = 0; i < hoekenLengte - 1; i++)
                 {
                     // Debug.DrawLine(Path.corners[i], Path.corners[i + 1] + target.GetComponent<Speler>().lastdir * 10, Color.red);
                     //var t = Target.transform.position + target.GetComponent<Speler>().lastdir * 10;
@@ -173,53 +171,5 @@ private void Start()
         }
     }
 
-        if (Path.status != NavMeshPathStatus.PathPartial)
-        {
-            hoekenLengte = Path.corners.Length;
-
-            for (int i = 0; i < Path.corners.Length - 1; i++)
-            {
-                Debug.DrawLine(Path.corners[i], Path.corners[i + 1], Color.red);
-            }
-
-            if (Path.corners != null && Path.corners.Length > 0)
-            {
-                offset = (Path.corners[currentPathIndex] - transform.position);
-                offset.y = 0;
-
-                var t = transform.position;
-
-                var o = offset;
-
-                //up&down
-                if (o.x > o.y && Path.corners[currentPathIndex].y < t.y)
-                {
-                    thisBot.directionChanger(Vector3.down);
-                    //yield return new WaitForSeconds(randomTime);
-                }
-
-                else if (o.x <= o.y && Path.corners[currentPathIndex].y >= t.y)
-                {
-                    thisBot.directionChanger(Vector3.up);
-                    //yield return new WaitForSeconds(randomTime);
-                }
-
-                //left&right
-                else if (o.x <= o.y && Path.corners[currentPathIndex].x < t.x)
-                {
-                    thisBot.directionChanger(Vector3.left);
-                    //yield return new WaitForSeconds(randomTime);
-                }
-
-                else if (o.x > o.y && Path.corners[currentPathIndex].x >= t.x)
-                {
-                    thisBot.directionChanger(Vector3.right);
-                    //yield return new WaitForSeconds(randomTime);
-                }
-
-                //randomTime = Random.Range(0, 0.75f);
-                Debug.DrawLine(transform.position, transform.position + offset, Color.green);
-            }
-        }
     }
 

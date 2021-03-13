@@ -43,6 +43,13 @@ public class GameController : MonoBehaviour
 
         setupPlayers();
 
+        addComponents();
+
+        checkTouchScreen();
+    }
+
+    void addComponents()
+	{
         gameObject.AddComponent<Timer>();
 
         gameObject.AddComponent<PowerupPlacer>();
@@ -54,6 +61,11 @@ public class GameController : MonoBehaviour
             gameObject.AddComponent<NavController>();
         }
     }
+
+    void checkTouchScreen()
+	{
+
+	}
 
 
 
