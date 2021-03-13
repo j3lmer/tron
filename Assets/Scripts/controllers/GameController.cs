@@ -43,31 +43,6 @@ public class GameController : MonoBehaviour
 
         setupPlayers();
 
-		addComponents();
-
-        checkTouchScreen();
-
-    }
-
-    void checkTouchScreen()
-	{
-        var tmode = PlayerPrefs.GetInt("Touch");
-
-		switch (tmode)
-		{
-            case 0://touchscreen uit
-
-                break;
-
-
-            case 1://touchscreen aan
-                gameObject.AddComponent<TouchScreenModule>();
-                break;
-		}
-	}
-
-    void addComponents()
-	{
         gameObject.AddComponent<Timer>();
 
         gameObject.AddComponent<PowerupPlacer>();
@@ -79,6 +54,8 @@ public class GameController : MonoBehaviour
             gameObject.AddComponent<NavController>();
         }
     }
+
+
 
     void setupPlayers()
     {        
