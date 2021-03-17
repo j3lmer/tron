@@ -76,10 +76,11 @@ public class Speler : MonoBehaviour, IMovable
     }    
 
     public void directionChanger(Vector3 direction)
-    {        
+    {
         rb.velocity = direction * speed;
         LastDirection = direction;
-        spawnWall();             
+        spawnWall();
+        print("changing direction");    
     }
 
 

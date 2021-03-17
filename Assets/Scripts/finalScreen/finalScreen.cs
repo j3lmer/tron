@@ -146,7 +146,7 @@ public class finalScreen : MonoBehaviour
 
 	
 
-	private void saveAndTransition()
+	public void saveAndTransition()
 	{
 		if (sm.Instance)
 		{
