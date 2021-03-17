@@ -16,21 +16,42 @@ public class TouchScreenModule : MonoBehaviour
 		getArrows();
 		getLocations();
 
-		makeButtonSet("green", new Vector3(0,0,0)); 
+		makeButtonSet("green", new Vector3()); 
 	}
 
 
 	void makeButtonSet(string color, Vector3 location)
 	{
-		makeButton(color,location, Quaternion.identity);
+
+		makeButton(color,location);
+
+		var left = location.x	- 10;
+		var right = location.x	+ 10;
+		var down = location.y	- 10;
+
+
+		var lowerLeft = location + new Vector3(left, down, 0);
+		var lowerRight = location + new Vector3(right, down, 0);
+		var lower = location + new Vector3(0, down, 0);
+
+		var ll = makeButton(color, lowerLeft);
+		ll.transform.Rotate(0, 0, 90);
+
+		var lr = makeButton(color, lowerRight);
+		lr.transform.Rotate(0, 0, -90);
+
+		var d = makeButton(color, lower);
+		d.transform.Rotate(0 , 0, 180);
+
 	}
 
 
-	void makeButton(string color, Vector3 location, Quaternion rotation)
+	Button makeButton(string color, Vector3 location)
 	{
 		var selected = arrows[color];
-		Button button = Instantiate(selected, location, rotation, touchscreeners.transform);
+		Button button = Instantiate(selected, location, Quaternion.identity, touchscreeners.transform);
 		button.gameObject.SetActive(true);
+		return button;
 	}
 
 	void getArrows()
@@ -74,9 +95,10 @@ public class TouchScreenModule : MonoBehaviour
 	void getLocations()
 	{
 		locations = new List<Vector3>();
-		locations.Add(Vector3.up);
-		locations.Add(Vector3.down);
-		locations.Add(Vector3.left);
-		locations.Add(Vector3.right);
+
+		locations.Add(new Vector3(-100, 70, 0));
+		locations.Add(new Vector3(100, 70, 0));
+		locations.Add(new Vector3(100, -70, 0));
+		locations.Add(new Vector3(-100,-70,0));
 	}
 }

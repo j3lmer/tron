@@ -31,25 +31,25 @@ public class finalScreen : MonoBehaviour
 	private void Start()
 	{
 		StopAllCoroutines();
-		
-		//canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-		//setWinner();
 
-		//init();
-		//if(sm.Instance)
-		//      {
-		//	sm.Instance.MusicSource.clip = finalMusic;
-		//	sm.Instance.EffectsSource.clip = click;
-		//	sm.Instance.MusicSource.Play();
-		//}		
+		canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+		setWinner();
+
+		init();
+		if (sm.Instance)
+		{
+			sm.Instance.MusicSource.clip = finalMusic;
+			sm.Instance.EffectsSource.clip = click;
+			sm.Instance.MusicSource.Play();
+		}
 	}
 
 	private void Update()
 	{
-		//if (blinking)
-		//{
-		//	blinkLetter();
-		//}
+		if (blinking)
+		{
+			blinkLetter();
+		}
 	}
 
 
