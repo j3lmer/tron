@@ -168,6 +168,12 @@ public class finalScreen : MonoBehaviour
 		spelers spelerObj = new spelers();
 		bool foundWinner = false;
 
+		if (!Directory.Exists(Application.dataPath + "/json/"))
+		{
+			Directory.CreateDirectory(Application.dataPath + "/json/");
+		}
+
+
 		if (File.Exists(jsonPath))
 		{
 			print($"File found @ {jsonPath}, Reading..");
@@ -214,10 +220,10 @@ public class finalScreen : MonoBehaviour
 		else
 		{
 			print($"No file found @ {jsonPath}. Generating new file..");
-			FileStream file;
-			if (jsonPath == null)
+			if (!File.Exists(jsonPath))
 			{
-				file = File.Create(jsonPath);
+				var fs = new FileStream(jsonPath, FileMode.Create);
+				fs.Dispose();
 			}
 
 			playerData newPlayer = new playerData();
