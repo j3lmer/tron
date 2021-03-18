@@ -46,7 +46,7 @@ public class PowerupPlacer : MonoBehaviour
 			thisdot.AddComponent<Powerup>();
 			j++;
 
-			int powerupNr = Random.Range(0, 3);
+			int powerupNr = Random.Range(0, 4);
 
 			if (j % 10 == 0)
 			{

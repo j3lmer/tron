@@ -87,7 +87,12 @@ private void Start()
 
             if (thisBot != null)
             {
-            
+               foundPath = NavMesh.CalculatePath(transform.position, targetpos, NavMesh.AllAreas, Path);
+                print(foundPath);
+				if (foundPath)
+				{
+                    moveToObjective();
+				}
                 //print($"path: {foundPath}");
                 //print(Path.corners.Length);
                 await new WaitForSeconds(1);

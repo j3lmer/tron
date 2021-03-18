@@ -111,7 +111,7 @@ public class GameController : MonoBehaviour
                         makePlayer("Bot", i);
                     }
                     PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") + 1);
-                    print(PlayerPrefs.GetInt("AlivePlayers"));
+                    //print(PlayerPrefs.GetInt("AlivePlayers"));
                 }
                 break;
         }

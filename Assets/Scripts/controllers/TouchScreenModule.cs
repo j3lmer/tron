@@ -35,6 +35,7 @@ public class TouchScreenModule : MonoBehaviour
 
 	void makeButtonSet(string color, Vector3 location/*, string rotation,*/ ,Speler player)
 	{
+
 		var thiscomponent = new GameObject();
 		thiscomponent.name = color;
 		thiscomponent.transform.SetParent(touchscreeners.transform);
@@ -58,6 +59,7 @@ public class TouchScreenModule : MonoBehaviour
 				player.directionChanger(Vector3.up);
 			}
 		});
+
 
 
 		var ll = makeButton(color, lowerLeft, thiscomponent.transform);

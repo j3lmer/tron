@@ -79,8 +79,7 @@ public class Speler : MonoBehaviour, IMovable
     {
         rb.velocity = direction * speed;
         LastDirection = direction;
-        spawnWall();
-        print("changing direction");    
+        spawnWall();   
     }
 
 
