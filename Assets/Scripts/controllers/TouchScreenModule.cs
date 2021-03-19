@@ -12,6 +12,7 @@ public class TouchScreenModule : MonoBehaviour
 	GameObject touchscreeners;
 	Dictionary<string, Vector3> rotations;
 	List<Speler> players;
+	GameObject set;
 
 
 
@@ -29,77 +30,62 @@ public class TouchScreenModule : MonoBehaviour
 		//}
 
 
-		makeButtonSet("green", new Vector3(), players[0]); 
+		makeButtonSet("green", locations[0], players[0]);
 	}
 
 
-	void makeButtonSet(string color, Vector3 location/*, string rotation,*/ ,Speler player)
+	void makeButtonSet(string color, Vector3 location/*, string rotation,*/ , Speler player)
 	{
 
 		var thiscomponent = new GameObject();
 		thiscomponent.name = color;
 		thiscomponent.transform.SetParent(touchscreeners.transform);
-
-
-		var left = location.x - 10;
-		var right = location.x + 10;
-		var down = location.y - 10;
-
-
-		var lowerLeft = location + new Vector3(left, down, 0);
-		var lowerRight = location + new Vector3(right, down, 0);
-		var lower = location + new Vector3(0, down, 0);
+		thiscomponent.transform.position = location;
 
 
 
-		var t = makeButton(color,location, thiscomponent.transform);
+		var t = makeButton(color, location, thiscomponent.transform);
 		t.onClick.AddListener(delegate {
-			if(player.lastdir != Vector3.down)
+			if (player.lastdir != Vector3.down)
 			{
 				player.directionChanger(Vector3.up);
 			}
 		});
 
-
-
-		var ll = makeButton(color, lowerLeft, thiscomponent.transform);
-		ll.transform.Rotate(0, 0, 90);
-		ll.onClick.AddListener(delegate {
-			if(player.lastdir != Vector3.right)
-			{
-				player.directionChanger(Vector3.left);
-			}
-		});
-
-
-		var lr = makeButton(color, lowerRight, thiscomponent.transform);
-		lr.transform.Rotate(0, 0, -90);
-		lr.onClick.AddListener(delegate {
-			if(player.lastdir != Vector3.left)
-			{
-				player.directionChanger(Vector3.right);
-			}
-		});
-
-
-		var d = makeButton(color, lower, thiscomponent.transform);
-		d.transform.Rotate(0 , 0, 180);
+		var d = makeButton(color, location + new Vector3(0,-10,0), thiscomponent.transform);
+		d.transform.Rotate(new Vector3(0, 0, 180));
 		d.onClick.AddListener(delegate {
-			if(player.lastdir != Vector3.up)
+			if (player.lastdir != Vector3.up)
 			{
 				player.directionChanger(Vector3.down);
 			}
 		});
 
+		var l = makeButton(color, location + new Vector3(-10,-10,0), thiscomponent.transform);
+		l.transform.Rotate(new Vector3(0, 0, 90));
+		l.onClick.AddListener(delegate {
+			if (player.lastdir != Vector3.right)
+			{
+				player.directionChanger(Vector3.left);
+			}
+		});
+
+		var r = makeButton(color, location + new Vector3(+10,-10,0), thiscomponent.transform);
+		r.transform.Rotate(new Vector3(0, 0, -90));
+		r.onClick.AddListener(delegate {
+			if (player.lastdir != Vector3.left)
+			{
+				player.directionChanger(Vector3.right);
+			}
+		});
 	}
 
 
 	Button makeButton(string color, Vector3 location, Transform parent)
 	{
 		var selected = arrows[color];
-		Button button = Instantiate(selected, location, Quaternion.identity, touchscreeners.transform);
+		Button button = Instantiate(selected, location, Quaternion.identity, parent);
 		button.gameObject.SetActive(true);
-		button.transform.SetParent(parent);
 		return button;
 	}
 
@@ -110,7 +96,7 @@ public class TouchScreenModule : MonoBehaviour
 
 		var temp = GameObject.Find("template");
 
-		for(var i=0; i<temp.transform.childCount; i++)
+		for (var i = 0; i < temp.transform.childCount; i++)
 		{
 			var thisbtn = temp.transform.GetChild(i);
 
@@ -133,9 +119,9 @@ public class TouchScreenModule : MonoBehaviour
 			{
 				arrows.Add("green", thisbtn.GetComponent<Button>());
 			}
-			
-			
-			
+
+
+
 			else
 			{
 				print("not a valid button");
@@ -152,7 +138,7 @@ public class TouchScreenModule : MonoBehaviour
 		locations.Add(new Vector3(-100, 70, 0));
 		locations.Add(new Vector3(100, 70, 0));
 		locations.Add(new Vector3(100, -70, 0));
-		locations.Add(new Vector3(-100,-70,0));
+		locations.Add(new Vector3(-100, -70, 0));
 	}
 
 	void getRotations()

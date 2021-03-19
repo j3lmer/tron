@@ -29,6 +29,11 @@ public class MenuController : MonoBehaviour
 		 */
 		getMenuObjects();
 		playMusic();
+
+		if (Debug.isDebugBuild)
+		{
+			Debug.Log("This is a debug build!");
+		}
 	}
 
 
@@ -150,12 +155,12 @@ public class MenuController : MonoBehaviour
 		switch (PlayerPrefs.GetInt("Touch"))
 		{
 			case 0:
-				toggle.isOn = false;
+				toggle.isOn = true;
 				print(toggle.isOn);
 				break;
 
 			case 1:
-				toggle.isOn = true;
+				toggle.isOn = false;
 				print(toggle.isOn);
 				break;
 		}
