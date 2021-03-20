@@ -10,7 +10,7 @@ public class TouchScreenModule : MonoBehaviour
 	List<string> colors;
 	List<Vector3> locations;
 	GameObject touchscreeners;
-	Dictionary<string, Vector3> rotations;
+	List<Vector3> rotations;
 	List<Speler> players;
 	GameObject set;
 
@@ -21,20 +21,25 @@ public class TouchScreenModule : MonoBehaviour
 		touchscreeners = GameObject.Find("touchscreen");
 		getArrows();
 		getLocations();
+		getRotations();
 		getPlayers();
 		getColors();
 
-		//for(var i=0; i<players.Count; i++)
-		//{
-		//	makeButtonSet(colors[i], new Vector3(), players[i]);
-		//}
-
-
-		makeButtonSet("green", locations[0], players[0]);
+		createSets();		
 	}
 
+	void createSets()
+	{
+		var index = 0;
+		foreach (Speler player in players)
+		{
+			//print($"setting Color:{colors[index]} to {locations[index]} and {players[index]}");
+			setUpButtons(colors[index], locations[index], players[index]);
+			index += 1;
+		}
+	}
 
-	void makeButtonSet(string color, Vector3 location/*, string rotation,*/ , Speler player)
+	void setUpButtons(string color, Vector3 location, Speler player)
 	{
 
 		var thiscomponent = new GameObject();
@@ -42,43 +47,79 @@ public class TouchScreenModule : MonoBehaviour
 		thiscomponent.transform.SetParent(touchscreeners.transform);
 		thiscomponent.transform.position = location;
 
+		var thisset = makeButtonSet(thiscomponent, color, location, player);
+
+		switch (color)
+		{
+			case "pink": //roteer rechts
+				var tempObject = new GameObject();
+				tempObject.transform.Rotate(rotations[0]);
+				foreach (Button b in thisset)
+				{
+					b.transform.parent = tempObject.transform;
+					b.transform.parent = thiscomponent.transform;
+				}
+
+				break;
+
+			case "cyan":
+				//roteer links
+				break;
+
+			default:
+				//niks
+				break;
+		}
+	}
+
+
+	Button[] makeButtonSet(GameObject thiscomponent, string color, Vector3 location, Speler player)
+	{
+		
 
 
 		var t = makeButton(color, location, thiscomponent.transform);
-		t.onClick.AddListener(delegate {
+		t.onClick.AddListener(delegate
+		{
 			if (player.lastdir != Vector3.down)
 			{
 				player.directionChanger(Vector3.up);
 			}
 		});
 
-		var d = makeButton(color, location + new Vector3(0,-10,0), thiscomponent.transform);
+		var d = makeButton(color, location + new Vector3(0, -10, 0), thiscomponent.transform);
 		d.transform.Rotate(new Vector3(0, 0, 180));
-		d.onClick.AddListener(delegate {
+		d.onClick.AddListener(delegate
+		{
 			if (player.lastdir != Vector3.up)
 			{
 				player.directionChanger(Vector3.down);
 			}
 		});
 
-		var l = makeButton(color, location + new Vector3(-10,-10,0), thiscomponent.transform);
+		var l = makeButton(color, location + new Vector3(-10, -10, 0), thiscomponent.transform);
 		l.transform.Rotate(new Vector3(0, 0, 90));
-		l.onClick.AddListener(delegate {
+		l.onClick.AddListener(delegate
+		{
 			if (player.lastdir != Vector3.right)
 			{
 				player.directionChanger(Vector3.left);
 			}
 		});
 
-		var r = makeButton(color, location + new Vector3(+10,-10,0), thiscomponent.transform);
+		var r = makeButton(color, location + new Vector3(+10, -10, 0), thiscomponent.transform);
 		r.transform.Rotate(new Vector3(0, 0, -90));
-		r.onClick.AddListener(delegate {
+		r.onClick.AddListener(delegate
+		{
 			if (player.lastdir != Vector3.left)
 			{
 				player.directionChanger(Vector3.right);
 			}
 		});
-	}
+
+		Button[] buttons = {t,d,l,r};
+		return buttons;
+	}	
 
 
 	Button makeButton(string color, Vector3 location, Transform parent)
@@ -88,6 +129,9 @@ public class TouchScreenModule : MonoBehaviour
 		button.gameObject.SetActive(true);
 		return button;
 	}
+
+
+
 
 	void getArrows()
 	{
@@ -122,6 +166,8 @@ public class TouchScreenModule : MonoBehaviour
 
 
 
+
+
 			else
 			{
 				print("not a valid button");
@@ -137,21 +183,21 @@ public class TouchScreenModule : MonoBehaviour
 
 		locations.Add(new Vector3(-100, 70, 0));
 		locations.Add(new Vector3(100, 70, 0));
-		locations.Add(new Vector3(100, -70, 0));
-		locations.Add(new Vector3(-100, -70, 0));
+		locations.Add(new Vector3(-100, -65, 0));
+		locations.Add(new Vector3(106, -65, 0));
 	}
 
 	void getRotations()
 	{
-
+		rotations = new List<Vector3>();
+		rotations.Add(new Vector3(0, 0, 90));
+		rotations.Add(new Vector3(0, 0, -90));
 	}
 
 	void getPlayers()
 	{
-		players = new List<Speler>();
-
-		players.AddRange(FindObjectsOfType<Speler>());
-		print(players.Count);
+		players = FindObjectsOfType<Speler>().ToList();
+		players.Reverse();
 	}
 
 	void getColors()
@@ -159,7 +205,7 @@ public class TouchScreenModule : MonoBehaviour
 		colors = new List<string>();
 		colors.Add("pink");
 		colors.Add("cyan");
-		colors.Add("green");
 		colors.Add("yellow");
+		colors.Add("green");
 	}
 }

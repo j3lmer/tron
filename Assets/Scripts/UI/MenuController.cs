@@ -123,10 +123,7 @@ public class MenuController : MonoBehaviour
 						touchscreenenabler(toggle);
 					}					
 				}
-				catch
-				{
-					break;
-				}
+				catch{break;}
 				break;
 
 			case "backBtn":
@@ -155,12 +152,12 @@ public class MenuController : MonoBehaviour
 		switch (PlayerPrefs.GetInt("Touch"))
 		{
 			case 0:
-				toggle.isOn = true;
+				toggle.isOn = false;
 				print(toggle.isOn);
 				break;
 
 			case 1:
-				toggle.isOn = false;
+				toggle.isOn = true;
 				print(toggle.isOn);
 				break;
 		}

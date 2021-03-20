@@ -122,7 +122,7 @@ public class Speler : MonoBehaviour, IMovable
 			{
 				if (collider.tag != "Powerup")
 				{
-					print($"Player lost: {name}, lost to {collider}");
+					//print($"Player lost: {name}, lost to {collider}");
 					die();
 				}
 			}
@@ -167,7 +167,7 @@ public class Speler : MonoBehaviour, IMovable
         await new WaitForSeconds(1);
 
         PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") -1);
-        print(PlayerPrefs.GetInt("AlivePlayers"));
+        //print(PlayerPrefs.GetInt("AlivePlayers"));
         Destroy(gameObject);
     }
 

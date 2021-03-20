@@ -78,7 +78,7 @@ public class GameController : MonoBehaviour
                 break;
 
             case 1:
-                print("adding touchscreen module");
+                //print("adding touchscreen module");
                 gameObject.AddComponent<TouchScreenModule>();
                 break;
 		}
