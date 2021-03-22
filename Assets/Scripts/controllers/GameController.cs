@@ -65,6 +65,8 @@ public class GameController : MonoBehaviour
 	{
         var tmode = PlayerPrefs.GetInt("Touch");
 
+        print($"Touchscreen mode :{tmode},\n 1 means adding touchscreen");
+
 		switch (tmode)
 		{
             case 0:
@@ -78,7 +80,7 @@ public class GameController : MonoBehaviour
                 break;
 
             case 1:
-                //print("adding touchscreen module");
+                Debug.Log("adding touchscreen module");
                 gameObject.AddComponent<TouchScreenModule>();
                 break;
 		}
@@ -164,8 +166,8 @@ public class GameController : MonoBehaviour
 
         startPositions.Add(new Vector3(-60.5f, 52.2f, 0), Vector3.right);
         startPositions.Add(new Vector3(65.687f, 52.23f, 0), Vector3.down);
-        startPositions.Add(new Vector3(-60.49f, -55.95f, 0), Vector3.left);
-        startPositions.Add(new Vector3(65.639f, -56.006f, 0), Vector3.up);
+        startPositions.Add(new Vector3(65.639f, -56.006f, 0), Vector3.left);
+        startPositions.Add(new Vector3(-60.49f, -55.95f, 0), Vector3.up);
 
         return startPositions;
     }

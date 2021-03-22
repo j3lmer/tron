@@ -6,13 +6,12 @@ using System.Linq;
 
 public class TouchScreenModule : MonoBehaviour
 {
+	GameObject touchscreeners;
 	Dictionary<string, Button> arrows;
 	List<string> colors;
 	List<Vector3> locations;
-	GameObject touchscreeners;
 	List<Vector3> rotations;
 	List<Speler> players;
-	GameObject set;
 
 
 
@@ -53,11 +52,12 @@ public class TouchScreenModule : MonoBehaviour
 		{
 			case "pink": //roteer rechts
 				var tempObject = new GameObject();
+				tempObject.transform.parent = touchscreeners.transform;
 				tempObject.transform.Rotate(rotations[0]);
 				foreach (Button b in thisset)
 				{
 					b.transform.parent = tempObject.transform;
-					b.transform.parent = thiscomponent.transform;
+					//b.transform.parent = thiscomponent.transform;
 				}
 
 				break;

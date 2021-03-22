@@ -32,7 +32,7 @@ public class MenuController : MonoBehaviour
 
 		if (Debug.isDebugBuild)
 		{
-			Debug.Log("This is a debug build!");
+			Debug.Log("This is the latest debug build!");
 		}
 	}
 
@@ -153,11 +153,15 @@ public class MenuController : MonoBehaviour
 		{
 			case 0:
 				toggle.isOn = false;
+				PlayerPrefs.SetInt("Touch", 1);
+				print($"setting touch to 1");
 				print(toggle.isOn);
 				break;
 
 			case 1:
 				toggle.isOn = true;
+				PlayerPrefs.SetInt("Touch", 0);
+				print($"setting touch to 0");
 				print(toggle.isOn);
 				break;
 		}
