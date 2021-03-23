@@ -1,4 +1,25 @@
 todo:
+		make touchscreen arrows work as intended
+
+		make bots work as intended
+
+		show touchscreen in build
+
+
+-------
+doing:
+	
+
+
+
+-------
+done:
+	fixed finalscreen bug not saving
+
+
+	made touchscreen buttons/functionality
+
+
 
 	find out why unity crashes when entering finalscreen
 
@@ -6,19 +27,9 @@ todo:
 	make setting for touchscreen
 
 
-
--------
-doing:
+	
 	making a bot (with navmesh)
 
-	
-
-
-
--------
-done:
-
-	
 
 	refactored with interfaces
 

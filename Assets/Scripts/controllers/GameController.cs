@@ -42,6 +42,13 @@ public class GameController : MonoBehaviour
 
         setupPlayers();
 
+        addComponents();
+
+        checkTouchScreen();
+    }
+
+    void addComponents()
+	{
         gameObject.AddComponent<Timer>();
 
         gameObject.AddComponent<PowerupPlacer>();
@@ -54,6 +61,31 @@ public class GameController : MonoBehaviour
         }
     }
 
+    void checkTouchScreen()
+	{
+        var tmode = PlayerPrefs.GetInt("Touch");
+
+        print($"Touchscreen mode :{tmode},\n 1 means adding touchscreen");
+
+		switch (tmode)
+		{
+            case 0:
+               var t =  GameObject.Find("template");
+                for(var i=0; i<t.transform.childCount; i++)
+				{
+                    var thistemp = t.transform.GetChild(i);
+                    thistemp.gameObject.SetActive(false);
+				}
+
+                break;
+
+            case 1:
+                Debug.Log("adding touchscreen module");
+                gameObject.AddComponent<TouchScreenModule>();
+                break;
+		}
+	}
+
 
 
     void setupPlayers()
@@ -65,6 +97,7 @@ public class GameController : MonoBehaviour
                 {                    
                     makePlayer("Player", i);
                     PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers")+1);
+                    //print(PlayerPrefs.GetInt("AlivePlayers"));
                 }
                 break;
 
@@ -80,6 +113,7 @@ public class GameController : MonoBehaviour
                         makePlayer("Bot", i);
                     }
                     PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") + 1);
+                    //print(PlayerPrefs.GetInt("AlivePlayers"));
                 }
                 break;
         }
@@ -132,8 +166,8 @@ public class GameController : MonoBehaviour
 
         startPositions.Add(new Vector3(-60.5f, 52.2f, 0), Vector3.right);
         startPositions.Add(new Vector3(65.687f, 52.23f, 0), Vector3.down);
-        startPositions.Add(new Vector3(-60.49f, -55.95f, 0), Vector3.left);
-        startPositions.Add(new Vector3(65.639f, -56.006f, 0), Vector3.up);
+        startPositions.Add(new Vector3(65.639f, -56.006f, 0), Vector3.left);
+        startPositions.Add(new Vector3(-60.49f, -55.95f, 0), Vector3.up);
 
         return startPositions;
     }

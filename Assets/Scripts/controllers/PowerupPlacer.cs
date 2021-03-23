@@ -33,11 +33,8 @@ public class PowerupPlacer : MonoBehaviour
 
 
 		List<GameObject> contestants = GameObject.FindGameObjectsWithTag("Player").ToList();
-		var bots = GameObject.FindGameObjectsWithTag("Bot");
-		foreach (GameObject bot in bots)
-		{
-			contestants.Add(bot);
-		}
+		var bots = GameObject.FindGameObjectsWithTag("Bot").ToList();
+		contestants.AddRange(bots);
 
 		while (contestants.Count > 1)
 		{
@@ -49,9 +46,9 @@ public class PowerupPlacer : MonoBehaviour
 			thisdot.AddComponent<Powerup>();
 			j++;
 
-			int powerupNr = Random.Range(0, 3);
+			int powerupNr = Random.Range(0, 5);
 
-			if (j % 10 == 0)
+			if (true)
 			{
 				thisdot.name = pUps[4];
 				thisdot.GetComponent<SpriteRenderer>().color = colors[4];
@@ -92,6 +89,7 @@ public class PowerupPlacer : MonoBehaviour
 		colors.Add(invinciColor);
 		colors.Add(stopColor);
 		colors.Add(poison);
+		colors.Add(Color.yellow);
 		colors.Add(Color.magenta);
 
 		return colors;
@@ -104,6 +102,7 @@ public class PowerupPlacer : MonoBehaviour
 		powerupNames.Add("Invincible");
 		powerupNames.Add("stopPlayer");
 		powerupNames.Add("poison");
+		powerupNames.Add("points");
 		powerupNames.Add("RemoveWalls");
 		return powerupNames;
 	}

@@ -8,6 +8,7 @@ public class NavController : MonoBehaviour
     GameObject plane;
     BotController[] Bots;
     Transform Target;
+    NavMeshSurface surface;
 
 
     private void Start()
@@ -18,7 +19,16 @@ public class NavController : MonoBehaviour
 
         Target = FindObjectOfType<SpelerController>().GetComponent<Transform>();
 
-       
+        WaitForSurface();
+    }
+
+    async void WaitForSurface()
+    {
+        while(surface.size.magnitude <= 0.0f)
+        {
+            await new WaitForEndOfFrame();
+        }
+
         foreach (BotController bot in Bots)
         {
             bot.Target = Target;
@@ -29,7 +39,7 @@ public class NavController : MonoBehaviour
     void makeSurface()
     {
         plane = GameObject.Find("surface");
-        NavMeshSurface surface = plane.AddComponent<NavMeshSurface>();
+        surface = plane.AddComponent<NavMeshSurface>();
         surface.BuildNavMesh();
     }
 }

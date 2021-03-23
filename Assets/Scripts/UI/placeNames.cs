@@ -17,24 +17,35 @@ public class placeNames : MonoBehaviour
     //speciale kleur voor roze
     private Color Pink = new Color(232, 0, 254, 1);
 
-	int i = 0;
+	List<TextMeshProUGUI> texts = new List<TextMeshProUGUI>();
+
+	bool setnames = false;
+
 
     // Start is called before the first frame update.
     void Start()
     {
-        //set font colors to correct colors.
-        setColors();
+
+
+		//set font colors to correct colors.
+		setColors();
 		//set the right font.
-		setFont();			
+		setFont();
+
+       		
     }
+
 
 	private void Update()
 	{
-		if(i == 0 && PlayerPrefs.GetInt("placedPlayers") == 1)
+		if(PlayerPrefs.GetInt("placedPlayers") == 1)
 		{
-			//set the text to the player names.
+			if (!setnames)
+			{
+				//set the text to the player names.
 				setNames();
-			i++;
+				setnames = true;
+			}
 		}
 	}
 
@@ -53,7 +64,6 @@ public class placeNames : MonoBehaviour
 
 
 		//make list of texts and fill it
-		List<TextMeshProUGUI> texts = new List<TextMeshProUGUI>();
 		texts.Add(pink);
 		texts.Add(cyan);
 		texts.Add(yellow);
@@ -71,23 +81,6 @@ public class placeNames : MonoBehaviour
 			var thisText = texts[i];
 			//set text to contestant name
 			thisText.text = thisContName;
-
-			//var color = contestants[i].GetComponent<color>().Color;
-			//switch (color)
-			//{
-			//	case "pink":
-			//		break;
-
-			//	case "cyan":
-			//		break;
-
-			//	case "green":
-			//		break;
-
-			//	case "yellow":
-			//		break;
-			//}
-
 		}
 
 		//check if there are non used text entrys and empty them

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.AI;
 
 public class loadFinal : MonoBehaviour
 {
@@ -14,11 +15,15 @@ public class loadFinal : MonoBehaviour
 	}
 
 	async void checkforFinal()
-	{
-		while(PlayerPrefs.GetInt("AlivePlayers") != 1)
+	{	
+		
+		while(PlayerPrefs.GetInt("AlivePlayers") > 1)
         {
-			await new WaitForSeconds(0.2f);
+			//print("routining");
+			await new WaitForEndOfFrame();
         }
+
+		NavMesh.RemoveAllNavMeshData();
 
 		if(PlayerPrefs.GetInt("AlivePlayers") == 0)
         {
@@ -41,6 +46,8 @@ public class loadFinal : MonoBehaviour
 			}
 			setWinner();
 		}
+		
+		
 	}
 
 
@@ -49,6 +56,14 @@ public class loadFinal : MonoBehaviour
 		PlayerPrefs.SetString("winner", winningName);		
 		PlayerPrefs.SetInt("placedPlayers", 0);
 		PlayerPrefs.SetInt("controls", 0);
+		var cc = PlayerPrefs.GetInt(winningName + "CollectedCoins");
+		PlayerPrefs.SetFloat("winnercoins", cc);
+
+		foreach(Speler participant in FindObjectsOfType<Speler>())
+		{
+			PlayerPrefs.SetInt(participant.name + "CollectedCoins", 0);
+		}
+
 
 		if (sm.Instance != null)
 		{
@@ -57,8 +72,10 @@ public class loadFinal : MonoBehaviour
 				sm.Instance.MusicSource.Stop();
 			}
 		}
+
 		
 		SceneManager.LoadScene("finalScreen");
+
 	}
 }
 

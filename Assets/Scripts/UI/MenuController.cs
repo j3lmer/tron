@@ -29,6 +29,11 @@ public class MenuController : MonoBehaviour
 		 */
 		getMenuObjects();
 		playMusic();
+
+		if (Debug.isDebugBuild)
+		{
+			Debug.Log("This is the latest debug build!");
+		}
 	}
 
 
@@ -105,19 +110,20 @@ public class MenuController : MonoBehaviour
 			case "menuActivator":
 				menuActivator(thisBtn);
 				try
-				{
-					Toggle mute = GameObject.Find("Toggle").GetComponent<Toggle>();					
-					mute.isOn = sm.Instance.MusicSource.mute;					
-					slider = GameObject.Find("Slider").GetComponent<Slider>();
-					slider.value = sm.Instance.MusicSource.volume;
-					slider.value = sm.Instance.MusicSource.volume;
-					sliderActive = true;
-					//DontDestroySlider dds = new DontDestroySlider(slider);
+				{					
+					Toggle toggle = GameObject.Find("Toggle").GetComponent<Toggle>();
+					
+					if (toggle.transform.parent.name == "MusicEnabler")
+					{
+						musicenabler(toggle);
+					}
+					
+					else if (toggle.transform.parent.name == "TouchScreen")
+					{
+						touchscreenenabler(toggle);
+					}					
 				}
-				catch
-				{
-					break;
-				}
+				catch{break;}
 				break;
 
 			case "backBtn":
@@ -128,6 +134,35 @@ public class MenuController : MonoBehaviour
 			case "exit":
 				sliderActive = false;
 				exit();
+				break;
+		}
+	}
+
+	void musicenabler(Toggle toggle)
+	{
+		toggle.isOn = sm.Instance.MusicSource.mute;
+		slider = GameObject.Find("Slider").GetComponent<Slider>();
+		slider.value = sm.Instance.MusicSource.volume;
+		slider.value = sm.Instance.MusicSource.volume;
+		sliderActive = true;
+	}
+
+	void touchscreenenabler(Toggle toggle)
+	{
+		switch (PlayerPrefs.GetInt("Touch"))
+		{
+			case 0:
+				toggle.isOn = false;
+				PlayerPrefs.SetInt("Touch", 1);
+				print($"setting touch to 1");
+				print(toggle.isOn);
+				break;
+
+			case 1:
+				toggle.isOn = true;
+				PlayerPrefs.SetInt("Touch", 0);
+				print($"setting touch to 0");
+				print(toggle.isOn);
 				break;
 		}
 	}
@@ -313,7 +348,7 @@ public class MenuController : MonoBehaviour
 
 	}
 
-	void exit()
+	public void exit()
 	{
 		Application.Quit();
 	}

@@ -6,9 +6,10 @@ using UnityEngine.AI;
 
 public class BotController : MonoBehaviour, IBotControllable
 {
+    Speler thisBot;
     Transform target;
-    NavMeshPath path;
 
+    NavMeshPath path;
     private int currentPathIndex = 1;
 
     Vector3 offset;
@@ -16,11 +17,19 @@ public class BotController : MonoBehaviour, IBotControllable
     int hoekenLengte = 0;
 
 
-    Speler thisBot;
+    bool foundPath;
 
+
+    float randomTime;
 
 
     //GETTERS/SETTERS
+    public float RandomTime
+	{
+		get { return randomTime; }
+		set { randomTime = value; }
+	}
+
     public Transform Target
     {
         get { return target; }
@@ -30,88 +39,142 @@ public class BotController : MonoBehaviour, IBotControllable
     {
         get { return path; }
         set { path = value; }
-    }
+    }   
     //END GETTER/SETTERS
 
-    private void Start()
+
+
+private void Start()
     {
         thisBot = GetComponent<Speler>();
         Path = new NavMeshPath();
         Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+
+        setRandomTime();
     }
+
+    void setRandomTime()
+	{
+        int diff = PlayerPrefs.GetInt("difficulty");
+
+		switch (diff)
+		{
+            case 0:
+                RandomTime = Random.Range(0.75f, 1);
+                break;
+
+            case 1:
+                RandomTime = Random.Range(0.5f, 0.75f);
+                break;
+
+            case 2:
+                RandomTime = Random.Range(0, 0.25f);
+                break;
+
+            default:
+                RandomTime = Random.Range(0.25f, 0.5f);
+                break;
+		}
+	}
 
 
 
     public async void findPath()
     {
-        while (true)
+        while (PlayerPrefs.GetInt("AlivePlayers") > 1)           
         {
-            if(thisBot != null)
+            var targetpos = Target.position + target.GetComponent<Speler>().lastdir * 10;
+
+            if (thisBot != null)
             {
-                var foundPath = NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, Path);
-                print($"path: {foundPath}");
-                print(Path.corners.Length);
+               foundPath = NavMesh.CalculatePath(transform.position, targetpos, NavMesh.AllAreas, Path);
+                print(foundPath);
+				if (foundPath)
+				{
+                    moveToObjective();
+				}
+                //print($"path: {foundPath}");
+                //print(Path.corners.Length);
                 await new WaitForSeconds(1);
             }           
         }
     }
 
 
-
-
-    private void Update()
+    async void moveToObjective()
     {
-
-        //Debug.DrawLine(transform.position, path.corners[0]);
-        
-        if (Path != null)
+        if (Path.status != NavMeshPathStatus.PathInvalid)
         {
             hoekenLengte = Path.corners.Length;
-        }
+
+            //print(cornersLength);
 
 
-        for (int i = 0; i < Path.corners.Length - 1; i++)
-        { 
-            Debug.DrawLine(Path.corners[i], Path.corners[i + 1], Color.red);
-        }
 
-        if (Path.corners != null && Path.corners.Length > 0)
-        {
-            offset = (Path.corners[currentPathIndex] - transform.position);
-            offset.y = 0;
-
-            var t = transform.position;
-
-            var o = offset;
-
-            //up&down
-            if (o.x > o.y && Path.corners[currentPathIndex].y < t.y)
+            if (Path.corners != null && hoekenLengte > 0)
             {
-                thisBot.directionChanger(Vector3.down);
-                //yield return new WaitForSeconds(randomTime);
-            }
+                for (int i = 0; i < hoekenLengte - 1; i++)
+                {
+                    // Debug.DrawLine(Path.corners[i], Path.corners[i + 1] + target.GetComponent<Speler>().lastdir * 10, Color.red);
+                    //var t = Target.transform.position + target.GetComponent<Speler>().lastdir * 10;
+                    Debug.DrawLine(Path.corners[i], Path.corners[i + 1], Color.red);
+                }
 
-            else if (o.x <= o.y && Path.corners[currentPathIndex].y >= t.y)
-            {
-                thisBot.directionChanger(Vector3.up);
-                //yield return new WaitForSeconds(randomTime);
-            }
 
-            //left&right
-            else if (o.x <= o.y && Path.corners[currentPathIndex].x < t.x)
-            {
-                thisBot.directionChanger(Vector3.left);
-                //yield return new WaitForSeconds(randomTime);
-            }
+                offset = (Path.corners[currentPathIndex] - transform.position);
+                offset.y = 0;
 
-            else if (o.x > o.y && Path.corners[currentPathIndex].x >= t.x)
-            {
-                thisBot.directionChanger(Vector3.right);
-                //yield return new WaitForSeconds(randomTime);
-            }
+                var t = transform.position;
 
-            //randomTime = Random.Range(0, 0.75f);
-            Debug.DrawLine(transform.position, transform.position + offset, Color.green);
+                var o = offset;
+
+                var ld = gameObject.GetComponent<Speler>().lastdir;
+
+                //up&down
+                if (o.x > o.y && Path.corners[currentPathIndex].y < t.y)
+                {
+                    if (ld != Vector3.down && ld != Vector3.up)
+					{
+                        thisBot.directionChanger(Vector3.down);
+
+                        await new WaitForSeconds(RandomTime);
+                    }
+                }
+
+                else if (o.x <= o.y && Path.corners[currentPathIndex].y >= t.y)
+                {
+                    if(ld != Vector3.up && ld != Vector3.down)
+					{
+                        thisBot.directionChanger(Vector3.up);
+                        await new WaitForSeconds(RandomTime);
+                    }
+                }
+
+
+
+                //left&right
+                else if (o.x <= o.y && Path.corners[currentPathIndex].x < t.x)
+                {
+                    if(ld != Vector3.left && ld != Vector3.right)
+					{
+                        thisBot.directionChanger(Vector3.left);
+                        await new WaitForSeconds(RandomTime);
+                    }
+                }
+
+                else if (o.x > o.y && Path.corners[currentPathIndex].x >= t.x)
+                {
+                    if(ld != Vector3.right && ld != Vector3.left)
+					{
+                        thisBot.directionChanger(Vector3.right);
+                        await new WaitForSeconds(RandomTime);
+                    }
+                }
+
+            }
+            
         }
     }
-}
+
+    }
+
