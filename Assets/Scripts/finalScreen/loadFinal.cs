@@ -56,6 +56,14 @@ public class loadFinal : MonoBehaviour
 		PlayerPrefs.SetString("winner", winningName);		
 		PlayerPrefs.SetInt("placedPlayers", 0);
 		PlayerPrefs.SetInt("controls", 0);
+		var cc = PlayerPrefs.GetInt(winningName + "CollectedCoins");
+		PlayerPrefs.SetFloat("winnercoins", cc);
+
+		foreach(Speler participant in FindObjectsOfType<Speler>())
+		{
+			PlayerPrefs.SetInt(participant.name + "CollectedCoins", 0);
+		}
+
 
 		if (sm.Instance != null)
 		{

@@ -46,9 +46,9 @@ public class PowerupPlacer : MonoBehaviour
 			thisdot.AddComponent<Powerup>();
 			j++;
 
-			int powerupNr = Random.Range(0, 4);
+			int powerupNr = Random.Range(0, 5);
 
-			if (j % 10 == 0)
+			if (true)
 			{
 				thisdot.name = pUps[4];
 				thisdot.GetComponent<SpriteRenderer>().color = colors[4];
@@ -89,6 +89,7 @@ public class PowerupPlacer : MonoBehaviour
 		colors.Add(invinciColor);
 		colors.Add(stopColor);
 		colors.Add(poison);
+		colors.Add(Color.yellow);
 		colors.Add(Color.magenta);
 
 		return colors;
@@ -101,6 +102,7 @@ public class PowerupPlacer : MonoBehaviour
 		powerupNames.Add("Invincible");
 		powerupNames.Add("stopPlayer");
 		powerupNames.Add("poison");
+		powerupNames.Add("points");
 		powerupNames.Add("RemoveWalls");
 		return powerupNames;
 	}

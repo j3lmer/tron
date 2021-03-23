@@ -22,6 +22,7 @@ public class finalScreen : MonoBehaviour
 	private int cl = 0;
 
 	string Winner;
+	int WinCoins;
 
 	private readonly string letters = "ABCDEFGHIJKLMNOPQRSTUVWQXYZ0123456789!?";
 
@@ -57,6 +58,8 @@ public class finalScreen : MonoBehaviour
 	{
 		var winner = PlayerPrefs.GetString("winner");
 		print(winner);
+
+		WinCoins = PlayerPrefs.GetInt("winnercoins");
 
 		//message ophalenen hier uit wintext
 		var message = GameObject.Find("Message");
@@ -190,7 +193,8 @@ public class finalScreen : MonoBehaviour
 						var thisObj = spelerObj.AllSpelersList[i];
 						if(thisObj.naam == winner)
 						{
-							thisObj.score++;
+							thisObj.score += 10;
+							thisObj.score += WinCoins;
 							foundWinner = true;
 						}
 					}
@@ -199,7 +203,8 @@ public class finalScreen : MonoBehaviour
 				{
 					playerData nieuweSpeler = new playerData();
 					nieuweSpeler.naam = winner;
-					nieuweSpeler.score++;
+					nieuweSpeler.score += 10;
+					nieuweSpeler.score += WinCoins;
 
 					spelerObj.AllSpelersList.Add(nieuweSpeler);
 				}
@@ -211,7 +216,8 @@ public class finalScreen : MonoBehaviour
 				Debug.Log("SpelerObject is leeg");
 				playerData newPlayer = new playerData();
 				newPlayer.naam = winner;
-				newPlayer.score++;
+				newPlayer.score += 10;
+				newPlayer.score += WinCoins;
 
 				spelerObj.AllSpelersList.Add(newPlayer);
 				json = SaveToString(spelerObj);
@@ -228,7 +234,8 @@ public class finalScreen : MonoBehaviour
 
 			playerData newPlayer = new playerData();
 			newPlayer.naam = winner;
-			newPlayer.score++;
+			newPlayer.score += 10;
+			newPlayer.score += WinCoins;
 
 			spelerObj.AllSpelersList.Add(newPlayer);
 			json = SaveToString(spelerObj);
@@ -411,7 +418,7 @@ public class finalScreen : MonoBehaviour
 public class playerData
 {
 	public string naam;
-	public int score;
+	public float score;
 }
 
 [System.Serializable]

@@ -30,6 +30,15 @@ public class Powerup : MonoBehaviour
                     speler.die();
                     break;
 
+                case "points":
+                    if (PlayerPrefs.GetInt(speler.name + "CollectedCoins") != null)
+					{
+                        var coins = PlayerPrefs.GetInt(speler.name + "CollectedCoins");
+                        coins += 1;
+                        PlayerPrefs.SetInt(speler.name + "CollectedCoins", coins);
+                    }
+                    break;
+
                 case "RemoveWalls":
                     removeWalls();
                     break;
