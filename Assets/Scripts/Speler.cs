@@ -62,8 +62,13 @@ public class Speler : MonoBehaviour, IMovable
         get { return wall; }
         set { wall = value; }
     }
-    //------------------------------------end wall variables
+    //------------------------------------end wall variables\
 
+
+    //------------------------------------event
+    public delegate void movedDirection();
+    public static event movedDirection Moved;
+    //------------------------------------end event
 
 
 
@@ -79,7 +84,11 @@ public class Speler : MonoBehaviour, IMovable
     {
         rb.velocity = direction * speed;
         LastDirection = direction;
-        spawnWall();   
+        spawnWall();
+  //      if(Moved != null)
+		//{
+  //          Moved();
+  //      }
     }
 
 
@@ -99,7 +108,7 @@ public class Speler : MonoBehaviour, IMovable
 		obs.carveOnlyStationary = false;
 	}
 
-    public void fitColliderBetween(Collider2D co, Vector2 a, Vector2 b)
+    public void fitColliderBetween(Collider2D co, Vector3 a, Vector3 b)
     {
         // Calculate the Center Position
         co.transform.position = a + (b - a) * 0.5f;

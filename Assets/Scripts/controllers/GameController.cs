@@ -65,7 +65,7 @@ public class GameController : MonoBehaviour
 	{
         var tmode = PlayerPrefs.GetInt("Touch");
 
-        print($"Touchscreen mode :{tmode},\n 1 means adding touchscreen");
+        //print($"Touchscreen mode :{tmode},\n 1 means adding touchscreen");
 
 		switch (tmode)
 		{
@@ -80,7 +80,7 @@ public class GameController : MonoBehaviour
                 break;
 
             case 1:
-                Debug.Log("adding touchscreen module");
+                //Debug.Log("adding touchscreen module");
                 gameObject.AddComponent<TouchScreenModule>();
                 break;
 		}

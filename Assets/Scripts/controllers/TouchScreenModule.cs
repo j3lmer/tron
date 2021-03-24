@@ -53,12 +53,13 @@ public class TouchScreenModule : MonoBehaviour
 			case "pink": //roteer rechts
 				var tempObject = new GameObject();
 				tempObject.transform.parent = touchscreeners.transform;
-				tempObject.transform.Rotate(rotations[0]);
 				foreach (Button b in thisset)
 				{
 					b.transform.parent = tempObject.transform;
-					//b.transform.parent = thiscomponent.transform;
+					tempObject.transform.Rotate(rotations[0]);
+					b.transform.parent = thiscomponent.transform;
 				}
+				//Destroy(tempObject);
 
 				break;
 
@@ -75,7 +76,7 @@ public class TouchScreenModule : MonoBehaviour
 
 	Button[] makeButtonSet(GameObject thiscomponent, string color, Vector3 location, Speler player)
 	{
-		
+
 
 
 		var t = makeButton(color, location, thiscomponent.transform);

@@ -6,6 +6,6 @@ public interface IMovable
 {
     void directionChanger(Vector3 direction);
     void spawnWall();
-    void fitColliderBetween(Collider2D co, Vector2 a, Vector2 b);
+    void fitColliderBetween(Collider2D co, Vector3 a, Vector3 b);
     void die();    
 }

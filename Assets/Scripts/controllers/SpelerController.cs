@@ -21,7 +21,7 @@ public class SpelerController : MonoBehaviour
     }
 
     void checkInputs()
-    {        
+    {
         if (Input.GetKeyDown(up))
         {
             if (speler.lastdir != Vector3.down)
@@ -51,7 +51,8 @@ public class SpelerController : MonoBehaviour
             {
                 speler.directionChanger(Vector3.right);
             }
-        }               
+        }
+
     }
 
 

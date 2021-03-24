@@ -88,7 +88,7 @@ private void Start()
             if (thisBot != null)
             {
                foundPath = NavMesh.CalculatePath(transform.position, targetpos, NavMesh.AllAreas, Path);
-                print(foundPath);
+                //print(foundPath);
 				if (foundPath)
 				{
                     moveToObjective();
@@ -101,10 +101,23 @@ private void Start()
     }
 
 
-    async void moveToObjective()
+	//void OnEnable()
+	//{
+	//	Speler.Moved += findPath;
+	//	print("botcontroller findpath subscribing to speler.moved");
+	//}
+
+	//void OnDisable()
+	//{
+	//	Speler.Moved -= findPath;
+	//	print("botcontroller findpath unsubscribing to speler.moved");
+	//}
+
+
+	async void moveToObjective()
     {
-        if (Path.status != NavMeshPathStatus.PathInvalid)
-        {
+        //if (Path.status != NavMeshPathStatus.PathInvalid)
+        //{
             hoekenLengte = Path.corners.Length;
 
             //print(cornersLength);
@@ -173,7 +186,7 @@ private void Start()
 
             }
             
-        }
+        //}
     }
 
     }
