@@ -9,6 +9,8 @@ using UnityEngine.SceneManagement;
 
 public class HighscoreTable : MonoBehaviour
 {
+
+	//TODO: MAKE HIGHSCORETABLE DYNAMICALLY SIZED
 	public Transform entryContainer;
 	public Transform entryTemplate;
 

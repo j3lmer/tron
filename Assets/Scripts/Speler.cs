@@ -104,13 +104,16 @@ public class Speler : MonoBehaviour, IMovable
 
     public void spawnWall()
     {
-        lastWallEnd = transform.position;
-        GameObject w = Instantiate(wallPrefab, transform.position + Vector3.left *3, Quaternion.identity);
-        wall = w.GetComponent<Collider2D>();
-		w.tag = "playerWall";
-		var obs = w.AddComponent<NavMeshObstacle>();
-		obs.carving = true;
-		obs.carveOnlyStationary = false;
+        if(alive)
+        {
+            lastWallEnd = transform.position;
+            GameObject w = Instantiate(wallPrefab, transform.position , Quaternion.identity);
+            wall = w.GetComponent<Collider2D>();
+            w.tag = "playerWall";
+            var obs = w.AddComponent<NavMeshObstacle>();
+            obs.carving = true;
+            obs.carveOnlyStationary = false;
+        }
 	}
 
     public void fitColliderBetween(Collider2D co, Vector3 a, Vector3 b)

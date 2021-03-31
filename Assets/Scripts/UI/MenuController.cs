@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
 {
+	//TODO: MAKE BACK BTN INSTEAD OF HOME
+
 	//variables for accessing menus + canvas
 	GameObject menuObject;
 	Canvas canvas;

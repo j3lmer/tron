@@ -80,7 +80,7 @@ public class PowerupPlacer : MonoBehaviour
 	List<Color> getColors()
 	{
 		Color32 speedColor = new Color32(0, 134, 227, 255);
-		Color32 invinciColor = new Color32(251, 184, 41, 255);
+		Color32 invinciColor = new Color32(96, 40, 250, 255);
 		Color32 poison = new Color32(147, 229, 30, 255);
 		Color stopColor = Color.red;
 		List<Color> colors = new List<Color>();
