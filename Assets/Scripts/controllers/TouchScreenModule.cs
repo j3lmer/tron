@@ -33,8 +33,11 @@ public class TouchScreenModule : MonoBehaviour
 		foreach (Speler player in players)
 		{
 			//print($"setting Color:{colors[index]} to {locations[index]} and {players[index]}");
-			setUpButtons(colors[index], locations[index], players[index]);
-			index += 1;
+			if (!player.GetComponent<BotController>())
+			{
+				setUpButtons(colors[index], locations[index], players[index]);
+				index += 1;
+			}			
 		}
 	}
 
@@ -48,29 +51,40 @@ public class TouchScreenModule : MonoBehaviour
 
 		var thisset = makeButtonSet(thiscomponent, color, location, player);
 
+		var tempObject = new GameObject();
+
 		switch (color)
 		{
-			case "pink": //roteer rechts
-				var tempObject = new GameObject();
+			case "pink": //roteer rechts (sorry)
 				tempObject.transform.parent = touchscreeners.transform;
 				foreach (Button b in thisset)
 				{
 					b.transform.parent = tempObject.transform;
-					tempObject.transform.Rotate(rotations[0]);
+					tempObject.transform.Rotate(new Vector3(0, 0, -90));
+					tempObject.transform.Translate(new Vector3(locations[0].y, locations[0].x, 0) + new Vector3(-10,-95,0));
 					b.transform.parent = thiscomponent.transform;
 				}
-				//Destroy(tempObject);
-
 				break;
 
 			case "cyan":
-				//roteer links
+				//roteer links (nog meer sorry)
+				tempObject = new GameObject();
+				tempObject.transform.parent = touchscreeners.transform;
+				foreach (Button b in thisset)
+				{
+					b.transform.parent = tempObject.transform;
+					tempObject.transform.Rotate(new Vector3(0, 0, 90));
+					tempObject.transform.Translate(new Vector3(locations[0].y, locations[0].x, 0) + new Vector3(-130, -95, 0));
+					b.transform.parent = thiscomponent.transform;
+				}
 				break;
 
 			default:
 				//niks
 				break;
 		}
+
+		Destroy(tempObject);
 	}
 
 
@@ -82,40 +96,113 @@ public class TouchScreenModule : MonoBehaviour
 		var t = makeButton(color, location, thiscomponent.transform);
 		t.onClick.AddListener(delegate
 		{
-			if (player.lastdir != Vector3.down)
+			if(color != "pink" && color != "cyan")
 			{
-				player.directionChanger(Vector3.up);
+				if (player.lastdir != Vector3.down)
+				{
+					player.directionChanger(Vector3.up);
+				}
 			}
+			else if(color == "pink")
+			{
+				if (player.lastdir != Vector3.left)
+				{
+					player.directionChanger(Vector3.right);
+				}
+			}
+			else if(color == "cyan")
+			{
+				if (player.lastdir != Vector3.right)
+				{
+					player.directionChanger(Vector3.left);
+				}
+			}
+			
+			
 		});
 
 		var d = makeButton(color, location + new Vector3(0, -10, 0), thiscomponent.transform);
 		d.transform.Rotate(new Vector3(0, 0, 180));
 		d.onClick.AddListener(delegate
 		{
-			if (player.lastdir != Vector3.up)
+			if(color != "pink" && color != "cyan")
 			{
-				player.directionChanger(Vector3.down);
+				if (player.lastdir != Vector3.up)
+				{
+					player.directionChanger(Vector3.down);
+				}
 			}
+			else if(color == "pink")
+			{
+				if (player.lastdir != Vector3.right)
+				{
+					player.directionChanger(Vector3.left);
+				}
+			}
+			else if(color == "cyan")
+			{
+				if (player.lastdir != Vector3.left)
+				{
+					player.directionChanger(Vector3.right);
+				}
+			}
+			
 		});
 
 		var l = makeButton(color, location + new Vector3(-10, -10, 0), thiscomponent.transform);
 		l.transform.Rotate(new Vector3(0, 0, 90));
 		l.onClick.AddListener(delegate
 		{
-			if (player.lastdir != Vector3.right)
+			if(color != "pink" && color != "cyan")
 			{
-				player.directionChanger(Vector3.left);
+				if (player.lastdir != Vector3.right)
+				{
+					player.directionChanger(Vector3.left);
+				}
 			}
+			else if(color == "pink")
+			{
+				if (player.lastdir != Vector3.down)
+				{
+					player.directionChanger(Vector3.up);
+				}
+			}
+			else if(color == "cyan")
+			{
+				if (player.lastdir != Vector3.up)
+				{
+					player.directionChanger(Vector3.down);
+				}
+			}
+			
 		});
 
 		var r = makeButton(color, location + new Vector3(+10, -10, 0), thiscomponent.transform);
 		r.transform.Rotate(new Vector3(0, 0, -90));
 		r.onClick.AddListener(delegate
 		{
-			if (player.lastdir != Vector3.left)
+			if(color != "pink" && color != "cyan")
 			{
-				player.directionChanger(Vector3.right);
+				if (player.lastdir != Vector3.left)
+				{
+					player.directionChanger(Vector3.right);
+				}
 			}
+			else if(color == "pink")
+			{
+				if (player.lastdir != Vector3.up)
+				{
+					player.directionChanger(Vector3.down);
+				}
+			}
+			else if(color == "cyan")
+			{
+				if (player.lastdir != Vector3.down)
+				{
+					player.directionChanger(Vector3.up);
+				}
+			}
+			
 		});
 
 		Button[] buttons = {t,d,l,r};

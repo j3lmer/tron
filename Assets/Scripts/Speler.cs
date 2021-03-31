@@ -34,7 +34,9 @@ public class Speler : MonoBehaviour, IMovable
     {
         get { return invincible; }
         set { invincible = value; }
-    }    
+    }
+
+    bool alive;
    
 
     //------------------------------------end player variables
@@ -65,9 +67,9 @@ public class Speler : MonoBehaviour, IMovable
     //------------------------------------end wall variables\
 
 
-    //------------------------------------event
-    public delegate void movedDirection();
-    public static event movedDirection Moved;
+    ////------------------------------------event
+    //public delegate void movedDirection();
+    //public static event movedDirection Moved;
     //------------------------------------end event
 
 
@@ -77,18 +79,21 @@ public class Speler : MonoBehaviour, IMovable
         //fill in some local variables
         rb = GetComponent<Rigidbody2D>();
         speed = 16;
-        
+        alive = true;
     }    
 
     public void directionChanger(Vector3 direction)
     {
-        rb.velocity = direction * speed;
-        LastDirection = direction;
-        spawnWall();
-  //      if(Moved != null)
-		//{
-  //          Moved();
-  //      }
+		if (alive)
+		{
+            rb.velocity = direction * speed;
+            LastDirection = direction;
+            spawnWall();
+        }
+          //if(Moved != null)
+		  //{
+          // Moved();
+          //}
     }
 
 
@@ -100,7 +105,7 @@ public class Speler : MonoBehaviour, IMovable
     public void spawnWall()
     {
         lastWallEnd = transform.position;
-        GameObject w = Instantiate(wallPrefab, transform.position, Quaternion.identity);
+        GameObject w = Instantiate(wallPrefab, transform.position + Vector3.left *3, Quaternion.identity);
         wall = w.GetComponent<Collider2D>();
 		w.tag = "playerWall";
 		var obs = w.AddComponent<NavMeshObstacle>();
@@ -141,43 +146,45 @@ public class Speler : MonoBehaviour, IMovable
 
     public async void die()
     {
-        AudioClip derezz = Resources.Load<AudioClip>("music/derezz");
-
-        if(sm.Instance != null)
+        if (gameObject)
         {
-            sm.Instance.MusicSource.Stop();
-            sm.Instance.Play(derezz);
-        }
+            AudioClip derezz = Resources.Load<AudioClip>("music/derezz");
 
-        try
-        {
-          GetComponent<SpelerController>().enabled = false;
-        }
-        catch
-        {
-          GetComponent<BotController>().enabled = false;
-        }
-
-        Color c = GetComponent<SpriteRenderer>().color;
-        c.a = 0;
-        GetComponent<SpriteRenderer>().color = c;
-
-        string wallname = wallprefab.name;
-        GameObject[] walls = GameObject.FindGameObjectsWithTag("playerWall");
-
-        foreach(GameObject wall in walls)
-        {
-            if (wall.name.Contains(wallname))
+            if (sm.Instance != null)
             {
-                wall.SetActive(false);
+                sm.Instance.MusicSource.Stop();
+                sm.Instance.Play(derezz);
             }
-        }
 
-        await new WaitForSeconds(1);
+            try
+            {
+                GetComponent<SpelerController>().enabled = false;
+            }
+            catch
+            {
+                GetComponent<BotController>().enabled = false;
+            }
 
-        PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") -1);
-        //print(PlayerPrefs.GetInt("AlivePlayers"));
-        Destroy(gameObject);
+            Color c = GetComponent<SpriteRenderer>().color;
+            c.a = 0;
+            GetComponent<SpriteRenderer>().color = c;
+
+            string wallname = wallprefab.name;
+            GameObject[] walls = GameObject.FindGameObjectsWithTag("playerWall");
+
+            foreach (GameObject wall in walls)
+            {
+                if (wall.name.Contains(wallname))
+                {
+                    wall.SetActive(false);
+                }
+            }
+
+            await new WaitForSeconds(1);
+
+            PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") - 1);
+            //print(PlayerPrefs.GetInt("AlivePlayers"));
+            alive = false;
+        }		
     }
-
 }

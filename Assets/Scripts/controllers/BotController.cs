@@ -39,10 +39,10 @@ public class BotController : MonoBehaviour, IBotControllable
     {
         get { return path; }
         set { path = value; }
-    }   
+    }
     //END GETTER/SETTERS
 
-
+    NavMeshAgent agent;
 
 private void Start()
     {
@@ -51,6 +51,8 @@ private void Start()
         Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
 
         setRandomTime();
+
+        agent = gameObject.AddComponent<NavMeshAgent>();
     }
 
     void setRandomTime()
@@ -81,23 +83,30 @@ private void Start()
 
     public async void findPath()
     {
-        while (PlayerPrefs.GetInt("AlivePlayers") > 1)           
-        {
-            var targetpos = Target.position + target.GetComponent<Speler>().lastdir * 10;
+        path = new NavMeshPath();
+        bool foundpath = NavMesh.CalculatePath(gameObject.transform.position, target.transform.position, NavMesh.AllAreas, path);
 
-            if (thisBot != null)
-            {
-               foundPath = NavMesh.CalculatePath(transform.position, targetpos, NavMesh.AllAreas, Path);
-                //print(foundPath);
-				if (foundPath)
-				{
-                    moveToObjective();
-				}
-                //print($"path: {foundPath}");
-                //print(Path.corners.Length);
-                await new WaitForSeconds(1);
-            }           
-        }
+        print("did i find a path? "+ foundPath);
+
+        agent.SetPath(path);
+        print("setting path");
+    //    while (PlayerPrefs.GetInt("AlivePlayers") > 1)           
+    //    {
+    //        var targetpos = Target.position + target.GetComponent<Speler>().lastdir * 10;
+
+    //        if (thisBot != null)
+    //        {
+    //           foundPath = NavMesh.CalculatePath(transform.position, targetpos, NavMesh.AllAreas, Path);
+    //            //print(foundPath);
+				//if (foundPath)
+				//{
+    //                moveToObjective();
+				//}
+    //            //print($"path: {foundPath}");
+    //            //print(Path.corners.Length);
+    //            await new WaitForSeconds(1);
+    //        }           
+    //    }
     }
 
 

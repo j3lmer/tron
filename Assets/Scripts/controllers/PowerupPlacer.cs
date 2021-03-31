@@ -48,10 +48,10 @@ public class PowerupPlacer : MonoBehaviour
 
 			int powerupNr = Random.Range(0, 5);
 
-			if (true)
+			if (j % 10 == 0)
 			{
-				thisdot.name = pUps[4];
-				thisdot.GetComponent<SpriteRenderer>().color = colors[4];
+				thisdot.name = pUps[5];
+				thisdot.GetComponent<SpriteRenderer>().color = colors[5];
 			}
 			else
 			{

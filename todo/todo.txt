@@ -1,9 +1,7 @@
 todo:
-		make touchscreen arrows work as intended
 
 		make bots work as intended
 
-		show touchscreen in build
 
 
 -------
@@ -14,6 +12,14 @@ doing:
 
 -------
 done:
+
+
+	BUGFIX: create lightwall after death.
+
+	make touchscreen arrows work as intended
+
+	show touchscreen in build
+
 	fixed finalscreen bug not saving
 
 
