@@ -139,9 +139,9 @@ public class HighscoreTable : MonoBehaviour
 					var eindscore = GesorteerdeLijst[j].score * 10;
 
 					//zet de score, naam en positietext neer waar het hoort in de entry
-					var score = scoretext.GetComponent<UnityEngine.UI.Text>().text = eindscore.ToString();
-					var name = naamtext.GetComponent<UnityEngine.UI.Text>().text = GesorteerdeLijst[j].naam;
-					var posI = postext.GetComponent<UnityEngine.UI.Text>().text = pos.ToString();
+					var score = scoretext.GetComponent<Text>().text = eindscore.ToString();
+					var name = naamtext.GetComponent<Text>().text = GesorteerdeLijst[j].naam;
+					var posI = postext.GetComponent<Text>().text = pos.ToString();
 
 					//stoppen wanneer max van 10 is bereikt
 					if (j >= 9)
@@ -156,7 +156,7 @@ public class HighscoreTable : MonoBehaviour
 				var scoretext = entryTransform.GetChild(0);
 
 				// error weergeven
-				scoretext.GetComponent<UnityEngine.UI.Text>().text = "Gefaald om spelerdata op te halen, Probeer een potje te spelen!";
+				scoretext.GetComponent<Text>().text = "Gefaald om spelerdata op te halen, Probeer een potje te spelen!";
 			}
 		}
 	}

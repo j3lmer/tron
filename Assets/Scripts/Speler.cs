@@ -98,8 +98,9 @@ public class Speler : MonoBehaviour, IMovable
 
 
     private void Update()
-    {
-        fitColliderBetween(wall, lastWallEnd, transform.position);
+    {                                                              //CRASHES IF MOVING TO OTHER DIRECTION
+                                                                   //also not nessecary?
+        fitColliderBetween(wall, lastWallEnd, transform.position - lastdir*2 );
     }
 
     public void spawnWall()
@@ -110,10 +111,10 @@ public class Speler : MonoBehaviour, IMovable
             GameObject w = Instantiate(wallPrefab, transform.position , Quaternion.identity);
             wall = w.GetComponent<Collider2D>();
             w.tag = "playerWall";
-            var obs = w.AddComponent<NavMeshObstacle>();
-            obs.carving = true;
-            obs.carveOnlyStationary = false;
-        }
+			var obs = w.AddComponent<NavMeshObstacle>();
+			obs.carving = true;
+			obs.carveOnlyStationary = false;
+		}
 	}
 
     public void fitColliderBetween(Collider2D co, Vector3 a, Vector3 b)
@@ -124,9 +125,9 @@ public class Speler : MonoBehaviour, IMovable
         // Scale it (horizontally or vertically)
         float dist = Vector2.Distance(a, b);
         if (a.x != b.x)
-            co.transform.localScale = new Vector2(dist+1, 1);
+            co.transform.localScale = new Vector2(dist+0.99f, 1);
         else
-            co.transform.localScale = new Vector2(1, dist+1);
+            co.transform.localScale = new Vector2(1, dist+0.99f);
     }
 
 

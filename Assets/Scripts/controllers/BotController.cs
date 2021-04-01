@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -97,14 +95,14 @@ private void Start()
            if (thisBot != null)
            {
               foundPath = NavMesh.CalculatePath(transform.position, targetpos, NavMesh.AllAreas, Path);
-               //print(foundPath);
+               print($"FOUND PATH: {foundPath}");
 				if (foundPath)
 				{
                    moveToObjective();
 				}
                //print($"path: {foundPath}");
-               //print(Path.corners.Length);
-               await new WaitForSeconds(1);
+               print(Path.corners.Length);
+               await new WaitForSeconds(0.22f);
            }           
        }
     }
@@ -125,78 +123,74 @@ private void Start()
 
 	async void moveToObjective()
     {
-        //if (Path.status != NavMeshPathStatus.PathInvalid)
-        //{
-            hoekenLengte = Path.corners.Length;
+        hoekenLengte = Path.corners.Length;
 
-            //print(cornersLength);
+        //print(cornersLength);
 
 
 
-            if (Path.corners != null && hoekenLengte > 0)
+        if (Path.corners != null && hoekenLengte > 0)
+        {
+            for (int i = 0; i < hoekenLengte - 1; i++)
             {
-                for (int i = 0; i < hoekenLengte - 1; i++)
-                {
-                    // Debug.DrawLine(Path.corners[i], Path.corners[i + 1] + target.GetComponent<Speler>().lastdir * 10, Color.red);
-                    //var t = Target.transform.position + target.GetComponent<Speler>().lastdir * 10;
-                    Debug.DrawLine(Path.corners[i], Path.corners[i + 1], Color.red);
-                }
-
-
-                offset = (Path.corners[currentPathIndex] - transform.position);
-                offset.y = 0;
-
-                var t = transform.position;
-
-                var o = offset;
-
-                var ld = gameObject.GetComponent<Speler>().lastdir;
-
-                //up&down
-                if (o.x > o.y && Path.corners[currentPathIndex].y < t.y)
-                {
-                    if (ld != Vector3.down && ld != Vector3.up)
-					{
-                        thisBot.directionChanger(Vector3.down);
-
-                        await new WaitForSeconds(RandomTime);
-                    }
-                }
-
-                else if (o.x <= o.y && Path.corners[currentPathIndex].y >= t.y)
-                {
-                    if(ld != Vector3.up && ld != Vector3.down)
-					{
-                        thisBot.directionChanger(Vector3.up);
-                        await new WaitForSeconds(RandomTime);
-                    }
-                }
-
-
-
-                //left&right
-                else if (o.x <= o.y && Path.corners[currentPathIndex].x < t.x)
-                {
-                    if(ld != Vector3.left && ld != Vector3.right)
-					{
-                        thisBot.directionChanger(Vector3.left);
-                        await new WaitForSeconds(RandomTime);
-                    }
-                }
-
-                else if (o.x > o.y && Path.corners[currentPathIndex].x >= t.x)
-                {
-                    if(ld != Vector3.right && ld != Vector3.left)
-					{
-                        thisBot.directionChanger(Vector3.right);
-                        await new WaitForSeconds(RandomTime);
-                    }
-                }
-
+                //Debug.DrawLine(Path.corners[i], Path.corners[i + 1] + target.GetComponent<Speler>().lastdir * 10, Color.red);
+                //var t = Target.transform.position + target.GetComponent<Speler>().lastdir * 10;
+                //Debug.DrawLine(Path.corners[i], Path.corners[i + 1], Color.red);
             }
-            
-        //}
+
+
+            offset = (Path.corners[currentPathIndex] - transform.position);
+            offset.y = 0;
+
+            var t = transform.position;
+
+            var o = offset;
+
+            var ld = gameObject.GetComponent<Speler>().lastdir;
+
+            //up&down
+            if (o.x > o.y && Path.corners[currentPathIndex].y < t.y)
+            {
+                if (ld != Vector3.down && ld != Vector3.up)
+				{
+                    thisBot.directionChanger(Vector3.down);
+
+                    await new WaitForSeconds(RandomTime);
+                }
+            }
+
+            else if (o.x <= o.y && Path.corners[currentPathIndex].y >= t.y)
+            {
+                if(ld != Vector3.up && ld != Vector3.down)
+				{
+                    thisBot.directionChanger(Vector3.up);
+                    await new WaitForSeconds(RandomTime);
+                }
+            }
+
+
+
+            //left&right
+            else if (o.x <= o.y && Path.corners[currentPathIndex].x < t.x)
+            {
+                if(ld != Vector3.left && ld != Vector3.right)
+				{
+                    thisBot.directionChanger(Vector3.left);
+                    await new WaitForSeconds(RandomTime);
+                }
+            }
+
+            else if (o.x > o.y && Path.corners[currentPathIndex].x >= t.x)
+            {
+                if(ld != Vector3.right && ld != Vector3.left)
+				{
+                    thisBot.directionChanger(Vector3.right);
+                    await new WaitForSeconds(RandomTime);
+                }
+            }
+
+        }
     }
 
-    }
+}
 
