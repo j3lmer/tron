@@ -9,61 +9,28 @@ public class loadFinal : MonoBehaviour
 {
 	string winningName;
 
-	Speler[] players;
-	List<bool> Alives;
-	List<bool> TempAlives;
-
-
-	private void Update()
-	{
-		players = FindObjectsOfType<Speler>();
-		Alives = new List<bool>();
-		foreach (Speler player in players)
-		{
-			if(player.Alive == true)
-			{
-				Alives.Add(player.Alive);
-			}
-		}
-		print(Alives.Count);
-
-		
-	}
-
 	private void Start()
 	{
-		waituntilinitiated();
-		Alives = new List<bool>();
-	}
-
-	async void waituntilinitiated()
-	{
-		while (Alives == null)
-		{
-			await new WaitForEndOfFrame();
-		}
 		checkforFinal();
 	}
 
-
 	async void checkforFinal()
-	{
+	{	
 		
-
-		while(Alives.Count > 2)
+		while(PlayerPrefs.GetInt("AlivePlayers") > 1)
         {
-			print("routining");
-			await new WaitForEndOfFrame();			
+			//print("routining");
+			await new WaitForEndOfFrame();
         }
 
 		NavMesh.RemoveAllNavMeshData();
 
-		if(Alives.Count == 0)
+		if(PlayerPrefs.GetInt("AlivePlayers") == 0)
         {
 			winningName = "Gelijkspel!";
 			setWinner();
         }
-        else if(Alives.Count == 1)
+        else
         {			
 			var player = GameObject.FindGameObjectWithTag("Player");
 			var bot = GameObject.FindGameObjectWithTag("Bot");
@@ -78,7 +45,9 @@ public class loadFinal : MonoBehaviour
 				winningName = bot.name;
 			}
 			setWinner();
-		}	
+		}
+		
+		
 	}
 
 

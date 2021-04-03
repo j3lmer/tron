@@ -119,17 +119,14 @@ public class Powerup : MonoBehaviour
                 var t = spelers[i];
                 if (t == selectedplayer)
                 {
-					try
-					{
-                        if (spelers[i + 1] != null)
-                        {
-                            selectedplayer = spelers[i + 1];
-                        }
+                    if (spelers[i + 1] != null)
+                    {
+                        selectedplayer = spelers[i + 1];
                     }
-					catch
-					{
+                    else
+                    {
                         selectedplayer = spelers[i - 1];
-                    }                   
+                    }
                     break;
                 }
             }
