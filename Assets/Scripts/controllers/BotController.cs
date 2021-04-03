@@ -1,5 +1,10 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+using System.Collections;
+using System.Collections.Generic;
+>>>>>>> parent of e049451 (save)
 =======
 using System.Collections;
 using System.Collections.Generic;
@@ -156,6 +161,9 @@ public class BotController : MonoBehaviour, IBotControllable
             hoekenLengte = Path.corners.Length;
 
             //print(cornersLength);
+<<<<<<< HEAD
+>>>>>>> parent of e049451 (save)
+=======
 >>>>>>> parent of e049451 (save)
 
 				if (thisLastDir.y != 0)
@@ -164,9 +172,12 @@ public class BotController : MonoBehaviour, IBotControllable
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 					NavMeshPath HypoPathLeft = new NavMeshPath();
 					NavMeshPath HypoPathRight = new NavMeshPath();
 =======
+=======
+>>>>>>> parent of e049451 (save)
             if (Path.corners != null && hoekenLengte > 0)
             {
                 for (int i = 0; i < hoekenLengte - 1; i++)
@@ -175,11 +186,15 @@ public class BotController : MonoBehaviour, IBotControllable
                     //var t = Target.transform.position + target.GetComponent<Speler>().lastdir * 10;
                     Debug.DrawLine(Path.corners[i], Path.corners[i + 1], Color.red);
                 }
+<<<<<<< HEAD
+>>>>>>> parent of e049451 (save)
+=======
 >>>>>>> parent of e049451 (save)
 
 					var boolLeft = NavMesh.CalculatePath(transform.position + Vector3.left, targetpos, NavMesh.AllAreas, HypoPathLeft);
 					var boolRight = NavMesh.CalculatePath(transform.position + Vector3.right, targetpos, NavMesh.AllAreas, HypoPathRight);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 					if (boolLeft && !boolRight)
 						NewDir = Vector3.left;
@@ -266,6 +281,33 @@ public class BotController : MonoBehaviour, IBotControllable
 					{
                         thisBot.directionChanger(Vector3.down);
 
+=======
+                offset = (Path.corners[currentPathIndex] - transform.position);
+                offset.y = 0;
+
+                var t = transform.position;
+
+                var o = offset;
+
+                var ld = gameObject.GetComponent<Speler>().lastdir;
+
+                //up&down
+                if (o.x > o.y && Path.corners[currentPathIndex].y < t.y)
+                {
+                    if (ld != Vector3.down && ld != Vector3.up)
+					{
+                        thisBot.directionChanger(Vector3.down);
+
+                        await new WaitForSeconds(RandomTime);
+                    }
+                }
+
+                else if (o.x <= o.y && Path.corners[currentPathIndex].y >= t.y)
+                {
+                    if(ld != Vector3.up && ld != Vector3.down)
+					{
+                        thisBot.directionChanger(Vector3.up);
+>>>>>>> parent of e049451 (save)
                         await new WaitForSeconds(RandomTime);
                     }
                 }
@@ -282,6 +324,7 @@ public class BotController : MonoBehaviour, IBotControllable
 
 			var ld = gameObject.GetComponent<Speler>().lastdir;
 
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 			if (ld.x != 0)
@@ -341,9 +384,34 @@ public class BotController : MonoBehaviour, IBotControllable
         //}
     }
 
+=======
+                //left&right
+                else if (o.x <= o.y && Path.corners[currentPathIndex].x < t.x)
+                {
+                    if(ld != Vector3.left && ld != Vector3.right)
+					{
+                        thisBot.directionChanger(Vector3.left);
+                        await new WaitForSeconds(RandomTime);
+                    }
+                }
+
+                else if (o.x > o.y && Path.corners[currentPathIndex].x >= t.x)
+                {
+                    if(ld != Vector3.right && ld != Vector3.left)
+					{
+                        thisBot.directionChanger(Vector3.right);
+                        await new WaitForSeconds(RandomTime);
+                    }
+                }
+
+            }
+            
+        //}
+>>>>>>> parent of e049451 (save)
     }
 >>>>>>> parent of e049451 (save)
 
+<<<<<<< HEAD
 			//left&right
 			else if (o.x <= o.y && Path.corners[currentPathIndex].x < t.x)
 			{
@@ -353,6 +421,9 @@ public class BotController : MonoBehaviour, IBotControllable
 					await new WaitForSeconds(RandomTime);
 				}
 			}
+=======
+    }
+>>>>>>> parent of e049451 (save)
 
 			else if (o.x > o.y && Path.corners[currentPathIndex].x >= t.x)
 			{
