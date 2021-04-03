@@ -25,7 +25,7 @@ public class loadFinal : MonoBehaviour
 				Alives.Add(player.Alive);
 			}
 		}
-		print(Alives.Count);
+		//print(Alives.Count);
 
 		
 	}
