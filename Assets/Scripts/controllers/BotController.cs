@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 
+=======
+using System.Collections;
+using System.Collections.Generic;
+>>>>>>> parent of e049451 (save)
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -101,11 +106,28 @@ public class BotController : MonoBehaviour, IBotControllable
 				print($"botray heeft <color=yellow>{hit.collider.name}</color> geraakt");
 				Debug.DrawRay(transform.position + thisLastDir * 2, thisLastDir, Color.red, 500f);
 
+<<<<<<< HEAD
 				if (thisLastDir.x != 0)
 				{
 					print("onze orientatie is <color=pink>LINKS/RECHTS</color>");
 					NavMeshPath HypoPathUp = new NavMeshPath();
 					NavMeshPath HypoPathDown = new NavMeshPath();
+=======
+           if (thisBot != null)
+           {
+              foundPath = NavMesh.CalculatePath(transform.position, targetpos, NavMesh.AllAreas, Path);
+               //print(foundPath);
+				if (foundPath)
+				{
+                   moveToObjective();
+				}
+               //print($"path: {foundPath}");
+               //print(Path.corners.Length);
+               await new WaitForSeconds(1);
+           }           
+       }
+    }
+>>>>>>> parent of e049451 (save)
 
 					var boolUp = NavMesh.CalculatePath(transform.position + Vector3.left, targetpos, NavMesh.AllAreas, HypoPathUp);
 					var boolDown = NavMesh.CalculatePath(transform.position + Vector3.right, targetpos, NavMesh.AllAreas, HypoPathDown);
@@ -121,22 +143,44 @@ public class BotController : MonoBehaviour, IBotControllable
 						if (HypoPathUp.corners.Length > HypoPathDown.corners.Length)
 							NewDir = Vector3.down;
 
+<<<<<<< HEAD
 						if (HypoPathUp.corners.Length < HypoPathDown.corners.Length)
 							NewDir = Vector3.up;
 					}
 				}
+=======
+	async void moveToObjective()
+    {
+        //if (Path.status != NavMeshPathStatus.PathInvalid)
+        //{
+            hoekenLengte = Path.corners.Length;
+
+            //print(cornersLength);
+>>>>>>> parent of e049451 (save)
 
 				if (thisLastDir.y != 0)
 				{
 					print("onze orientatie is <color=pink>BOVEN/BENEDEN</color>");
 
 
+<<<<<<< HEAD
 					NavMeshPath HypoPathLeft = new NavMeshPath();
 					NavMeshPath HypoPathRight = new NavMeshPath();
+=======
+            if (Path.corners != null && hoekenLengte > 0)
+            {
+                for (int i = 0; i < hoekenLengte - 1; i++)
+                {
+                    // Debug.DrawLine(Path.corners[i], Path.corners[i + 1] + target.GetComponent<Speler>().lastdir * 10, Color.red);
+                    //var t = Target.transform.position + target.GetComponent<Speler>().lastdir * 10;
+                    Debug.DrawLine(Path.corners[i], Path.corners[i + 1], Color.red);
+                }
+>>>>>>> parent of e049451 (save)
 
 					var boolLeft = NavMesh.CalculatePath(transform.position + Vector3.left, targetpos, NavMesh.AllAreas, HypoPathLeft);
 					var boolRight = NavMesh.CalculatePath(transform.position + Vector3.right, targetpos, NavMesh.AllAreas, HypoPathRight);
 
+<<<<<<< HEAD
 					if (boolLeft && !boolRight)
 						NewDir = Vector3.left;
 
@@ -205,10 +249,41 @@ public class BotController : MonoBehaviour, IBotControllable
 			var t = transform.position;
 
 			var o = offset;
+=======
+                offset = (Path.corners[currentPathIndex] - transform.position);
+                offset.y = 0;
+
+                var t = transform.position;
+
+                var o = offset;
+
+                var ld = gameObject.GetComponent<Speler>().lastdir;
+
+                //up&down
+                if (o.x > o.y && Path.corners[currentPathIndex].y < t.y)
+                {
+                    if (ld != Vector3.down && ld != Vector3.up)
+					{
+                        thisBot.directionChanger(Vector3.down);
+
+                        await new WaitForSeconds(RandomTime);
+                    }
+                }
+
+                else if (o.x <= o.y && Path.corners[currentPathIndex].y >= t.y)
+                {
+                    if(ld != Vector3.up && ld != Vector3.down)
+					{
+                        thisBot.directionChanger(Vector3.up);
+                        await new WaitForSeconds(RandomTime);
+                    }
+                }
+>>>>>>> parent of e049451 (save)
 
 			var ld = gameObject.GetComponent<Speler>().lastdir;
 
 
+<<<<<<< HEAD
 			if (ld.x != 0)
 			{
 				//links/rechts
@@ -241,6 +316,33 @@ public class BotController : MonoBehaviour, IBotControllable
 			}
 
 
+=======
+                //left&right
+                else if (o.x <= o.y && Path.corners[currentPathIndex].x < t.x)
+                {
+                    if(ld != Vector3.left && ld != Vector3.right)
+					{
+                        thisBot.directionChanger(Vector3.left);
+                        await new WaitForSeconds(RandomTime);
+                    }
+                }
+
+                else if (o.x > o.y && Path.corners[currentPathIndex].x >= t.x)
+                {
+                    if(ld != Vector3.right && ld != Vector3.left)
+					{
+                        thisBot.directionChanger(Vector3.right);
+                        await new WaitForSeconds(RandomTime);
+                    }
+                }
+
+            }
+            
+        //}
+    }
+
+    }
+>>>>>>> parent of e049451 (save)
 
 			//left&right
 			else if (o.x <= o.y && Path.corners[currentPathIndex].x < t.x)
