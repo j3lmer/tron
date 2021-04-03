@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -202,4 +200,3 @@ private void Start()
 
     }
 
->>>>>>> parent of e049451 (save)
