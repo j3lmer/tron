@@ -16,21 +16,12 @@ public class BotController : MonoBehaviour, IBotControllable
 
 
     bool foundPath;
-    Vector3 targetpos;
 
 
     float randomTime;
 
-    Vector3 newdir;
 
     //GETTERS/SETTERS
-    public Vector3 NewDir
-	{
-        get { return newdir; }
-        set { newdir = value; }
-    
-    }
-
     public float RandomTime
 	{
 		get { return randomTime; }
@@ -49,6 +40,7 @@ public class BotController : MonoBehaviour, IBotControllable
     }
     //END GETTER/SETTERS
 
+    NavMeshAgent agent;
 
 private void Start()
     {
@@ -57,8 +49,6 @@ private void Start()
         Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
 
         setRandomTime();
-
-        checkObtrusions();
 
         //agent = gameObject.AddComponent<NavMeshAgent>();
     }
@@ -87,118 +77,67 @@ private void Start()
 		}
 	}
 
-	async void checkObtrusions()
-	{
-        while (GetComponent<Speler>().Alive)
-        {
-            
-
-            var thisLastDir = GetComponent<Speler>().lastdir;
-            RaycastHit2D hit = Physics2D.Raycast(transform.position + thisLastDir * 2, thisLastDir, 5);
-            if (hit.collider != null)
-            {
-                
-
-                print($"botray heeft <color=yellow>{hit.collider.name}</color> geraakt");
-                Debug.DrawRay(transform.position + thisLastDir * 2, thisLastDir, Color.red, 500f);
-
-                if( thisLastDir.x != 0)
-				{
-                    print("onze orientatie is <color=pink>LINKS/RECHTS</color>");
-                    NavMeshPath HypoPathUp = new NavMeshPath();
-                    NavMeshPath HypoPathDown = new NavMeshPath();
-
-                    var boolUp = NavMesh.CalculatePath(transform.position + Vector3.left, targetpos, NavMesh.AllAreas, HypoPathUp);
-                    var boolDown = NavMesh.CalculatePath(transform.position + Vector3.right, targetpos, NavMesh.AllAreas, HypoPathDown);
-
-                    if (boolUp && !boolDown)
-                        NewDir = Vector3.up;
-
-                    else if (boolDown && !boolUp)
-                        NewDir = Vector3.down;
-
-                    if (boolUp && boolDown)
-                    {
-                        if (HypoPathUp.corners.Length > HypoPathDown.corners.Length)
-                            NewDir = Vector3.down;
-
-                        if (HypoPathUp.corners.Length < HypoPathDown.corners.Length)
-                            NewDir = Vector3.up;
-                    }
-                }
-            
-                if(thisLastDir.y != 0)
-				{
-                    print("onze orientatie is <color=pink>BOVEN/BENEDEN</color>");
 
 
-                    NavMeshPath HypoPathLeft = new NavMeshPath();
-                    NavMeshPath HypoPathRight = new NavMeshPath();
-
-                    var boolLeft = NavMesh.CalculatePath(transform.position + Vector3.left, targetpos, NavMesh.AllAreas, HypoPathLeft);
-                    var boolRight= NavMesh.CalculatePath(transform.position + Vector3.right, targetpos, NavMesh.AllAreas, HypoPathRight);
-
-                    if (boolLeft && !boolRight)
-                        NewDir = Vector3.left;
-
-                    else if (boolRight && !boolLeft)
-                        NewDir = Vector3.right;
-
-                    if (boolLeft && boolRight)
-					{
-                        if(HypoPathLeft.corners.Length > HypoPathRight.corners.Length)
-                            NewDir = Vector3.right;
-
-                        if (HypoPathLeft.corners.Length < HypoPathRight.corners.Length)
-                            NewDir = Vector3.left;
-                    }
-                }
-
-                if (NewDir != null || NewDir != new Vector3())
-                {
-                    GetComponent<Speler>().directionChanger(NewDir);
-                    print($"{GetComponent<Speler>().name} is moving in direction {NewDir}");
-                }             
-            }
-
-            await new WaitForSeconds(0.1f);
-        }
-    }
-
-
-
-	public async void findPath()
+    public async void findPath()
     {
-       while (GetComponent<Speler>().Alive)           
+        // path = new NavMeshPath();
+        // bool foundpath = NavMesh.CalculatePath(gameObject.transform.position, target.transform.position, NavMesh.AllAreas, path);
+
+        // print("did i find a path? "+ foundPath);
+
+        // agent.SetPath(path);
+        // print("setting path");
+       while (PlayerPrefs.GetInt("AlivePlayers") > 1)           
        {
-            targetpos = Target.position + target.GetComponent<Speler>().lastdir * 20;
+           var targetpos = Target.position + target.GetComponent<Speler>().lastdir * 10;
 
            if (thisBot != null)
            {
               foundPath = NavMesh.CalculatePath(transform.position, targetpos, NavMesh.AllAreas, Path);
+               print($"FOUND PATH: {foundPath}");
 				if (foundPath)
 				{
-					if (GetComponent<Speler>().Alive)
-                    {
-                        moveToObjective();
-                    }
+                   moveToObjective();
 				}
+               //print($"path: {foundPath}");
+               print(Path.corners.Length);
                await new WaitForSeconds(0.22f);
            }           
        }
     }
 
-	
+
+	//void OnEnable()
+	//{
+	//	Speler.Moved += findPath;
+	//	print("botcontroller findpath subscribing to speler.moved");
+	//}
+
+	//void OnDisable()
+	//{
+	//	Speler.Moved -= findPath;
+	//	print("botcontroller findpath unsubscribing to speler.moved");
+	//}
+
 
 	async void moveToObjective()
     {
         hoekenLengte = Path.corners.Length;
 
-        //TODO: DOE RAYCASTS NAAR LINKS EN NAAR RECHTS IN KLEINE AFSTAND OM TE KIJKEN OF HET EEN ZELFMOORDMISSIE IS OM DAAR HEEN TE GAAN
+        //print(cornersLength);
+
 
 
         if (Path.corners != null && hoekenLengte > 0)
         {
+            for (int i = 0; i < hoekenLengte - 1; i++)
+            {
+                //Debug.DrawLine(Path.corners[i], Path.corners[i + 1] + target.GetComponent<Speler>().lastdir * 10, Color.red);
+                //var t = Target.transform.position + target.GetComponent<Speler>().lastdir * 10;
+                //Debug.DrawLine(Path.corners[i], Path.corners[i + 1], Color.red);
+            }
+
 
             offset = (Path.corners[currentPathIndex] - transform.position);
             offset.y = 0;
@@ -209,23 +148,11 @@ private void Start()
 
             var ld = gameObject.GetComponent<Speler>().lastdir;
 
-
-            if (ld.x != 0)
-			{
-                //links/rechts
-
-                
-            }
-            if (ld.y != 0)
-			{
-                //boven/beneden
-			}
-
-                //up&down
+            //up&down
             if (o.x > o.y && Path.corners[currentPathIndex].y < t.y)
             {
                 if (ld != Vector3.down && ld != Vector3.up)
-                {
+				{
                     thisBot.directionChanger(Vector3.down);
 
                     await new WaitForSeconds(RandomTime);
@@ -234,8 +161,8 @@ private void Start()
 
             else if (o.x <= o.y && Path.corners[currentPathIndex].y >= t.y)
             {
-                if (ld != Vector3.up && ld != Vector3.down)
-                {
+                if(ld != Vector3.up && ld != Vector3.down)
+				{
                     thisBot.directionChanger(Vector3.up);
                     await new WaitForSeconds(RandomTime);
                 }
@@ -246,8 +173,8 @@ private void Start()
             //left&right
             else if (o.x <= o.y && Path.corners[currentPathIndex].x < t.x)
             {
-                if (ld != Vector3.left && ld != Vector3.right)
-                {
+                if(ld != Vector3.left && ld != Vector3.right)
+				{
                     thisBot.directionChanger(Vector3.left);
                     await new WaitForSeconds(RandomTime);
                 }
@@ -255,13 +182,15 @@ private void Start()
 
             else if (o.x > o.y && Path.corners[currentPathIndex].x >= t.x)
             {
-                if (ld != Vector3.right && ld != Vector3.left)
-                {
+                if(ld != Vector3.right && ld != Vector3.left)
+				{
                     thisBot.directionChanger(Vector3.right);
                     await new WaitForSeconds(RandomTime);
                 }
-            }            
+            }
+
         }
     }
+
 }
 
