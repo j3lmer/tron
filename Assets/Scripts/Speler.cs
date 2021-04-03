@@ -81,12 +81,12 @@ public class Speler : MonoBehaviour, IMovable
         //fill in some local variables
         rb = GetComponent<Rigidbody2D>();
         speed = 16;
-        alive = true;
+        Alive = true;
     }    
 
     public void directionChanger(Vector3 direction)
     {
-		if (alive)
+		if (Alive)
 		{
             rb.velocity = direction * speed;
             LastDirection = direction;
@@ -151,6 +151,8 @@ public class Speler : MonoBehaviour, IMovable
     {
         if (gameObject)
         {
+
+          
             AudioClip derezz = Resources.Load<AudioClip>("music/derezz");
 
             if (sm.Instance != null)
@@ -184,10 +186,11 @@ public class Speler : MonoBehaviour, IMovable
             }
 
             await new WaitForSeconds(1);
-
-            PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") - 1);
+            Alive = false;
+            //PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") - 1);
             //print(PlayerPrefs.GetInt("AlivePlayers"));
-            alive = false;
+
+
         }
     }
 }
