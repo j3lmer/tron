@@ -64,13 +64,13 @@ public class Speler : MonoBehaviour, IMovable
         get { return wall; }
         set { wall = value; }
     }
+
+    public bool Alive
+	{
+        get { return alive; }
+        set { alive = value; }
+	}
     //------------------------------------end wall variables\
-
-
-    ////------------------------------------event
-    //public delegate void movedDirection();
-    //public static event movedDirection Moved;
-    //------------------------------------end event
 
 
 
@@ -90,17 +90,13 @@ public class Speler : MonoBehaviour, IMovable
             LastDirection = direction;
             spawnWall();
         }
-          //if(Moved != null)
-		  //{
-          // Moved();
-          //}
     }
 
 
     private void Update()
     {                                                              //CRASHES IF MOVING TO OTHER DIRECTION
                                                                    //also not nessecary?
-        fitColliderBetween(wall, lastWallEnd, transform.position - lastdir*2 );
+        fitColliderBetween(wall, lastWallEnd, transform.position /*- lastdir*2*/ );
     }
 
     public void spawnWall()
@@ -111,6 +107,7 @@ public class Speler : MonoBehaviour, IMovable
             GameObject w = Instantiate(wallPrefab, transform.position , Quaternion.identity);
             wall = w.GetComponent<Collider2D>();
             w.tag = "playerWall";
+            w.layer = 0;
 			var obs = w.AddComponent<NavMeshObstacle>();
 			obs.carving = true;
 			obs.carveOnlyStationary = false;
@@ -189,6 +186,6 @@ public class Speler : MonoBehaviour, IMovable
             PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") - 1);
             //print(PlayerPrefs.GetInt("AlivePlayers"));
             alive = false;
-        }		
+        }
     }
 }
