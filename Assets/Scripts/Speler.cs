@@ -54,6 +54,12 @@ public class Speler : MonoBehaviour, IMovable
     Vector2 lastWallEnd;
 
     //GETTER/SETTERS
+    public bool Alive
+	{
+		get { return alive; }
+		set { alive = value; }
+	}
+
     public GameObject wallprefab
     {
         get { return wallPrefab; }
@@ -72,12 +78,12 @@ public class Speler : MonoBehaviour, IMovable
         //fill in some local variables
         rb = GetComponent<Rigidbody2D>();
         speed = 16;
-        alive = true;
+        Alive = true;
     }    
 
     public void directionChanger(Vector3 direction)
     {
-		if (alive)
+		if (Alive)
 		{
             rb.velocity = direction * speed;
             LastDirection = direction;
@@ -94,12 +100,13 @@ public class Speler : MonoBehaviour, IMovable
 
     public void spawnWall()
     {
-        if(alive)
+        if(Alive)
         {
             lastWallEnd = transform.position;
             GameObject w = Instantiate(wallPrefab, transform.position , Quaternion.identity);
             wall = w.GetComponent<Collider2D>();
             w.tag = "playerWall";
+            w.layer = 0;
 			var obs = w.AddComponent<NavMeshObstacle>();
 			obs.carving = true;
 			obs.carveOnlyStationary = false;
@@ -175,7 +182,7 @@ public class Speler : MonoBehaviour, IMovable
             await new WaitForSeconds(1);
 
             PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") - 1);
-            alive = false;
+            Alive = false;
         }		
     }
 }
