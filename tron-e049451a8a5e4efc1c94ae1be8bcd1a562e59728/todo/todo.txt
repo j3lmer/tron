@@ -1,0 +1,463 @@
+todo:
+
+		make bots work as intended
+
+
+
+-------
+doing:
+	
+
+
+
+-------
+done:
+
+
+	BUGFIX: create lightwall after death.
+
+	make touchscreen arrows work as intended
+
+	show touchscreen in build
+
+	fixed finalscreen bug not saving
+
+
+	made touchscreen buttons/functionality
+
+
+
+	find out why unity crashes when entering finalscreen
+
+	
+	make setting for touchscreen
+
+
+	
+	making a bot (with navmesh)
+
+
+	refactored with interfaces
+
+
+	probleem:
+
+	volume slider werkt niet meer als ik uit de scene ben geweest.
+	dit komt doordat hij de slider niet meer ziet als hij weg is, dus verlaat het gameobject. de slider word niet automatisch teruggezet.
+
+	-------------------
+	oplossing:
+
+	de slider moet mee gaan in het dontdestroyonload object
+	op het dontdestroyonload(ddl) object zit het volumevalue changed script, deze word al exclusief door de volume slider gebruikt
+	het zou geen bad practice zijn om deze functionaliteit in dit script mee te geven.
+
+	conclusie
+	zorg er voor dat volumevaluechanged zelf een listener op de slider kan zetten
+
+
+
+
+
+documentatie schrijven
+
+met rene behandelen waarom er onnodig veel lightwalls worden gespawned
+
+volumeslider werkt niet meer nadat in andere scene geweest
+
+	
+volumeslider werkt niet meer nadat in andere scene geweest!
+	-slider instellen in onvaluechange
+
+
+	-elke 10e powerup spawn, powerup die alle bestaande muren weghaalt.
+
+finalscreen rewrite
+
+goeie keycodes gebruikt voor speler 4
+
+zet speler 3/4 op juiste plek (andersom)
+	-velocity ook aanpassen
+
+volume slider
+
+mute button 
+
+aftel timer voor gamescene maken
+
+beweging schrijven	
+
+
+laat muziek weer werken
+
+walls toevoegen
+		-fix bug dat wall soms te lang is
+
+
+			
+	powerups
+		-temporary speedboost.
+		-tijdelijk grijs en door lijnen heen mogen gaan
+		-iets wat de andere speler tijdelijk stopt
+		-poison, instadeath
+
+
+-maak lijst aan keycode lijsten en zorg er voor dat de juiste speler de juiste controls heeft, up to 4 players.
+
+pas setnames(placeNames) runnen wanneer gamecontroller alle spelers heeft geplaatst.
+
+
+gamecontroller rewritten
+
+mainmenucontroller rewritten
+
+rewritten placeNames for future updates
+
+Muziek veelste luid.
+	-tickbox kleur groen wanneer disabled (2ECC24)  + muziek enablen
+		-tickbox kleur rood geven wanneer disabled.		+ muziek disablen		
+	-tickbox maken voor of je uberhaupt muziek aan wil of niet (default enabled)
+		-knop achterzetten met highlighted color als pressed color.
+			-wanneer button pressed, toggle de toggle
+	-nieuwe knop maken in optionsmenu (Muziek)
+	-optionsmenu disabelen	
+	-nieuw gameobject die nieuwe muziekpagina huist maken
+	-font veranderen
+
+
+adding documentation
+
+maak pvp default gamemode
+
+mainmenucontroller cleanup
+
+music script removed
+
+
+
+remove editor script+ folder
+
+remove gizmos folder
+
+music script bugfix
+
+leaderboard brought back to old
+
+characters move through each other (normal gamescene) bug
+
+menucontroller not defined bug
+
+visual changes to leaderboard
+
+homeknop op pvp/pve scherm werkt niet, pvp/pve selecteren ook niet (caused by temp mainmenu 	prefab)
+
+
+The associated script cannot be loaded, please fix any compile errors and assign a valid script
+
+
+namen weergeven in pvp gamescene
+The associated script cannot be loaded, please fix any compile errors and assign a valid script
+	-download monodevelop, klik f8 of er ook problemen zijn in de compiler
+		-na geprobeerd hebben monodevelop te builden realiseerde ik dat dit vrij outdated is.
+
+
+de eerste scene waar je inlaad is de gamescene, dit moet mainmenu zijn
+	-buildsettings aanpassen
+
+
+testbuild doen
+	-evt problemen noteren
+
+
+fixen dat je ook je eigen muur kan raken
+	Alle bot walls zitten tegenwoordig op een andere layer en tag, kans zit er dik in dat het hiermee heeft te maken
+
+	Hoe kom ik hier achter
+		-comment wall layering
+			dit verhelpt het probleem
+		-comment wall tagging (redundant)
+
+		het probleem is dus de nieuwe layer van de wall
+			waar hebben we de layer voor nodig?
+				geen idee nog
+
+			Ontriggerenter2d:
+			if (co != wall)
+	        {
+	            print("Player lost: " + name);
+	            Destroy(gameObject);
+	        }
+
+	        wat is co?
+	        	Collider trigger
+	        wat is wall?
+	        	Collider
+
+        Onderzoek doen naar layers
+        	-unity documentatie lezen
+        		rays worden gebruikt om selectief te raycasten, of speciafieke dingen wel of niet te renderen vanaf de camera
+        			rule out camera
+        		waar gebruik ik raycasting, in context met de wall
+        			NIET in beweging script.
+        			NIET (meer) in botbeweging
+        				 Is het dan nog wel nodig?
+        				 Ik denk het niet.
+        				 -g.layer = 8 removed from beweging && botbeweging spawnwall function
+
+
+
+transitions maken
+		-animations maken
+		-script maken
+
+	leaderboard prettify
+		-font
+		-wallpaper
+		-colors
+
+post processing stuff
+
+standaard pvp ipv pve
+
+geluid stoppen te spelen wanneer gamescene word geopend
+
+geluid doorspelen wanneer menuitem geluid afspeelt
+
+gelijkspel naam invullen skippen
+
+ 	Bot field of view 
+ 		bot avoiding wall
+
+ 	scorelijst else statement fixen
+
+	scorelijst mooi maken
+		-post processing
+		-kleurenpallette
+		-speciale kleuren geven aan de 1e, 2e, en derde.
+
+
+highscoresysteem 
+
+glow toevoegen
+
+score bijhouden
+	maak een tabblad aan met een layout voor een highscore systeem.
+		-voeg knoppen toe om te navigeren
+		-sorteren
+
+-finalscreen
+		-aan
+		maken van een jsonbestand als dat nog niet is gedaan
+			-2 serialisable classes maken
+				-1 bevat een array die meerdere keren de andere als object in bevat
+			-deze winnende speler object in de array zetten(met score = score+1)
+			-converteren naar string
+			-naar bestand schrijven
+
+		-als deze aangemaakt is
+			-lees het bestand 
+			-zet om naar c# compatible code
+			-als het niet leeg is, loop door de spelers heen
+				-vergelijk elke keer "deze" spelernaam met de winnende spelernaam
+				-wanneer we deze tegen komen, score = score+1
+				-na de loop, als we de speler niet zijn tegengekomen, maak een nieuwe entry voor deze speler
+			-als het wel leeg is, maak een nieuwe entry voor deze speler
+
+
+
+	added post processing for glow
+
+	optimised code geschreven voor initialisatie snelheid.
+		-bug gefixt dat sommige bots geen initialisatie snelheid krijgen
+		-mooiere code geschreven
+		-code hoeveelheid verminderd
+
+
+	nieuw script gemaakt om initiele startpositie en velocity mee te geven
+		-functies uit oude scripts verwijderd
+		-hele nieuwe manier van script schrijven en formatteren
+		-functie grabusers gemaakt
+		-functie setstartpos gemaakt
+		-functie setInitialVelocity gemaakt
+		-functie setBotVelocity gemaakt
+		-functie setPlayerVelocity gemaakt
+		-losse functies gemaakt om initiele velocity in te stellen voor de spelers en bots ipv alles in start
+		-functie gemaakt om user difficulty in te stellen
+
+
+	
+	logs clearen
+
+	als botnumber 0 is maar pvp false is, manual check voor hoeveelheid bots maken
+
+
+	duidelijk maken wie welke speler is 
+		-buiten grid namen zetten			
+			-font kiezen
+			-kleur veranderen gebaseerd op speler
+			-font size kiezen
+			
+
+als niet door het menu geweest, geen variabelen gekregen van menuscript, dus voor testing extra code geschreven die alsnog zelf telt hoeveel spelers er zijn als de spelers/bots 0 zijn
+
+bugfix gelijkspel blijft staan wanneer je op ok klikt
+
+bugfix als bots "hoofden" tegen elkaar crashen dat finalscreen dan niet word geladen
+	-(moet nog getest worden ookal staat het in done)
+
+fixen dat spelers en bots de juiste richting opgaan wanneer ze spawnen(was eerst wel goed)
+
+2e backup maken
+
+
+visionscript + botvision abandoned (inefficient)
+	-nieuwe raycast techniek proberen
+
+bugfix beide spelers dood geen finalscreen
+	-loadfinal compatibel maken met een gelijkspel
+	-als loadfinal winnaam gelijkspel is dan niet winnaam + heeft gewonnen maar alleen winnaam
+
+
+
+fixen dat spelers en bots de juiste richting opgaan wanneer ze spawnen(was eerst wel goed)
+		-nieuwe manier van een locatie uitzoeken maken
+			-voorgedefinieerde startposities maken
+			-kijken of er iets is op de startpositie
+			-als dat wel zo is kijken of er iets is op de volgende startpositie etc
+			-uiteindelijk plek uitkiezen
+
+
+	eerste frame bot fix crash fixen
+		-uitvogelen hoe het kan
+			-ruimte tussen bot en eigen lichtmuur maken
+
+
+code voor initiele velocity herschrijven voor nieuwe grid
+		-speciafieke transform punten kiezen 
+			-op alle spelers inzetten
+			-transform punten in code vervangen
+			(linksboven : X-60.5, Y52.2, Z0)
+			(rechtsboven: X65.7, Y52.2, Z0)
+			(linksonder : X-60.5, Y-56, Z0)
+			(rechtsonder: X65.7, Y-56, Z0)
+
+
+code voor initiele velocity herschrijven voor nieuwe grid
+		-Speciafieke punten kiezen
+
+documentatie schrijven
+		-script kiezen
+			-Beweging
+			-BotBeweging
+			-loadFinal
+			-finalScreen
+		-bovenste nongedocumenteerde functie documenteren
+		-herhaal tot klaar
+
+alle menus bij langs gaan en kijken of dingen niet overlappen/niet mooi uitkomen
+	-dit fixen
+
+nieuwe jpg implementeren
+	-alle gamescenes bij langs gaan en grid vervangen
+	-alle gamescenes bij langs gaan en walls vervangen
+
+
+functie die een score iets gaat opslaan (in game)
+		-final screen name input maken
+			-op eerste ok klik, wintext laten verdwijnen
+			-3 nieuwe textmeshproui onder message gameobject maken
+			-deze laten knipperen als ze geselecteerd zijn(en wanneer er word geswitched naar een andere letter, deze altijd weer op laten komen)
+			-pijltjes door alfabet en cijfers laten rouleren
+				-array/lijst maken die het alfabet+nummers bevat
+				-onclick bovenste pijltjes volgende karakter in de array selecteren
+				-dit karakter weergeven bij de A
+				-onderste pijltjes hetzelfde laten doen in omgekeerde richting
+
+			-geselecteerde letter laten knipperen/animatie voor switchen tussen letters
+			-opzoeken hoe je informatie permanent opslaat in unity
+
+
+
+final screen laten opkomen wanneer van toepassing
+		- wanneer 1 actieve bestuurder over is
+			-opzoeken hoe hoe ik onderscheid maak tussen gameobjects
+			- ervoor zorgen dat ik tags per object ga opslaan wat voor type dat het is
+			- uitzoeken hoe ik een los script ergens opsla / activeer
+			- functie schrijven die valideert all users < 2 == true
+			- functie schrijven final screen inlaad
+
+juiste text weergeven in final screen
+		- score / win resultaat opslaan
+		- final screen resultaat overzicht presenteren
+
+functie die een score iets gaat opslaan (in game)
+		-final screen name input maken
+			-na 1 keer klikken, wintext weghalen
+			-onderzoek naar hoe je buttons programmatisch accest
+
+mooi maken van win text
+		-uitzoeken welke kleur het winnende karakter heeft
+		-deze kleur toepassen aan de wintext
+		-nieuwe font titel
+		-nieuwe achtergrond opzoeken voor mainmenu canvas (en finalscreen)
+		-knoppen op nieuwe achtergrond aanpassen
+		-font aanpassen van wintext
+		-kleuren aanpassen wintext bots
+
+		
+
+
+
+algemene estische aanpassingen
+		-titel plek corrigeren overal
+		-overal kleur highlighted aangepast
+		-overal spacing juist gezet zodat knoppen niet buiten het scherm vallen
+		-achtergrond naar beneden bewogen om titel beter uit te laten komen
+		-titel kleur aangepast om meer uit de achtergrond te springen
+		-besloten achtergrondgrootte met het scherm te matchen
+		-geleerd nieuwe fonts aan unity toe te voegen
+		-fonts uitgezocht om toe te voegen
+		-nieuwe fonts toegepast
+		-menugradient aangepast
+		-finalscreen aangepast op nieuwe style
+		-voor elke scene een liedje toevoegen
+			-mainmenu
+			-alle game scenes
+			-finalscreen
+
+
+	debugging	(laat toegevoegd)
+		-error mainmenucontroller niet via addcomponent toegevoegd fixen
+		-onnodige imports verwijderd
+		(
+		using UnityEngine.SceneManagement;
+		using System.Collections.Generic;
+		using System.Transactions;
+		using UnityEditor.Experimental.GraphView;
+		using UnityEditor.SceneManagement;
+		using JetBrains.Annotations;
+		)
+
+
+///////////////////////////////////////////////////////////////////////
+ wanneer je op play klikt, kom je in een menu. hier kies je PVP of PVE
+speler weer lijn laten hebben
+final screen maken
+verschillende botsoorten maken (responsetime)
+pve difficulty select screen maken
+bot functionaliteit gemaakt
+Als je op PVP(start voor nu) klikt kom je in een menu dat je mag kiezen met hoeveel spelers je speelt(max 4)
+opties menu maken
+menu maken
+basic menu functionaliteit maken
+game functionaliteit maken
+map border maken
+veranderde startlocaties en startvelocity richting
+bij 4p andere startlocaties
+map sprites vinden
+grid maken
+sprites toevoegen
+sprites veranderen naar tiles en toevoegen aan palette
+tiles zelf bewerken (oververfen en logica)
+sorteer en lagen toevoegen
+-------

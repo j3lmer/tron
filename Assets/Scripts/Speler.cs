@@ -90,10 +90,6 @@ public class Speler : MonoBehaviour, IMovable
             LastDirection = direction;
             spawnWall();
         }
-          //if(Moved != null)
-		  //{
-          // Moved();
-          //}
     }
 
 
