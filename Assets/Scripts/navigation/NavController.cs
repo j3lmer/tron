@@ -38,8 +38,9 @@ public class NavController : MonoBehaviour
 
     void makeSurface()
     {
-        plane = GameObject.Find("surface");
+        print(plane);
         surface = plane.AddComponent<NavMeshSurface>();
-        surface.BuildNavMesh();
+        surface.BuildNavMesh()
+            print(surface.BuildNavMesh());
     }
 }

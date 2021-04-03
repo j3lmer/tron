@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -194,4 +192,3 @@ public class Speler : MonoBehaviour, IMovable
         }
     }
 }
->>>>>>> parent of a69b9f9 (Rewriting loadfinal system)
