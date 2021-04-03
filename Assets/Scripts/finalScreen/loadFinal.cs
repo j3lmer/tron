@@ -1,0 +1,82 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.AI;
+
+public class loadFinal : MonoBehaviour
+{
+	string winningName;
+
+	private void Start()
+	{
+		checkforFinal();
+	}
+
+	async void checkforFinal()
+	{	
+		
+		while(PlayerPrefs.GetInt("AlivePlayers") > 1)
+        {
+			//print("routining");
+			await new WaitForEndOfFrame();
+        }
+
+		NavMesh.RemoveAllNavMeshData();
+
+		if(PlayerPrefs.GetInt("AlivePlayers") == 0)
+        {
+			winningName = "Gelijkspel!";
+			setWinner();
+        }
+        else
+        {			
+			var player = GameObject.FindGameObjectWithTag("Player");
+			var bot = GameObject.FindGameObjectWithTag("Bot");
+
+			if (player)
+            {
+				winningName = player.name;
+			}
+
+            if (bot)
+			{
+				winningName = bot.name;
+			}
+			setWinner();
+		}
+		
+		
+	}
+
+
+	void setWinner()
+    {
+		PlayerPrefs.SetString("winner", winningName);		
+		PlayerPrefs.SetInt("placedPlayers", 0);
+		PlayerPrefs.SetInt("controls", 0);
+		var cc = PlayerPrefs.GetInt(winningName + "CollectedCoins");
+		PlayerPrefs.SetFloat("winnercoins", cc);
+
+		foreach(Speler participant in FindObjectsOfType<Speler>())
+		{
+			PlayerPrefs.SetInt(participant.name + "CollectedCoins", 0);
+		}
+
+
+		if (sm.Instance != null)
+		{
+			if (sm.Instance.MusicSource.isPlaying)
+			{
+				sm.Instance.MusicSource.Stop();
+			}
+		}
+
+		
+		SceneManager.LoadScene("finalScreen");
+
+	}
+}
+
+
