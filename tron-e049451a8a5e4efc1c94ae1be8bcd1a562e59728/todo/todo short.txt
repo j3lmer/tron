@@ -1,8 +1,0 @@
-todo short
-
-	maak een interface die features enforced per script 
-
-	compatible maken met touchscreen (windows) (touchscreenbuttons?)	
-
-	(shared) beweging code in botbeweging toevoegen
-	

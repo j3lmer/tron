@@ -57,6 +57,7 @@ public class finalScreen : MonoBehaviour
 	private void setWinner()
 	{
 		var winner = PlayerPrefs.GetString("winner");
+		print(winner);
 
 		WinCoins = PlayerPrefs.GetInt("winnercoins");
 

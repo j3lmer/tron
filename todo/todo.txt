@@ -1,6 +1,9 @@
 todo:
 
 		make bots work as intended
+			-unity has a bug which does not allow me to finish the project as intended (https://forum.unity.com/threads/navmesh-obstacle-carving-problem-with-agents.213325/)
+
+			will have to simplify the idea of the bot and finish it in another way
 
 
 

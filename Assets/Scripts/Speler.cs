@@ -37,8 +37,6 @@ public class Speler : MonoBehaviour, IMovable
     }
 
     bool alive;
-   
-
     //------------------------------------end player variables
 
 
@@ -64,8 +62,7 @@ public class Speler : MonoBehaviour, IMovable
         get { return wall; }
         set { wall = value; }
     }
-    //------------------------------------end wall variables\
-
+    //------------------------------------end wall variables
 
     private void Awake()
     {
@@ -100,6 +97,7 @@ public class Speler : MonoBehaviour, IMovable
             GameObject w = Instantiate(wallPrefab, transform.position , Quaternion.identity);
             wall = w.GetComponent<Collider2D>();
             w.tag = "playerWall";
+            w.layer = 0;
 			var obs = w.AddComponent<NavMeshObstacle>();
 			obs.carving = true;
 			obs.carveOnlyStationary = false;
@@ -129,6 +127,8 @@ public class Speler : MonoBehaviour, IMovable
 			{
 				if (collider.tag != "Powerup")
 				{
+                    print(collider.name);
+					//print($"Player lost: {name}, lost to {collider}");
 					die();
 				}
 			}
@@ -140,7 +140,7 @@ public class Speler : MonoBehaviour, IMovable
     {
         if (gameObject)
         {
-            print(gameObject + " being killed");
+          
             AudioClip derezz = Resources.Load<AudioClip>("music/derezz");
 
             if (sm.Instance != null)
@@ -156,9 +156,7 @@ public class Speler : MonoBehaviour, IMovable
             catch
             {
                 GetComponent<BotController>().enabled = false;
-                GetComponent<BotController>().gameObject.SetActive(false);
             }
-
 
             Color c = GetComponent<SpriteRenderer>().color;
             c.a = 0;
@@ -178,6 +176,7 @@ public class Speler : MonoBehaviour, IMovable
             await new WaitForSeconds(1);
 
             PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") - 1);
+            //print(PlayerPrefs.GetInt("AlivePlayers"));
             alive = false;
         }		
     }
