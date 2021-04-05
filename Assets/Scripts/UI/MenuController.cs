@@ -36,7 +36,7 @@ public class MenuController : MonoBehaviour
 
 		if (Debug.isDebugBuild)
 		{
-			Debug.Log("This is the latest debug build!");
+			Debug.Log("This is the (latest) debug build!");
 		}
 	}
 
@@ -213,6 +213,7 @@ public class MenuController : MonoBehaviour
 		//button is the button clicked
 		GameObject thisMenu = button.transform.parent.gameObject;
 		thisMenu.SetActive(false);
+		
 		switch (button.name)
 		{
 			case "StartKnop":
@@ -231,7 +232,7 @@ public class MenuController : MonoBehaviour
 						break;
 
 					case 0:
-						listLoop(menuList, "BotsKiezen");
+						listLoop(menuList, "moeilijkheidsgraad");
 						break;
 				}
 
@@ -256,14 +257,29 @@ public class MenuController : MonoBehaviour
 
 			case "PVE":
 				PVE();
+				listLoop(menuList, "moeilijkheidsgraad");
+				break;
+
+			case "makkelijk":
+				PlayerPrefs.SetInt("difficulty",0);
 				listLoop(menuList, "BotsKiezen");
 				break;
+
+			case "normaal":
+				PlayerPrefs.SetInt("difficulty", 1);
+				listLoop(menuList, "BotsKiezen");
+				break;
+
+			case "moeilijk":
+				PlayerPrefs.SetInt("difficulty", 2);
+				listLoop(menuList, "BotsKiezen");
+				break;
+
 
 			case "home":
 				SceneManager.LoadScene(0);
 				break;
-
-		}
+		}		
 	}
 
 	void listLoop(List<GameObject> menuL, string stop)

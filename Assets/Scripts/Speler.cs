@@ -147,6 +147,7 @@ public class Speler : MonoBehaviour, IMovable
     {
         if (gameObject)
         {
+            print(gameObject + " being killed");
             AudioClip derezz = Resources.Load<AudioClip>("music/derezz");
 
             if (sm.Instance != null)
@@ -162,7 +163,9 @@ public class Speler : MonoBehaviour, IMovable
             catch
             {
                 GetComponent<BotController>().enabled = false;
+                GetComponent<BotController>().gameObject.SetActive(false);
             }
+
 
             Color c = GetComponent<SpriteRenderer>().color;
             c.a = 0;

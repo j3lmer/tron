@@ -9,19 +9,16 @@ public class BotController : MonoBehaviour, IBotControllable
 
     NavMeshPath path;
     private int currentPathIndex = 1;
-
     Vector3 offset;
-
     int hoekenLengte = 0;
-
-
     bool foundPath;
-    Vector3 targetpos;
 
+
+    Vector3 targetpos;
+    Vector3 newdir;
 
     float randomTime;
 
-    Vector3 newdir;
 
     //GETTERS/SETTERS
     public Vector3 NewDir
@@ -30,13 +27,11 @@ public class BotController : MonoBehaviour, IBotControllable
         set { newdir = value; }
 
     }
-
     public float RandomTime
     {
         get { return randomTime; }
         set { randomTime = value; }
     }
-
     public Transform Target
     {
         get { return target; }
@@ -65,6 +60,7 @@ public class BotController : MonoBehaviour, IBotControllable
     void setRandomTime()
     {
         int diff = PlayerPrefs.GetInt("difficulty");
+        print(diff);
 
         switch (diff)
         {
@@ -164,7 +160,6 @@ public class BotController : MonoBehaviour, IBotControllable
             await new WaitForSeconds(RandomTime);
         }
     }
-
 
 
     public async void findPath()

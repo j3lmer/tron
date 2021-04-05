@@ -1006,7 +1006,7 @@ GameObject:
   - component: {fileID: 255616857}
   m_Layer: 5
   m_Name: moeilijk
-  m_TagString: Untagged
+  m_TagString: menuActivator
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1139,7 +1139,7 @@ GameObject:
   - component: {fileID: 256170376}
   m_Layer: 5
   m_Name: normaal
-  m_TagString: Untagged
+  m_TagString: menuActivator
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5384,7 +5384,7 @@ GameObject:
   - component: {fileID: 1238798629}
   m_Layer: 5
   m_Name: makkelijk
-  m_TagString: Untagged
+  m_TagString: menuActivator
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

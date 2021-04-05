@@ -130,6 +130,8 @@ public class GameController : MonoBehaviour
 
     void makePlayer(string tag, int i)
     {
+        //print($"Making player {tag}, number {i}");
+
         Vector3 thisStartpos = startpos[i];
         dir = Linked[thisStartpos];
 
@@ -229,6 +231,7 @@ public class GameController : MonoBehaviour
         {
             PVP = PlayerPrefs.GetInt("PVP");
             contenders = PlayerPrefs.GetInt("contestants");
+            print($"PVP = {PVP}, CONTENDERS = {contenders}");
         }
     }
 }
