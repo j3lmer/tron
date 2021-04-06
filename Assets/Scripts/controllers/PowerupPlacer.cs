@@ -60,7 +60,7 @@ public class PowerupPlacer : MonoBehaviour
 			}
 
 
-			print($"<color=blue>{thisdot.name}</color> instansiated @ <color=red>{p}</color>");
+			//print($"<color=blue>{thisdot.name}</color> instansiated @ <color=red>{p}</color>");
 			yield return new WaitForSeconds(t);
 		}
 

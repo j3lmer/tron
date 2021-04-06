@@ -37,6 +37,8 @@ public class Speler : MonoBehaviour, IMovable
     }
 
     bool alive;
+   
+
     //------------------------------------end player variables
 
 
@@ -52,6 +54,12 @@ public class Speler : MonoBehaviour, IMovable
     Vector2 lastWallEnd;
 
     //GETTER/SETTERS
+    public bool Alive
+	{
+		get { return alive; }
+		set { alive = value; }
+	}
+
     public GameObject wallprefab
     {
         get { return wallPrefab; }
@@ -62,19 +70,20 @@ public class Speler : MonoBehaviour, IMovable
         get { return wall; }
         set { wall = value; }
     }
-    //------------------------------------end wall variables
+    //------------------------------------end wall variables\
+
 
     private void Awake()
     {
         //fill in some local variables
         rb = GetComponent<Rigidbody2D>();
         speed = 16;
-        alive = true;
+        Alive = true;
     }    
 
     public void directionChanger(Vector3 direction)
     {
-		if (alive)
+		if (Alive)
 		{
             rb.velocity = direction * speed;
             LastDirection = direction;
@@ -86,12 +95,12 @@ public class Speler : MonoBehaviour, IMovable
     private void Update()
     {                                                              //CRASHES IF MOVING TO OTHER DIRECTION
                                                                    //also not nessecary?
-        fitColliderBetween(wall, lastWallEnd, transform.position /*- lastdir*2*/ );
+        fitColliderBetween(wall, lastWallEnd, transform.position - lastdir * 1.205f );
     }
 
     public void spawnWall()
     {
-        if(alive)
+        if(Alive)
         {
             lastWallEnd = transform.position;
             GameObject w = Instantiate(wallPrefab, transform.position , Quaternion.identity);
@@ -127,10 +136,9 @@ public class Speler : MonoBehaviour, IMovable
 			{
 				if (collider.tag != "Powerup")
 				{
-                    print(collider.name);
-					//print($"Player lost: {name}, lost to {collider}");
 					die();
-				}
+                    print(gameObject + " being killed by " + collider.name);
+                }
 			}
 		}
 	}
@@ -140,7 +148,7 @@ public class Speler : MonoBehaviour, IMovable
     {
         if (gameObject)
         {
-          
+           
             AudioClip derezz = Resources.Load<AudioClip>("music/derezz");
 
             if (sm.Instance != null)
@@ -156,7 +164,9 @@ public class Speler : MonoBehaviour, IMovable
             catch
             {
                 GetComponent<BotController>().enabled = false;
+                GetComponent<BotController>().gameObject.SetActive(false);
             }
+
 
             Color c = GetComponent<SpriteRenderer>().color;
             c.a = 0;
@@ -176,8 +186,7 @@ public class Speler : MonoBehaviour, IMovable
             await new WaitForSeconds(1);
 
             PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") - 1);
-            //print(PlayerPrefs.GetInt("AlivePlayers"));
-            alive = false;
+            Alive = false;
         }		
     }
 }
