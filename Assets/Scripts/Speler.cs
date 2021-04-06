@@ -95,7 +95,7 @@ public class Speler : MonoBehaviour, IMovable
     private void Update()
     {                                                              //CRASHES IF MOVING TO OTHER DIRECTION
                                                                    //also not nessecary?
-        fitColliderBetween(wall, lastWallEnd, transform.position - lastdir * 1.205f );
+        fitColliderBetween(wall, lastWallEnd, transform.position /*- lastdir * 1.205f*/ );
     }
 
     public void spawnWall()

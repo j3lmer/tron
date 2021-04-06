@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,283 +9,220 @@ public class BotController : MonoBehaviour, IBotControllable
     Speler thisBot;
     Transform target;
 
-    NavMeshPath path;
-    private int currentPathIndex = 1;
-    Vector3 afstandTussenBotEnVolgendeCorner;
-    int hoekenLengte = 0;
-    bool foundPath;
-
-
     Vector3 targetpos;
-    Vector3 newdir;
+
+    NavMeshPath path;  
+    
 
     float randomTime;
 
+    Vector3 ld;
+
 
     //GETTERS/SETTERS
-    public Vector3 NewDir
-    {
-        get { return newdir; }
-        set { newdir = value; }
-
-    }
     public float RandomTime
     {
         get { return randomTime; }
         set { randomTime = value; }
     }
+
     public Transform Target
     {
         get { return target; }
         set { target = value; }
     }
-    NavMeshPath Path
-    {
-        get { return path; }
-        set { path = value; }
-    }
     //END GETTER/SETTERS
+
+
+
+
 
 
     private void Start()
     {
         thisBot = GetComponent<Speler>();
-        Path = new NavMeshPath();
+        path = new NavMeshPath();
         Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
 
         setRandomTime();
-
-        checkObtrusions();
-
     }
 
     void setRandomTime()
     {
         int diff = PlayerPrefs.GetInt("difficulty");
-        print(diff);
 
-        RandomTime = 0.1f;
+        switch (diff)
+        {
+            case 0:
+                RandomTime = Random.Range(0.75f, 1);
+                break;
 
-        //switch (diff)
-        //{
-        //    case 0:
-        //        RandomTime = Random.Range(0.25f, 0.50f);
-        //        break;
+            case 1:
+                RandomTime = Random.Range(0.5f, 0.75f);
+                break;
 
-        //    case 1:
-        //        RandomTime = Random.Range(0.10f, 0.25f);
-        //        break;
+            case 2:
+                RandomTime = Random.Range(0, 0.25f);
+                break;
 
-        //    case 2:
-        //        RandomTime = Random.Range(0, 0.10f);
-        //        break;
-
-        //    default:
-        //        RandomTime = Random.Range(0.25f, 0.5f);
-        //        break;
-        //}
+            default:
+                RandomTime = Random.Range(0.25f, 0.5f);
+                break;
+        }
     }
+
+
+
+	
+
+	public void findPath()
+    {
+		if (this.enabled)
+		{
+			checkObtrusions();
+		}
+    
+	}
+
+
 
     async void checkObtrusions()
-    {
-        while (GetComponent<Speler>().Alive)
-        {
-            var thisLastDir = GetComponent<Speler>().lastdir;
-            RaycastHit2D hit = Physics2D.Raycast(transform.position + thisLastDir * 2, thisLastDir, 5);
+	{
+		//haal lastdirection op
+		//kijk een klein stukje voor je of je iets raakt en vertel het
+
+		while (GetComponent<Speler>().Alive)
+		{
+            targetpos = Target.position + target.GetComponent<Speler>().lastdir * 10;
+
+            ld = GetComponent<Speler>().lastdir;
+            RaycastHit2D hit = Physics2D.Raycast(transform.position + ld * 2, ld, 5);
             if (hit.collider != null)
             {
-                print($"botray heeft <color=yellow>{hit.collider.name}</color> geraakt");
-                Debug.DrawRay(transform.position + thisLastDir * 2, thisLastDir, Color.red, 500f);
+                print($"<color=yellow>{gameObject} will hit {hit.collider.name}</color>");
 
-                if (thisLastDir.x != 0)
-                {
-                    //print("onze orientatie is <color=pink>LINKS/RECHTS</color>");
-                    NavMeshPath HypoPathUp = new NavMeshPath();
-                    NavMeshPath HypoPathDown = new NavMeshPath();
-
-                    var boolUp = NavMesh.CalculatePath(transform.position + Vector3.left, targetpos, NavMesh.AllAreas, HypoPathUp);
-                    var boolDown = NavMesh.CalculatePath(transform.position + Vector3.right, targetpos, NavMesh.AllAreas, HypoPathDown);
-
-                    if (boolUp && !boolDown)
-                        NewDir = Vector3.up;
-
-                    else if (boolDown && !boolUp)
-                        NewDir = Vector3.down;
-
-                    if (boolUp && boolDown)
-                    {
-                        if (HypoPathUp.corners.Length > HypoPathDown.corners.Length)
-                            NewDir = Vector3.down;
-
-                        if (HypoPathUp.corners.Length < HypoPathDown.corners.Length)
-                            NewDir = Vector3.up;
-
-                        else
-                            NewDir = Vector3.down;
-                    }
-                }
-
-                if (thisLastDir.y != 0)
-                {
-                    //print("onze orientatie is <color=pink>BOVEN/BENEDEN</color>");
-                    NavMeshPath HypoPathLeft = new NavMeshPath();
-                    NavMeshPath HypoPathRight = new NavMeshPath();
-
-                    var boolLeft = NavMesh.CalculatePath(transform.position + Vector3.left, targetpos, NavMesh.AllAreas, HypoPathLeft);
-                    var boolRight = NavMesh.CalculatePath(transform.position + Vector3.right, targetpos, NavMesh.AllAreas, HypoPathRight);
-
-                    if (boolLeft && !boolRight)
-                        NewDir = Vector3.left;
-
-                    else if (boolRight && !boolLeft)
-                        NewDir = Vector3.right;
-
-                    else if (boolLeft && boolRight)
-                    {
-                        if (HypoPathLeft.corners.Length > HypoPathRight.corners.Length)
-                            NewDir = Vector3.right;
-
-                        else if (HypoPathLeft.corners.Length < HypoPathRight.corners.Length)
-                            NewDir = Vector3.left;
-
-                        else
-                            NewDir = Vector3.left;
-                    }
-                }
-
-                if (NewDir != null || NewDir != new Vector3())
-                {
-                    GetComponent<Speler>().directionChanger(NewDir);
-                    print($"{GetComponent<Speler>().name} is moving in direction {NewDir}");
-                }
-            }
-
-            await new WaitForSeconds(RandomTime);
-        }
-    }
-
-
-    public async void findPath()
-    {
-        while (this.enabled)
-        {
-            targetpos = Target.position + target.GetComponent<Speler>().lastdir * 20;
-
-            if (thisBot != null)
-            {
-                foundPath = NavMesh.CalculatePath(transform.position, targetpos, NavMesh.AllAreas, Path);
-                if (foundPath)
-                {
-                     moveToObjective();                    
-                }
-                await new WaitForSeconds(RandomTime);
-            }
-        }
-    }
-
-
-    async void moveToObjective()
-    {
-        hoekenLengte = Path.corners.Length;
-
-
-       
-        if (Path.corners != null && hoekenLengte > 0)
-        {
-
-            afstandTussenBotEnVolgendeCorner = (Path.corners[currentPathIndex] - transform.position);
-
-            var t = transform.position;
-            var o = afstandTussenBotEnVolgendeCorner;
-            var ld = gameObject.GetComponent<Speler>().lastdir;
-
-            if(ld != null || ld != new Vector3())
-			{
-                print(ld);
-
+                //check de orientatie
                 if (ld.x != 0)
                 {
-                    //links/rechts georienteerd
-                    RaycastHit2D hitUp = Physics2D.Raycast(t + Vector3.up * 2, Vector3.up, 5);
-                    RaycastHit2D hitDown = Physics2D.Raycast(t + Vector3.down * 2, Vector3.down, 5);
-
-                    if (!hitDown && !hitUp)
-                    {
-                        //up&down
-                        if (o.x > o.y && Path.corners[currentPathIndex].y < t.y)
-                        {
-                            thisBot.directionChanger(Vector3.down);
-                            await new WaitForSeconds(RandomTime);
-                        }
-
-                        else if (o.x <= o.y && Path.corners[currentPathIndex].y >= t.y)
-                        {
-                            thisBot.directionChanger(Vector3.up);
-                            await new WaitForSeconds(RandomTime);
-                        }
-                    }
-
-                    if (hitUp && !hitDown)
-                    {
-                        if (o.x > o.y && Path.corners[currentPathIndex].y < t.y)
-                        {
-                            thisBot.directionChanger(Vector3.down);
-                            await new WaitForSeconds(RandomTime);
-                        }
-                    }
-
-                    if (hitDown && !hitUp)
-                    {
-                        if (o.x <= o.y && Path.corners[currentPathIndex].y >= t.y)
-                        {
-                            thisBot.directionChanger(Vector3.up);
-                            await new WaitForSeconds(RandomTime);
-                        }
-                    }
-
-
+                    //print("onze orientatie is <color=pink>HORIZONTAAL</color>");
+                    moveOutOfTheWay(Vector3.up, Vector3.down, hit);
                 }
-                if (ld.y != 0)
+                else if (ld.y != 0)
                 {
-                    //boven/beneden georienteerd
-                    RaycastHit2D hitLeft = Physics2D.Raycast(transform.position + Vector3.left * 2, Vector3.left, 5);
-                    RaycastHit2D hitRight = Physics2D.Raycast(transform.position + Vector3.right * 2, Vector3.right, 5);
-
-                    if (!hitLeft && !hitRight)
-                    {
-                        //left&right
-                        if (o.x < o.y && Path.corners[currentPathIndex].x < t.x)
-                        {
-                            thisBot.directionChanger(Vector3.left);
-                            await new WaitForSeconds(RandomTime);
-                        }
-
-                        else if (o.x > o.y && Path.corners[currentPathIndex].x > t.x)
-                        {
-                            thisBot.directionChanger(Vector3.right);
-                            await new WaitForSeconds(RandomTime);                        
-                        }
-                    }
-
-                    if (hitLeft && !hitRight)
-                    {
-                        if (o.x > o.y && Path.corners[currentPathIndex].x > t.x)
-                        {
-                            thisBot.directionChanger(Vector3.right);
-                            await new WaitForSeconds(RandomTime);
-                        }
-                    }
-
-                    if (hitRight && !hitLeft)
-                    {
-                        if (o.x < o.y && Path.corners[currentPathIndex].x < t.x)
-                        {
-                            thisBot.directionChanger(Vector3.left);
-                            await new WaitForSeconds(RandomTime);
-                        }
-                    }
+                    //print("onze orientatie is <color=pink>VERTICAAL</color>");
+                    moveOutOfTheWay(Vector3.left, Vector3.right, hit);
                 }
             }
+            else
+            {
+                print("hit nothing");
+
+                NavMesh.CalculatePath(transform.position + ld, targetpos, NavMesh.AllAreas, path);
+                move();
+            }
+
+            await new WaitForSeconds(0.15f);
+        }        
+    }
+
+
+
+    void moveOutOfTheWay(Vector3 sideOne, Vector3 sideTwo, RaycastHit2D hit)
+	{
+		
+
+        //maak nieuwe paden aan beide kanten van de bot om te kijken welke efficienter is
+        var s = GetComponent<Speler>();
+
+
+        //kijk links en rechts
+        RaycastHit2D hitOne = Physics2D.Raycast(transform.position + sideOne * 2, sideOne, 5);
+        RaycastHit2D hitTwo = Physics2D.Raycast(transform.position + sideTwo * 2, sideTwo, 5);
+
+        //zie je niks links en rechts
+        if (!hitOne && !hitTwo)
+		{
+            //calculeer de paden als je naar links&naar rechts zou gaan
+            NavMeshPath side1 = new NavMeshPath();
+            NavMeshPath side2 = new NavMeshPath();
+
+            var boolOne = NavMesh.CalculatePath(transform.position + sideOne, targetpos, NavMesh.AllAreas, side1);
+            var boolTwo = NavMesh.CalculatePath(transform.position + sideTwo, targetpos, NavMesh.AllAreas, side2);
+
+            //als beide paden geldig zijn
+            if (boolOne && boolTwo)
+			{
+                //neem het pad met de minste hoeveelheid afslagen
+                if (side1.corners.Length < side2.corners.Length)
+                    s.directionChanger(sideOne);
+
+                else
+                    s.directionChanger(sideTwo);
+			}
+
+            //als pad 1 alleen geldig is neem pad 1
+            else if (boolOne && !boolTwo)
+                s.directionChanger(sideOne);
+
+            //als pad 2 alleen geldig is neem pad 2
+            else if (!boolOne && boolTwo)
+                s.directionChanger(sideTwo);
         }
+
+        //als je aan 1 kant iets ziet en de andere kant niet ga dan de kant op waar je niets ziet
+        else if(!hitOne && hitTwo)
+            s.directionChanger(sideOne);
+
+        else if(hitOne && !hitTwo)
+            s.directionChanger(sideTwo);
+
+    }
+
+
+
+
+
+    void move()
+	{
+        if(path.corners != null && path.corners.Length > 0)
+		{
+            Vector3 afstandTussenBotEnVolgendeCorner = path.corners[1] - transform.position;
+
+            Vector3 t = transform.position;
+            Vector3 o = afstandTussenBotEnVolgendeCorner;
+
+            //als je laatste kant niet niks is (dus is geinitieerd)
+            if(ld != null && ld != new Vector3())
+			{
+                //horizontaal
+                if (ld.x != 0)
+                {                   
+                    //als de afstand tussen de bot en de eerstvolgende afslag op de x as groter is dan die op de afstand bot-afslag op de y as
+                    //EN 
+                    //als de locatiewaarde van de afslag op de y as kleiner is mijn locatiewaarde op de y as
+                    if (o.x > o.y && path.corners[1].y < t.y)
+                    {
+                        
+                        thisBot.directionChanger(Vector3.down);
+                    }
+
+                    else if (o.x <= o.y && path.corners[1].y > t.y)
+                    {
+                        thisBot.directionChanger(Vector3.up);
+                    }
+                }
+
+                //verticaal 
+                else if (ld.y != 0)
+                {    
+                    if (o.x < o.y && path.corners[1].x < t.x)
+                        thisBot.directionChanger(Vector3.left);
+
+                    else if (o.x > o.y && path.corners[1].x > t.x)
+                        thisBot.directionChanger(Vector3.right);
+                }
+            }
+		}        
     }
 }
+
