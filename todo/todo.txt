@@ -4,33 +4,43 @@ todo:
 
 		GEWENSTE RESULTATEN
 
-		CHECKOBTRUSIONS
+			async CHECKOBTRUSIONS
 
-		checkobtrusions is meer important dan movetoObjective
-		de bot die in leven blijft > de bot die een pad naar de speler vind
 
-		de bot moet elke frame kijken of we ergens tegen aan botsen als we deze kant op blijven gaan
 
-		als de bot niks gaat raken, dan kunnen we verder met het origineel gecalculeerde pad naar de speler 
+			checkobtrusions is meer important dan movetoObjective 
+			de bot die in leven blijft > de bot die een pad naar de speler vind
 
-		als de bot iets voor zich ziet
-		{
-		check orientatie van de bot
-			wanneer horizontaal, executeer functie met voor horizontale parameters
-			wanneer verticaal, executeer functie met voor verticale parameters
+			de bot moet elke frame kijken of we ergens tegen aan botsen als we deze kant op blijven gaan
 
-		-calculeer een nieuw pad aan links en aan rechts (van de bot)
-				-als 1 van de 2 paden false returnt, doe de andere
-				-als beide paden true returnen, check welke van de 2 paden de minste corners heeft en executeer dit pad als ons hoofdpad
+			als de bot niks gaat raken, dan kunnen we verder met het origineel gecalculeerde pad naar de speler 
 
-			-herhaal dit voor horizontaal 
-		}
 
-		als de bot niets voor zich ziet
-		{
-			check de orientatie van de bot
 
-		}
+
+
+			DUS
+
+
+
+
+			als de bot iets voor zich ziet
+			{
+			check orientatie van de bot
+				wanneer horizontaal, executeer functie met voor horizontale parameters
+				wanneer verticaal, executeer functie met voor verticale parameters
+
+			-calculeer een nieuw pad aan links en aan rechts (van de bot)
+					-als 1 van de 2 paden false returnt, doe de andere
+					-als beide paden true returnen, check welke van de 2 paden de minste corners heeft en executeer dit pad als ons hoofdpad
+
+				-herhaal dit voor horizontaal 
+			}
+
+			als de bot niets voor zich ziet
+			{
+			executeer functie moveToObjective				
+			}
 			
 			
 
@@ -57,23 +67,22 @@ todo:
 
 
 
+wincondities herschrijven
+
+powerups spawnen in spelers lijnen
 
 
 
+muziek gaat uit na dood
+
+maak kleurenlijst
+
+maak controllijst
+
+ontzichtbare muren hebben nog een collider
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+te snel richting veranderen = dood
 
 
 
