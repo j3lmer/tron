@@ -11,16 +11,14 @@ public class BotController : MonoBehaviour, IBotControllable
 
     Vector3 targetpos;
 
-    NavMeshPath path;  
-    
+    NavMeshPath path;
+
+    bool busy;
+    bool checkActive;
 
     float randomTime;
 
     Vector3 ld;
-
-    bool busy;
-
-
     //GETTERS/SETTERS
     public float RandomTime
     {
@@ -38,8 +36,6 @@ public class BotController : MonoBehaviour, IBotControllable
 
 
 
-
-
     private void Start()
     {
         thisBot = GetComponent<Speler>();
@@ -47,7 +43,6 @@ public class BotController : MonoBehaviour, IBotControllable
         Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
 
         setRandomTime();
-
         busy = false;
     }
 
@@ -79,13 +74,18 @@ public class BotController : MonoBehaviour, IBotControllable
 
 	
 
-	public void findPath()
+	public async void findPath()
     {
 		if (this.enabled)
 		{
 			checkObtrusions();
 		}
-    
+
+		//while (this.enabled && !busy && !checkActive)
+		//{
+		//	checkObtrusions();
+  //          await new WaitForSeconds(0.5f);
+		//}
 	}
 
 
@@ -94,53 +94,51 @@ public class BotController : MonoBehaviour, IBotControllable
 	{
 		//haal lastdirection op
 		//kijk een klein stukje voor je of je iets raakt en vertel het
-		if (!busy)
-		{
-            while (GetComponent<Speler>().Alive)
+		
+        while (GetComponent<Speler>().Alive)
+        {
+            targetpos = Target.position + target.GetComponent<Speler>().lastdir * 10;
+
+            ld = GetComponent<Speler>().lastdir;
+            RaycastHit2D hit = Physics2D.Raycast(transform.position + ld * 2, ld, 2);
+            if (hit.collider != null)
             {
-                targetpos = Target.position + target.GetComponent<Speler>().lastdir * 10;
+                print($"<color=yellow>{gameObject} will hit {hit.collider.name}</color>");
 
-                ld = GetComponent<Speler>().lastdir;
-                RaycastHit2D hit = Physics2D.Raycast(transform.position + ld * 2, ld, 2);
-                if (hit.collider != null)
+                //check de orientatie
+                if (ld.x != 0)
                 {
-                    print($"<color=yellow>{gameObject} will hit {hit.collider.name}</color>");
-
-                    //check de orientatie
-                    if (ld.x != 0)
-                    {
-                        //print("onze orientatie is <color=pink>HORIZONTAAL</color>");
-                        moveOutOfTheWay(Vector3.up, Vector3.down, hit);
-                    }
-                    else if (ld.y != 0)
-                    {
-                        //print("onze orientatie is <color=pink>VERTICAAL</color>");
-                        moveOutOfTheWay(Vector3.left, Vector3.right, hit);
-                    }
+                    //print("onze orientatie is <color=pink>HORIZONTAAL</color>");
+                    moveOutOfTheWay(Vector3.up, Vector3.down);
                 }
-                else
+                else if (ld.y != 0)
                 {
-                    print("hit nothing");
-
-                    //check de orientatie
-                    if (ld.x != 0)
-                    {
-                        //print("onze orientatie is <color=pink>HORIZONTAAL</color>");
-                        checkLeftAndRight(Vector3.up, Vector3.down);
-                    }
-                    else if (ld.y != 0)
-                    {
-                        //print("onze orientatie is <color=pink>VERTICAAL</color>");
-                        checkLeftAndRight(Vector3.left, Vector3.right);
-                    }
-
-
+                    //print("onze orientatie is <color=pink>VERTICAAL</color>");
+                    moveOutOfTheWay(Vector3.left, Vector3.right);
                 }
-
-                await new WaitForSeconds(0.15f);
             }
-        }
-		 
+            else
+            {
+                print("hit nothing");
+
+                if (ld.x != 0)
+                {
+                    //print("onze orientatie is <color=pink>HORIZONTAAL</color>");
+                    checkLeftAndRight(Vector3.up, Vector3.down);
+                }
+                else if (ld.y != 0)
+                {
+                    //print("onze orientatie is <color=pink>VERTICAAL</color>");
+                    checkLeftAndRight(Vector3.left, Vector3.right);
+                }
+            }
+            await new WaitForSeconds(0.15f);
+            print("waited");
+           
+			//NavMesh.CalculatePath(transform.position + ld, targetpos, NavMesh.AllAreas, path);
+			//move();
+		}
+
     }
 
     async void checkLeftAndRight(Vector3 kant1, Vector3 kant2)
@@ -149,26 +147,34 @@ public class BotController : MonoBehaviour, IBotControllable
         RaycastHit2D hitTwo = Physics2D.Raycast(transform.position + kant2 * 2, kant2, 2);
 
         if(!hitOne && !hitTwo)
-		{
-            NavMesh.CalculatePath(transform.position + ld, targetpos, NavMesh.AllAreas, path);
-            move();           
+		{ 
+            RaycastHit2D hitbackOne = Physics2D.Raycast(transform.position -ld + kant1 * 2, kant1, 2);
+            RaycastHit2D hitbackTwo = Physics2D.Raycast(transform.position -ld + kant2 * 2, kant2, 2);
+
+            if(!hitbackOne && !hitbackTwo)
+			{
+                print("Ik zie links en rechts niks van me, ik ga door als normaal");
+                NavMesh.CalculatePath(transform.position + ld, targetpos, NavMesh.AllAreas, path);
+                move();
+            }          
         }
-       while(hitOne || hitTwo)
+        while (hitOne || hitTwo)
 		{
             busy = true;
             await new WaitUntil(() => !hitOne && !hitTwo);
+            await new WaitForSeconds(0.2f);
+            busy = false;
             NavMesh.CalculatePath(transform.position + ld, targetpos, NavMesh.AllAreas, path);
             move();
-            busy = false;
         }
     }
 
 
 
 
-    void moveOutOfTheWay(Vector3 sideOne, Vector3 sideTwo, RaycastHit2D hit)
-	{	
-
+    void moveOutOfTheWay(Vector3 sideOne, Vector3 sideTwo)
+	{
+        print("Ik ga aan de kant");
         //maak nieuwe paden aan beide kanten van de bot om te kijken welke efficienter is
         var s = GetComponent<Speler>();
 
@@ -180,7 +186,7 @@ public class BotController : MonoBehaviour, IBotControllable
         //zie je niks links en rechts
         if (!hitOne && !hitTwo)
 		{
-            print("ik zie niks links en rechts");
+            //print("ik zie niks links en rechts");
             //calculeer de paden als je naar links&naar rechts zou gaan
             NavMeshPath side1 = new NavMeshPath();
             NavMeshPath side2 = new NavMeshPath();
@@ -191,19 +197,25 @@ public class BotController : MonoBehaviour, IBotControllable
             //als beide paden geldig zijn
             if (boolOne && boolTwo)
 			{
-                print("beide paden zijn geldig");
+                //print("beide paden zijn geldig");
                 //neem het pad met de minste hoeveelheid afslagen
                 if (side1.corners.Length < side2.corners.Length)
 				{
-                    s.directionChanger(sideOne);
-                    print("ik ga naar kant 1(mogelijkheid uit beide paden)");
+					if (!busy)
+                    {
+                        s.directionChanger(sideOne);
+                        //print("ik ga naar kant 1(mogelijkheid uit beide paden)");
+                    }
                 }
 
 
 				else
 				{
-                    s.directionChanger(sideTwo);
-                    print("ik ga naar kant 1(mogelijkheid uit beide paden)");
+					if (!busy)
+                    {
+                        s.directionChanger(sideTwo);
+                        //print("ik ga naar kant 1(mogelijkheid uit beide paden)");
+                    }
                 }
                    
 			}
@@ -211,34 +223,43 @@ public class BotController : MonoBehaviour, IBotControllable
             //als pad 1 alleen geldig is neem pad 1
             else if (boolOne && !boolTwo)
 			{
-                s.directionChanger(sideOne);
-                print("alleen pad 1 is geldig");
+				if (!busy)
+                {
+                    s.directionChanger(sideOne);
+                    //print("alleen pad 1 is geldig");
+                }
             }
                 
 
             //als pad 2 alleen geldig is neem pad 2
             else if (!boolOne && boolTwo)
 			{
-                s.directionChanger(sideTwo);
-                print("alleen pad 2 is geldig");
-            }
-                
+				if (!busy)
+				{
+                    s.directionChanger(sideTwo);
+                    //print("alleen pad 2 is geldig");
+                }
+            }                
         }
 
         //als je aan 1 kant iets ziet en de andere kant niet ga dan de kant op waar je niets ziet
         else if(!hitOne && hitTwo)
 		{
-            s.directionChanger(sideOne);
-            print("ik zie alleen aan kant 1 niks");
+			if (!busy)
+			{
+                s.directionChanger(sideOne);
+                //print("ik zie alleen aan kant 1 niks");
+            }
         }
 
         else if(hitOne && !hitTwo)
 		{
-            s.directionChanger(sideTwo);
-            print("ik zie alleen aan kant 2 niks");
+			if (!busy)
+			{
+                s.directionChanger(sideTwo);
+                //print("ik zie alleen aan kant 2 niks");
+            }
         }
-            
-
     }
 
 

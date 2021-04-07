@@ -53,7 +53,7 @@ public class GameController : MonoBehaviour
 
         gameObject.AddComponent<PowerupPlacer>();
 
-        //gameObject.AddComponent<loadFinal>();
+        gameObject.AddComponent<loadFinal>();
 
         if (PVP == 0)
         {

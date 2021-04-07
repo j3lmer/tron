@@ -42,6 +42,20 @@ public class PowerupPlacer : MonoBehaviour
 			Vector3 p = new Vector3(Random.Range(-65, 70), Random.Range(60, -60), 0);
 			GameObject thisdot = Instantiate(Dot, p, Quaternion.identity);
 			thisdot.transform.localScale = thisdot.transform.localScale * 2;
+
+			Collider2D[] overlap = Physics2D.OverlapBoxAll(p, thisdot.transform.localScale, 0);
+
+			if(overlap.Length > 1 )
+			{
+				foreach(Collider2D o in overlap)
+				{
+					if(o != thisdot)
+					{
+						thisdot.transform.position = new Vector3(Random.Range(-65, 70), Random.Range(60, -60), 0);
+					}
+				}				
+			}
+
 			thisdot.tag = "Powerup";
 			thisdot.AddComponent<Powerup>();
 			j++;
