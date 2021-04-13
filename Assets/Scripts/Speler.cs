@@ -181,11 +181,11 @@ public class Speler : MonoBehaviour, IMovable
                     wall.SetActive(false);
                 }
             }
-
+            
             await new WaitForSeconds(1);
-
-            PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") - 1);
             Alive = false;
+            PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") - 1);
+           
         }		
     }
 }
