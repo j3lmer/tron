@@ -43,7 +43,7 @@ public class BotController : MonoBehaviour, IBotControllable
 
         setRandomTime();
 
-       
+
 
     }
 
@@ -73,23 +73,23 @@ public class BotController : MonoBehaviour, IBotControllable
 
 
 
-	
 
-	public void findPath()
+
+    public void findPath()
     {
-		if (this.enabled)
-		{
-			checkObtrusions();
-		}
-	}
+        if (this.enabled)
+        {
+            checkObtrusions();
+        }
+    }
 
 
 
     async void checkObtrusions()
-	{
-		//haal lastdirection op
-		//kijk een klein stukje voor je of je iets raakt en vertel het
-		
+    {
+        //haal lastdirection op
+        //kijk een klein stukje voor je of je iets raakt en vertel het
+
         while (thisBot.Alive)
         {
             targetpos = Target.position + target.GetComponent<Speler>().lastdir * 10;
@@ -99,9 +99,9 @@ public class BotController : MonoBehaviour, IBotControllable
             var o = transform.up;
 
             if (ld.y != 0)
-			{
+            {
                 o = transform.right;
-			}          
+            }
 
 
             var dirRight = (ld * Mathf.Cos(a) + o * Mathf.Sin(a)).normalized;
@@ -114,7 +114,7 @@ public class BotController : MonoBehaviour, IBotControllable
 
             if (hitMid.collider != null)
             {
-               
+
                 RaycastHit2D hitLeft = Physics2D.Raycast(transform.position + ld * 2, dirLeft, 2);
                 RaycastHit2D hitRight = Physics2D.Raycast(transform.position + ld * 2, dirRight, 2);
 
@@ -142,19 +142,19 @@ public class BotController : MonoBehaviour, IBotControllable
                 }
 
                 else if (hm != null && hr != null && hl == null)
-				{
+                {
                     print($"voor {thisBot.name} {hm.name} geraakt en schuin rechts {hr.name} geraakt");
                     thisBot.directionChanger(Vector3.left);
                 }
 
                 else if (hm != null && hr == null && hl != null)
-				{
+                {
                     print($"voor {thisBot.name} {hm.name} geraakt en schuin links {hl.name} geraakt");
                     thisBot.directionChanger(Vector3.right);
                 }
 
 
-                
+
             }
             else
             {
@@ -171,45 +171,45 @@ public class BotController : MonoBehaviour, IBotControllable
                     checkLeftAndRight(Vector3.left, Vector3.right);
                 }
             }
-            
+
             await new WaitForSeconds(0.15f);
-		}
+        }
 
     }
 
     async void checkLeftAndRight(Vector3 kant1, Vector3 kant2)
-	{    
+    {
 
         RaycastHit2D hitOne = Physics2D.Raycast(transform.position + kant1 * 2, kant1, 2);
         RaycastHit2D hitTwo = Physics2D.Raycast(transform.position + kant2 * 2, kant2, 2);
 
         if (!hitOne && !hitTwo)
-		{ 
+        {
             //soms zijn de 2 normale raycasts net wat te weinig info voor de bot om te zien, dus heb ik er 2 extra toegevoegd die iets achter hem zijn
-            RaycastHit2D hitbackOne = Physics2D.Raycast(transform.position -ld + kant1 * 2, kant1, 2);
-            RaycastHit2D hitbackTwo = Physics2D.Raycast(transform.position -ld + kant2 * 2, kant2, 2);
+            RaycastHit2D hitbackOne = Physics2D.Raycast(transform.position - ld + kant1 * 2, kant1, 2);
+            RaycastHit2D hitbackTwo = Physics2D.Raycast(transform.position - ld + kant2 * 2, kant2, 2);
 
-            if(!hitbackOne && !hitbackTwo)
-			{
+            if (!hitbackOne && !hitbackTwo)
+            {
                 //print("Ik zie links en rechts niks van me, ik ga door als normaal");
                 NavMesh.CalculatePath(transform.position + ld, targetpos, NavMesh.AllAreas, path);
                 move();
-            }          
+            }
         }
-		while (hitOne || hitTwo)
-		{
-			await new WaitUntil(() => !hitOne && !hitTwo);
-			NavMesh.CalculatePath(transform.position + ld, targetpos, NavMesh.AllAreas, path);
-			move();
+        while (hitOne || hitTwo)
+        {
+            await new WaitUntil(() => !hitOne && !hitTwo);
+            NavMesh.CalculatePath(transform.position + ld, targetpos, NavMesh.AllAreas, path);
+            move();
             print("moving again");
-		}
-	}
+        }
+    }
 
 
 
 
     void moveOutOfTheWay(Vector3 sideOne, Vector3 sideTwo, string orientation)
-	{
+    {
         //print("Ik ga aan de kant");
         //maak nieuwe paden aan beide kanten van de bot om te kijken welke efficienter is
         var s = thisBot;
@@ -220,7 +220,7 @@ public class BotController : MonoBehaviour, IBotControllable
 
         //zie je niks links en rechts
         if (!hitOne && !hitTwo)
-		{
+        {
 
 
 
@@ -235,45 +235,45 @@ public class BotController : MonoBehaviour, IBotControllable
 
             //als beide paden geldig zijn
             if (boolOne && boolTwo)
-			{
+            {
                 print("beide paden zijn geldig");
                 //neem het pad met de minste hoeveelheid afslagen
                 if (side1.corners.Length < side2.corners.Length)
-				{
+                {
                     s.directionChanger(sideOne);
                     print("ik ga naar kant 1(mogelijkheid uit beide paden)");
                 }
-				else
-				{
+                else
+                {
                     s.directionChanger(sideTwo);
                     print("ik ga naar kant 1(mogelijkheid uit beide paden)");
-                }                   
-			}
+                }
+            }
 
             //als pad 1 alleen geldig is neem pad 1
             else if (boolOne && !boolTwo)
-			{
+            {
                 s.directionChanger(sideOne);
                 print("alleen pad 1 is geldig");
-            }                
+            }
 
             //als pad 2 alleen geldig is neem pad 2
             else if (!boolOne && boolTwo)
-			{
+            {
                 s.directionChanger(sideTwo);
                 print("alleen pad 2 is geldig");
             }
         }
 
         //als je aan 1 kant iets ziet en de andere kant niet ga dan de kant op waar je niets ziet
-        else if(!hitOne && hitTwo)
-		{
+        else if (!hitOne && hitTwo)
+        {
             s.directionChanger(sideOne);
             print("ik zie alleen aan kant 1 niks");
         }
 
-        else if(hitOne && !hitTwo)
-		{
+        else if (hitOne && !hitTwo)
+        {
             s.directionChanger(sideTwo);
             print("ik zie alleen aan kant 2 niks");
         }
@@ -282,26 +282,26 @@ public class BotController : MonoBehaviour, IBotControllable
 
 
     void move()
-	{
-        if(path.corners != null && path.corners.Length > 0)
-		{
+    {
+        if (path.corners != null && path.corners.Length > 0)
+        {
             Vector3 afstandTussenBotEnVolgendeCorner = path.corners[1] - transform.position;
 
             Vector3 t = transform.position;
             Vector3 o = afstandTussenBotEnVolgendeCorner;
 
             //als je laatste kant niet niks is (dus is geinitieerd)
-            if(ld != null && ld != new Vector3())
-			{
+            if (ld != null && ld != new Vector3())
+            {
                 //horizontaal
                 if (ld.x != 0)
-                {                   
+                {
                     //als de afstand tussen de bot en de eerstvolgende afslag op de x as groter is dan die op de afstand bot-afslag op de y as
                     //EN 
                     //als de locatiewaarde van de afslag op de y as kleiner is mijn locatiewaarde op de y as
                     if (o.x > o.y && path.corners[1].y < t.y)
                     {
-                        
+
                         thisBot.directionChanger(Vector3.down);
                     }
 
@@ -313,7 +313,7 @@ public class BotController : MonoBehaviour, IBotControllable
 
                 //verticaal 
                 else if (ld.y != 0)
-                {    
+                {
                     if (o.x < o.y && path.corners[1].x < t.x)
                         thisBot.directionChanger(Vector3.left);
 
@@ -321,7 +321,7 @@ public class BotController : MonoBehaviour, IBotControllable
                         thisBot.directionChanger(Vector3.right);
                 }
             }
-		}        
+        }
     }
 }
 
