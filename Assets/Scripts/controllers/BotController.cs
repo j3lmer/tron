@@ -42,6 +42,9 @@ public class BotController : MonoBehaviour, IBotControllable
         Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
 
         setRandomTime();
+
+       
+
     }
 
     void setRandomTime()
@@ -91,23 +94,67 @@ public class BotController : MonoBehaviour, IBotControllable
         {
             targetpos = Target.position + target.GetComponent<Speler>().lastdir * 10;
 
-            ld = thisBot.lastdir;
-            RaycastHit2D hit = Physics2D.Raycast(transform.position + ld * 2, ld, 2);
-            if (hit.collider != null)
-            {
-                print($"<color=yellow>{gameObject} will hit {hit.collider.name}</color>");                
+            var a = 45 * Mathf.Deg2Rad;
 
-                //check de orientatie
-                if (ld.x != 0)
+            var o = transform.up;
+
+            if (ld.y != 0)
+			{
+                o = transform.right;
+			}          
+
+
+            var dirRight = (ld * Mathf.Cos(a) + o * Mathf.Sin(a)).normalized;
+            var dirLeft = (ld * Mathf.Cos(a) - o * Mathf.Sin(a)).normalized;
+
+
+            ld = thisBot.lastdir;
+            RaycastHit2D hitMid = Physics2D.Raycast(transform.position + ld * 2, ld, 2);
+
+
+            if (hitMid.collider != null)
+            {
+               
+                RaycastHit2D hitLeft = Physics2D.Raycast(transform.position + ld * 2, dirLeft, 2);
+                RaycastHit2D hitRight = Physics2D.Raycast(transform.position + ld * 2, dirRight, 2);
+
+                var hm = hitMid.collider;
+                var hr = hitRight.collider;
+                var hl = hitLeft.collider;
+
+                print($"{hm.name} geraakt");
+
+
+                if (hm != null && hr == null && hl == null || hm != null && hr != null && hl != null)
                 {
-                    //print("onze orientatie is <color=pink>HORIZONTAAL</color>");
-                    moveOutOfTheWay(Vector3.up, Vector3.down, "HORIZONTAL");
+                    print($"voor {thisBot.name} {hm.name} geraakt");
+                    //check de orientatie
+                    if (ld.x != 0)
+                    {
+                        //print("onze orientatie is <color=pink>HORIZONTAAL</color>");
+                        moveOutOfTheWay(Vector3.up, Vector3.down, "HORIZONTAL");
+                    }
+                    else if (ld.y != 0)
+                    {
+                        //print("onze orientatie is <color=pink>VERTICAAL</color>");
+                        moveOutOfTheWay(Vector3.left, Vector3.right, "VERTICAL");
+                    }
                 }
-                else if (ld.y != 0)
-                {
-                    //print("onze orientatie is <color=pink>VERTICAAL</color>");
-                    moveOutOfTheWay(Vector3.left, Vector3.right, "VERTICAL");
+
+                else if (hm != null && hr != null && hl == null)
+				{
+                    print($"voor {thisBot.name} {hm.name} geraakt en schuin rechts {hr.name} geraakt");
+                    thisBot.directionChanger(Vector3.left);
                 }
+
+                else if (hm != null && hr == null && hl != null)
+				{
+                    print($"voor {thisBot.name} {hm.name} geraakt en schuin links {hl.name} geraakt");
+                    thisBot.directionChanger(Vector3.right);
+                }
+
+
+                
             }
             else
             {
@@ -163,7 +210,6 @@ public class BotController : MonoBehaviour, IBotControllable
 
     void moveOutOfTheWay(Vector3 sideOne, Vector3 sideTwo, string orientation)
 	{
-      
         //print("Ik ga aan de kant");
         //maak nieuwe paden aan beide kanten van de bot om te kijken welke efficienter is
         var s = thisBot;
@@ -172,11 +218,12 @@ public class BotController : MonoBehaviour, IBotControllable
         RaycastHit2D hitOne = Physics2D.Raycast(transform.position + sideOne * 2, sideOne, 2);
         RaycastHit2D hitTwo = Physics2D.Raycast(transform.position + sideTwo * 2, sideTwo, 2);
 
-
         //zie je niks links en rechts
         if (!hitOne && !hitTwo)
 		{
-            //var botpos = thisBot.transform.position;
+
+
+
 
             print("ik zie niks links en rechts van me");
             //calculeer de paden als je naar links&naar rechts zou gaan
