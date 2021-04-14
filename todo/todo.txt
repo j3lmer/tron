@@ -1,9 +1,46 @@
 todo:
-		make touchscreen arrows work as intended
 
-		make bots work as intended
 
-		show touchscreen in build
+
+
+wincondities herschrijven
+
+kies orientatie uit positie speler relatief tot jezelf ipv of je boven of onder iets ziet
+
+muziek gaat uit na 1 speler dood
+
+maak kleurenlijst voor powerups
+
+maak controllijst
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 -------
@@ -14,6 +51,84 @@ doing:
 
 -------
 done:
+
+
+
+
+vuur 3 raycasts uit, 1 voor en 2 links en rechts op 45deg angle
+
+check welke raycast iets raakte, als alleen de forward ray iets raakte, moveoutOfTheWay
+
+als de forward en de linker ray iets raakte, ga naar rechts
+
+als de forward en de rechter ray iets raakte, ga naar links
+
+
+
+
+
+
+powerups spawnen in spelers lijnen
+
+
+
+bot movetoobjective & checkobtrustions refactor
+
+GEWENSTE RESULTATEN
+
+	async CHECKOBTRUSIONS
+
+
+
+	checkobtrusions is meer important dan movetoObjective 
+	de bot die in leven blijft > de bot die een pad naar de speler vind
+
+	de bot moet elke frame kijken of we ergens tegen aan botsen als we deze kant op blijven gaan
+
+	als de bot niks gaat raken, dan kunnen we verder met het origineel gecalculeerde pad naar de speler 
+
+
+
+
+
+	DUS
+
+
+
+
+	als de bot iets voor zich ziet
+	{
+	check orientatie van de bot
+		wanneer horizontaal, executeer functie met voor horizontale parameters
+		wanneer verticaal, executeer functie met voor verticale parameters
+
+	-calculeer een nieuw pad aan links en aan rechts (van de bot)
+			-als 1 van de 2 paden false returnt, doe de andere
+			-als beide paden true returnen, check welke van de 2 paden de minste corners heeft en executeer dit pad als ons hoofdpad
+
+		-herhaal dit voor horizontaal 
+	}
+
+	als de bot niets voor zich ziet
+	{
+	executeer functie moveToObjective				
+	}
+	
+			
+
+	
+	make bots work as intended
+			-unity has a bug which does not allow me to finish the project as intended (https://forum.unity.com/threads/navmesh-obstacle-carving-problem-with-agents.213325/)
+
+			will have to simplify the idea of the bot and finish it in another way
+
+
+	BUGFIX: create lightwall after death.
+
+	make touchscreen arrows work as intended
+
+	show touchscreen in build
+
 	fixed finalscreen bug not saving
 
 

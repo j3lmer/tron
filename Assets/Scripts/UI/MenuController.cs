@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
 {
+	//TODO: MAKE BACK BTN INSTEAD OF HOME
+
 	//variables for accessing menus + canvas
 	GameObject menuObject;
 	Canvas canvas;
@@ -21,6 +23,8 @@ public class MenuController : MonoBehaviour
 	Slider slider;
 	private bool sliderActive = false;
 
+	private bool touchActive = false;
+
 	private void Start()
 	{
 		/* 
@@ -32,7 +36,7 @@ public class MenuController : MonoBehaviour
 
 		if (Debug.isDebugBuild)
 		{
-			Debug.Log("This is the latest debug build!");
+			Debug.Log("This is the (latest) debug build!");
 		}
 	}
 
@@ -110,9 +114,9 @@ public class MenuController : MonoBehaviour
 			case "menuActivator":
 				menuActivator(thisBtn);
 				try
-				{					
+				{
 					Toggle toggle = GameObject.Find("Toggle").GetComponent<Toggle>();
-					
+
 					if (toggle.transform.parent.name == "MusicEnabler")
 					{
 						musicenabler(toggle);
@@ -121,7 +125,9 @@ public class MenuController : MonoBehaviour
 					else if (toggle.transform.parent.name == "TouchScreen")
 					{
 						touchscreenenabler(toggle);
-					}					
+						touchActive = true;
+					}
+					
 				}
 				catch{break;}
 				break;
@@ -129,10 +135,13 @@ public class MenuController : MonoBehaviour
 			case "backBtn":
 				home(thisBtn);
 				sliderActive = false;
+				touchActive = false;
+
 				break;
 
 			case "exit":
 				sliderActive = false;
+				touchActive = false;
 				exit();
 				break;
 		}
@@ -153,25 +162,49 @@ public class MenuController : MonoBehaviour
 		{
 			case 0:
 				toggle.isOn = false;
-				PlayerPrefs.SetInt("Touch", 1);
-				print($"setting touch to 1");
 				print(toggle.isOn);
 				break;
 
 			case 1:
 				toggle.isOn = true;
-				PlayerPrefs.SetInt("Touch", 0);
-				print($"setting touch to 0");
 				print(toggle.isOn);
 				break;
 		}
 	}
+
+
 
 	private void Update()
 	{
 		if (sliderActive)
 		{
 			GameObject.Find("SoundManager").GetComponent<VolumeValueChange>().SetVolume(slider.value);
+		}
+
+		//print(touchActive);
+		if (touchActive)
+		{
+			if (GameObject.Find("Toggle"))
+			{
+				switch (GameObject.Find("Toggle").GetComponent<Toggle>().isOn)
+				{
+					case true:
+						if (PlayerPrefs.GetInt("Touch") != 1)
+						{
+							print("touch set to true");
+							PlayerPrefs.SetInt("Touch", 1);
+						}
+						break;
+
+					case false:
+						if (PlayerPrefs.GetInt("Touch") != 0)
+						{
+							print("touch set to false");
+							PlayerPrefs.SetInt("Touch", 0);
+						}
+						break;
+				}
+			}		
 		}
 	}
 
@@ -180,6 +213,7 @@ public class MenuController : MonoBehaviour
 		//button is the button clicked
 		GameObject thisMenu = button.transform.parent.gameObject;
 		thisMenu.SetActive(false);
+		
 		switch (button.name)
 		{
 			case "StartKnop":
@@ -198,7 +232,7 @@ public class MenuController : MonoBehaviour
 						break;
 
 					case 0:
-						listLoop(menuList, "BotsKiezen");
+						listLoop(menuList, "moeilijkheidsgraad");
 						break;
 				}
 
@@ -223,14 +257,29 @@ public class MenuController : MonoBehaviour
 
 			case "PVE":
 				PVE();
+				listLoop(menuList, "moeilijkheidsgraad");
+				break;
+
+			case "makkelijk":
+				PlayerPrefs.SetInt("difficulty",0);
 				listLoop(menuList, "BotsKiezen");
 				break;
+
+			case "normaal":
+				PlayerPrefs.SetInt("difficulty", 1);
+				listLoop(menuList, "BotsKiezen");
+				break;
+
+			case "moeilijk":
+				PlayerPrefs.SetInt("difficulty", 2);
+				listLoop(menuList, "BotsKiezen");
+				break;
+
 
 			case "home":
 				SceneManager.LoadScene(0);
 				break;
-
-		}
+		}		
 	}
 
 	void listLoop(List<GameObject> menuL, string stop)

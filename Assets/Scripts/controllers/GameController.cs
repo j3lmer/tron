@@ -53,7 +53,7 @@ public class GameController : MonoBehaviour
 
         gameObject.AddComponent<PowerupPlacer>();
 
-        gameObject.AddComponent<loadFinal>();
+        //gameObject.AddComponent<loadFinal>();
 
         if (PVP == 0)
         {
@@ -65,7 +65,7 @@ public class GameController : MonoBehaviour
 	{
         var tmode = PlayerPrefs.GetInt("Touch");
 
-        print($"Touchscreen mode :{tmode},\n 1 means adding touchscreen");
+        //print($"Touchscreen mode :{tmode},\n 1 means adding touchscreen");
 
 		switch (tmode)
 		{
@@ -80,7 +80,7 @@ public class GameController : MonoBehaviour
                 break;
 
             case 1:
-                Debug.Log("adding touchscreen module");
+                //Debug.Log("adding touchscreen module");
                 gameObject.AddComponent<TouchScreenModule>();
                 break;
 		}
@@ -130,6 +130,8 @@ public class GameController : MonoBehaviour
 
     void makePlayer(string tag, int i)
     {
+        //print($"Making player {tag}, number {i}");
+
         Vector3 thisStartpos = startpos[i];
         dir = Linked[thisStartpos];
 
@@ -229,6 +231,7 @@ public class GameController : MonoBehaviour
         {
             PVP = PlayerPrefs.GetInt("PVP");
             contenders = PlayerPrefs.GetInt("contestants");
+            print($"PVP = {PVP}, CONTENDERS = {contenders}");
         }
     }
 }

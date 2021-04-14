@@ -8,8 +8,6 @@ public class SpelerController : MonoBehaviour
 
     KeyCode up, left, down, right;
 
-
-
     private void Start()
     {
         speler = gameObject.GetComponent<Speler>();
@@ -21,12 +19,13 @@ public class SpelerController : MonoBehaviour
     }
 
     void checkInputs()
-    {        
+    {
         if (Input.GetKeyDown(up))
         {
             if (speler.lastdir != Vector3.down)
             {
                 speler.directionChanger(Vector3.up);
+                
             }
         }
 
@@ -40,6 +39,7 @@ public class SpelerController : MonoBehaviour
 
         if (Input.GetKeyDown(left))
         {
+            
             if (speler.lastdir != Vector3.right)
             {
                 speler.directionChanger(Vector3.left);
@@ -51,7 +51,8 @@ public class SpelerController : MonoBehaviour
             {
                 speler.directionChanger(Vector3.right);
             }
-        }               
+        }
+
     }
 
 

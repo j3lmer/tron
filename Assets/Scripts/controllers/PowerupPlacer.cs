@@ -42,16 +42,30 @@ public class PowerupPlacer : MonoBehaviour
 			Vector3 p = new Vector3(Random.Range(-65, 70), Random.Range(60, -60), 0);
 			GameObject thisdot = Instantiate(Dot, p, Quaternion.identity);
 			thisdot.transform.localScale = thisdot.transform.localScale * 2;
+
+			Collider2D[] overlap = Physics2D.OverlapBoxAll(p, thisdot.transform.localScale, 0);
+
+			if(overlap.Length > 1 )
+			{
+				foreach(Collider2D o in overlap)
+				{
+					if(o != thisdot)
+					{
+						thisdot.transform.position = new Vector3(Random.Range(-65, 70), Random.Range(60, -60), 0);
+					}
+				}				
+			}
+
 			thisdot.tag = "Powerup";
 			thisdot.AddComponent<Powerup>();
 			j++;
 
 			int powerupNr = Random.Range(0, 5);
 
-			if (true)
+			if (j % 10 == 0)
 			{
-				thisdot.name = pUps[4];
-				thisdot.GetComponent<SpriteRenderer>().color = colors[4];
+				thisdot.name = pUps[5];
+				thisdot.GetComponent<SpriteRenderer>().color = colors[5];
 			}
 			else
 			{
@@ -60,7 +74,7 @@ public class PowerupPlacer : MonoBehaviour
 			}
 
 
-			print($"<color=blue>{thisdot.name}</color> instansiated @ <color=red>{p}</color>");
+			//print($"<color=blue>{thisdot.name}</color> instansiated @ <color=red>{p}</color>");
 			yield return new WaitForSeconds(t);
 		}
 
@@ -80,7 +94,7 @@ public class PowerupPlacer : MonoBehaviour
 	List<Color> getColors()
 	{
 		Color32 speedColor = new Color32(0, 134, 227, 255);
-		Color32 invinciColor = new Color32(251, 184, 41, 255);
+		Color32 invinciColor = new Color32(96, 40, 250, 255);
 		Color32 poison = new Color32(147, 229, 30, 255);
 		Color stopColor = Color.red;
 		List<Color> colors = new List<Color>();

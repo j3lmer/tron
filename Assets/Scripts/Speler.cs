@@ -34,7 +34,9 @@ public class Speler : MonoBehaviour, IMovable
     {
         get { return invincible; }
         set { invincible = value; }
-    }    
+    }
+
+    bool alive;
    
 
     //------------------------------------end player variables
@@ -52,6 +54,12 @@ public class Speler : MonoBehaviour, IMovable
     Vector2 lastWallEnd;
 
     //GETTER/SETTERS
+    public bool Alive
+	{
+		get { return alive; }
+		set { alive = value; }
+	}
+
     public GameObject wallprefab
     {
         get { return wallPrefab; }
@@ -62,9 +70,7 @@ public class Speler : MonoBehaviour, IMovable
         get { return wall; }
         set { wall = value; }
     }
-    //------------------------------------end wall variables
-
-
+    //------------------------------------end wall variables\
 
 
     private void Awake()
@@ -72,34 +78,41 @@ public class Speler : MonoBehaviour, IMovable
         //fill in some local variables
         rb = GetComponent<Rigidbody2D>();
         speed = 16;
-        
+        Alive = true;
     }    
 
     public void directionChanger(Vector3 direction)
     {
-        rb.velocity = direction * speed;
-        LastDirection = direction;
-        spawnWall();   
+		if (Alive)
+		{
+            rb.velocity = direction * speed;
+            LastDirection = direction;
+            spawnWall();
+        }
     }
 
 
     private void Update()
-    {
+    {                                                             
         fitColliderBetween(wall, lastWallEnd, transform.position);
     }
 
     public void spawnWall()
     {
-        lastWallEnd = transform.position;
-        GameObject w = Instantiate(wallPrefab, transform.position, Quaternion.identity);
-        wall = w.GetComponent<Collider2D>();
-		w.tag = "playerWall";
-		var obs = w.AddComponent<NavMeshObstacle>();
-		obs.carving = true;
-		obs.carveOnlyStationary = false;
+        if(Alive)
+        {
+            lastWallEnd = transform.position;
+            GameObject w = Instantiate(wallPrefab, transform.position , Quaternion.identity);
+            wall = w.GetComponent<Collider2D>();
+            w.tag = "playerWall";
+            w.layer = 0;
+			var obs = w.AddComponent<NavMeshObstacle>();
+			obs.carving = true;
+			obs.carveOnlyStationary = false;
+		}
 	}
 
-    public void fitColliderBetween(Collider2D co, Vector2 a, Vector2 b)
+    public void fitColliderBetween(Collider2D co, Vector3 a, Vector3 b)
     {
         // Calculate the Center Position
         co.transform.position = a + (b - a) * 0.5f;
@@ -107,9 +120,9 @@ public class Speler : MonoBehaviour, IMovable
         // Scale it (horizontally or vertically)
         float dist = Vector2.Distance(a, b);
         if (a.x != b.x)
-            co.transform.localScale = new Vector2(dist+1, 1);
+            co.transform.localScale = new Vector2(dist+0.99f, 1);
         else
-            co.transform.localScale = new Vector2(1, dist+1);
+            co.transform.localScale = new Vector2(1, dist+0.99f);
     }
 
 
@@ -122,9 +135,9 @@ public class Speler : MonoBehaviour, IMovable
 			{
 				if (collider.tag != "Powerup")
 				{
-					//print($"Player lost: {name}, lost to {collider}");
 					die();
-				}
+                    print(gameObject + " being killed by " + collider.name);
+                }
 			}
 		}
 	}
@@ -132,43 +145,47 @@ public class Speler : MonoBehaviour, IMovable
 
     public async void die()
     {
-        AudioClip derezz = Resources.Load<AudioClip>("music/derezz");
-
-        if(sm.Instance != null)
+        if (gameObject)
         {
-            sm.Instance.MusicSource.Stop();
-            sm.Instance.Play(derezz);
-        }
+           
+            AudioClip derezz = Resources.Load<AudioClip>("music/derezz");
 
-        try
-        {
-          GetComponent<SpelerController>().enabled = false;
-        }
-        catch
-        {
-          GetComponent<BotController>().enabled = false;
-        }
-
-        Color c = GetComponent<SpriteRenderer>().color;
-        c.a = 0;
-        GetComponent<SpriteRenderer>().color = c;
-
-        string wallname = wallprefab.name;
-        GameObject[] walls = GameObject.FindGameObjectsWithTag("playerWall");
-
-        foreach(GameObject wall in walls)
-        {
-            if (wall.name.Contains(wallname))
+            if (sm.Instance != null)
             {
-                wall.SetActive(false);
+                sm.Instance.MusicSource.Stop();
+                sm.Instance.Play(derezz);
             }
-        }
 
-        await new WaitForSeconds(1);
+            try
+            {
+                GetComponent<SpelerController>().enabled = false;
+            }
+            catch
+            {
+                GetComponent<BotController>().enabled = false;
+                GetComponent<BotController>().gameObject.SetActive(false);
+            }
 
-        PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") -1);
-        //print(PlayerPrefs.GetInt("AlivePlayers"));
-        Destroy(gameObject);
+
+            Color c = GetComponent<SpriteRenderer>().color;
+            c.a = 0;
+            GetComponent<SpriteRenderer>().color = c;
+
+            string wallname = wallprefab.name;
+            GameObject[] walls = GameObject.FindGameObjectsWithTag("playerWall");
+
+            foreach (GameObject wall in walls)
+            {
+                if (wall.name.Contains(wallname))
+                {
+                    wall.SetActive(false);
+                }
+            }
+            
+            await new WaitForSeconds(1);
+            Alive = false;
+            PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") - 1);
+           
+        }		
     }
-
 }

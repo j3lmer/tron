@@ -9,23 +9,45 @@ public class loadFinal : MonoBehaviour
 {
 	string winningName;
 
+	bool[] bools;
+
+
 	private void Start()
 	{
 		checkforFinal();
 	}
 
+	private void Update()
+	{
+		var AlivePlayers = FindObjectsOfType<Speler>();
+		List<bool> b = new List<bool>();
+
+		foreach (Speler s in AlivePlayers)
+		{			
+			b.Add(s.Alive);
+		}
+
+
+
+		bools = b.ToArray();
+
+		print(bools.Length);
+	}
+
+
 	async void checkforFinal()
 	{	
 		
-		while(PlayerPrefs.GetInt("AlivePlayers") > 1)
+		while(bools.Length > 2)
         {
-			//print("routining");
+			print("routining");
+
 			await new WaitForEndOfFrame();
         }
 
 		NavMesh.RemoveAllNavMeshData();
 
-		if(PlayerPrefs.GetInt("AlivePlayers") == 0)
+		if(bools.Length == 1)
         {
 			winningName = "Gelijkspel!";
 			setWinner();
