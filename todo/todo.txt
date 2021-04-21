@@ -3,8 +3,6 @@ todo:
 
 
 
-wincondities herschrijven
-
 kies orientatie uit positie speler relatief tot jezelf ipv of je boven of onder iets ziet
 
 muziek gaat uit na 1 speler dood
@@ -45,8 +43,8 @@ maak controllijst
 
 -------
 doing:
-	
 
+wincondities herschrijven
 
 
 -------

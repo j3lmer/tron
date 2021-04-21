@@ -8,6 +8,7 @@ public class BotController : MonoBehaviour, IBotControllable
 {
     Speler thisBot;
     Transform target;
+    Speler targetPlayer;
 
     Vector3 targetpos;
 
@@ -18,6 +19,13 @@ public class BotController : MonoBehaviour, IBotControllable
     float randomTime;
 
     Vector3 ld;
+
+    Vector3 dirRight;
+    Vector3 dirLeft;
+    RaycastHit2D hitLeft;
+    RaycastHit2D hitRight;
+
+
     //GETTERS/SETTERS
     public float RandomTime
     {
@@ -37,14 +45,12 @@ public class BotController : MonoBehaviour, IBotControllable
 
     private void Start()
     {
-        thisBot = GetComponent<Speler>();
+        thisBot = GetComponent<Speler>();   
         path = new NavMeshPath();
         Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        targetPlayer = Target.GetComponent<Speler>();
 
         setRandomTime();
-
-
-
     }
 
     void setRandomTime()
@@ -92,31 +98,26 @@ public class BotController : MonoBehaviour, IBotControllable
 
         while (thisBot.Alive)
         {
-            targetpos = Target.position + target.GetComponent<Speler>().lastdir * 10;
-
-            var a = 45 * Mathf.Deg2Rad;
-
-            var o = transform.up;
-
-            if (ld.y != 0)
-            {
-                o = transform.right;
-            }
-
-
-            var dirRight = (ld * Mathf.Cos(a) + o * Mathf.Sin(a)).normalized;
-            var dirLeft = (ld * Mathf.Cos(a) - o * Mathf.Sin(a)).normalized;
-
-
+            targetpos = Target.position + targetPlayer.lastdir * 10;
             ld = thisBot.lastdir;
-            RaycastHit2D hitMid = Physics2D.Raycast(transform.position + ld * 2, ld, 2);
 
+
+            RaycastHit2D hitMid = Physics2D.Raycast(transform.position + ld * 2, ld, 2);
 
             if (hitMid.collider != null)
             {
+                var a = 45 * Mathf.Deg2Rad;
+                var o = transform.up;
 
-                RaycastHit2D hitLeft = Physics2D.Raycast(transform.position + ld * 2, dirLeft, 2);
-                RaycastHit2D hitRight = Physics2D.Raycast(transform.position + ld * 2, dirRight, 2);
+                if (ld.y != 0)
+                {
+                    o = transform.right;
+                }
+                dirRight = (ld * Mathf.Cos(a) + o * Mathf.Sin(a)).normalized;
+                dirLeft = (ld * Mathf.Cos(a) - o * Mathf.Sin(a)).normalized;
+
+                hitLeft = Physics2D.Raycast(transform.position + ld * 2, dirLeft, 2);
+                hitRight = Physics2D.Raycast(transform.position + ld * 2, dirRight, 2);
 
                 var hm = hitMid.collider;
                 var hr = hitRight.collider;
@@ -186,14 +187,15 @@ public class BotController : MonoBehaviour, IBotControllable
         if (!hitOne && !hitTwo)
         {
             //soms zijn de 2 normale raycasts net wat te weinig info voor de bot om te zien, dus heb ik er 2 extra toegevoegd die iets achter hem zijn
-            RaycastHit2D hitbackOne = Physics2D.Raycast(transform.position - ld + kant1 * 2, kant1, 2);
-            RaycastHit2D hitbackTwo = Physics2D.Raycast(transform.position - ld + kant2 * 2, kant2, 2);
+            hitLeft = Physics2D.Raycast(transform.position + ld * 2, dirLeft, 2);
+            hitRight = Physics2D.Raycast(transform.position + ld * 2, dirRight, 2);
 
-            if (!hitbackOne && !hitbackTwo)
+            if (!hitLeft && !hitRight)
             {
                 //print("Ik zie links en rechts niks van me, ik ga door als normaal");
                 NavMesh.CalculatePath(transform.position + ld, targetpos, NavMesh.AllAreas, path);
                 move();
+                print("moving");
             }
         }
         while (hitOne || hitTwo)
@@ -222,9 +224,6 @@ public class BotController : MonoBehaviour, IBotControllable
         if (!hitOne && !hitTwo)
         {
 
-
-
-
             print("ik zie niks links en rechts van me");
             //calculeer de paden als je naar links&naar rechts zou gaan
             NavMeshPath side1 = new NavMeshPath();
@@ -236,18 +235,43 @@ public class BotController : MonoBehaviour, IBotControllable
             //als beide paden geldig zijn
             if (boolOne && boolTwo)
             {
-                print("beide paden zijn geldig");
-                //neem het pad met de minste hoeveelheid afslagen
-                if (side1.corners.Length < side2.corners.Length)
+                //haal nieuwe target positie op voor de zekerheid
+                var tp = Target.position;
+                var tbp = thisBot.transform.position;
+
+                switch (orientation)
                 {
-                    s.directionChanger(sideOne);
-                    print("ik ga naar kant 1(mogelijkheid uit beide paden)");
+                    case "HORIZONTAL":
+                        if (tp.y > tbp.y)
+                            thisBot.directionChanger(Vector3.up);
+                        else if (tp.y < tbp.y)
+                            thisBot.directionChanger(Vector3.down);
+                        else
+                        {
+                            if (side1.corners.Length < side2.corners.Length)
+                                s.directionChanger(sideOne);
+                            else
+                                s.directionChanger(sideTwo);
+                        }
+
+                        break;
+
+                    case "VERTICAL":
+                        if (tp.x > tbp.x)
+                            thisBot.directionChanger(Vector3.right);
+                        else if (tp.x < tbp.x)
+                            thisBot.directionChanger(Vector3.left);
+                        else
+                        {
+                            if (side1.corners.Length < side2.corners.Length)
+                                s.directionChanger(sideOne);
+                            else
+                                s.directionChanger(sideTwo);
+                        }
+                        break;
                 }
-                else
-                {
-                    s.directionChanger(sideTwo);
-                    print("ik ga naar kant 1(mogelijkheid uit beide paden)");
-                }
+
+
             }
 
             //als pad 1 alleen geldig is neem pad 1
@@ -268,6 +292,7 @@ public class BotController : MonoBehaviour, IBotControllable
         //als je aan 1 kant iets ziet en de andere kant niet ga dan de kant op waar je niets ziet
         else if (!hitOne && hitTwo)
         {
+
             s.directionChanger(sideOne);
             print("ik zie alleen aan kant 1 niks");
         }
