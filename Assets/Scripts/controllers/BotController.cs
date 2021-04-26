@@ -209,7 +209,6 @@ public class BotController : MonoBehaviour, IBotControllable
 
 
 
-
     void moveOutOfTheWay(Vector3 sideOne, Vector3 sideTwo, string orientation)
     {
         //print("Ik ga aan de kant");
@@ -266,12 +265,10 @@ public class BotController : MonoBehaviour, IBotControllable
                             if (side1.corners.Length < side2.corners.Length)
                                 s.directionChanger(sideOne);
                             else
-                                s.directionChanger(sideTwo);
+                                s.directionChanger(sideTwo);                            
                         }
                         break;
                 }
-
-
             }
 
             //als pad 1 alleen geldig is neem pad 1
@@ -326,11 +323,10 @@ public class BotController : MonoBehaviour, IBotControllable
                     //als de locatiewaarde van de afslag op de y as kleiner is mijn locatiewaarde op de y as
                     if (o.x > o.y && path.corners[1].y < t.y)
                     {
-
                         thisBot.directionChanger(Vector3.down);
                     }
 
-                    else if (o.x <= o.y && path.corners[1].y > t.y)
+                    else if (o.x < o.y && path.corners[1].y > t.y)
                     {
                         thisBot.directionChanger(Vector3.up);
                     }

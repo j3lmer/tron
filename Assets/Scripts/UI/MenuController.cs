@@ -19,6 +19,8 @@ public class MenuController : MonoBehaviour
 	public AudioClip buttonClick;
 	//end clips
 
+	Camera SecondaryCamera;
+
 
 	Slider slider;
 	private bool sliderActive = false;
@@ -38,6 +40,12 @@ public class MenuController : MonoBehaviour
 		{
 			Debug.Log("This is the (latest) debug build!");
 		}
+
+		SecondaryCamera = GameObject.Find("Camera").GetComponent<Camera>();
+
+		print(SecondaryCamera.name);
+
+		SecondaryCamera.enabled = false;
 	}
 
 
@@ -136,8 +144,8 @@ public class MenuController : MonoBehaviour
 				home(thisBtn);
 				sliderActive = false;
 				touchActive = false;
-
 				break;
+
 
 			case "exit":
 				sliderActive = false;
@@ -275,6 +283,23 @@ public class MenuController : MonoBehaviour
 				listLoop(menuList, "BotsKiezen");
 				break;
 
+			case "SchemeShower":
+				listLoop(menuList, "Schemes");
+				break;
+
+			case "Controls":
+				listLoop(menuList, "Controls");
+
+				SecondaryCamera.enabled = true;
+
+				break;
+
+			case "Powerups":
+				listLoop(menuList, "Powerups");
+
+				SecondaryCamera.enabled = true;
+				break;
+
 
 			case "home":
 				SceneManager.LoadScene(0);
@@ -383,6 +408,11 @@ public class MenuController : MonoBehaviour
 	{
 		//check what menu this back button is part of
 		GameObject thisMenu = button.transform.parent.gameObject;
+
+		if (SecondaryCamera.enabled)
+		{
+			SecondaryCamera.enabled = false;
+		}
 
 		//loop through menu list, stop when this menu is found, set this menu inactive, set previous menu active(WIP)
 		for (var i = 0; i < menuList.Count; i++)

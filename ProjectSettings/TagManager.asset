@@ -14,7 +14,6 @@ TagManager:
   - menuActivator
   - backBtn
   - 'exit '
-  - toMM
   - playerTemp
   - wall
   - wallHolder
@@ -28,7 +27,7 @@ TagManager:
   - Water
   - UI
   - touchscreen
-  - 
+  - ignoreFx
   - botwall
   - PostProcessing
   - target
