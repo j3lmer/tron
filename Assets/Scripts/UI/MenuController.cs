@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -19,7 +20,15 @@ public class MenuController : MonoBehaviour
 	public AudioClip buttonClick;
 	//end clips
 
+	//variables for settings
 	Camera SecondaryCamera;
+	RawImage current_wallpaper;
+	Texture original_wallpaper;
+	Texture alternate_wallpaper;
+	//end
+
+	//controlfont
+	public TMP_FontAsset fontAsset;
 
 
 	Slider slider;
@@ -41,11 +50,11 @@ public class MenuController : MonoBehaviour
 			Debug.Log("This is the (latest) debug build!");
 		}
 
-		SecondaryCamera = GameObject.Find("Camera").GetComponent<Camera>();
+		current_wallpaper = GameObject.Find("RawImage").GetComponent<RawImage>();
+		original_wallpaper = Resources.Load<Texture>("Images/default_background");
+		alternate_wallpaper = Resources.Load<Texture>("Images/alternate_background");
 
-		print(SecondaryCamera.name);
-
-		SecondaryCamera.enabled = false;
+		
 	}
 
 
@@ -289,15 +298,57 @@ public class MenuController : MonoBehaviour
 
 			case "Controls":
 				listLoop(menuList, "Controls");
+				current_wallpaper.texture = alternate_wallpaper;
 
-				SecondaryCamera.enabled = true;
 
+				GameObject rows = GameObject.Find("rows");
+				GameObject playerlist = GameObject.Find("players");
+
+				Color[] colors = { new Color(232, 0, 254, 1), Color.cyan, Color.yellow, Color.green };
+
+				for(var i=0; i<rows.transform.childCount; i++)
+				{
+					TextMeshProUGUI thischild = rows.transform.GetChild(i).GetComponent<TextMeshProUGUI>();
+					thischild.font = fontAsset;
+					thischild.color = new Color32(128, 149, 255,255);
+				}
+
+				for (var j=0; j<playerlist.transform.childCount; j++)
+				{
+					TextMeshProUGUI thischild = playerlist.transform.GetChild(j).GetComponent<TextMeshProUGUI>();
+					thischild.font = fontAsset;
+					thischild.color = colors[j];
+
+					for(var k=0; k<thischild.transform.childCount; k++)
+					{
+						thischild.transform.GetChild(k).GetComponent<TextMeshProUGUI>().font = fontAsset;
+					}
+				}
+				
 				break;
 
 			case "Powerups":
 				listLoop(menuList, "Powerups");
+				current_wallpaper.texture = alternate_wallpaper;
 
-				SecondaryCamera.enabled = true;
+				GameObject blocks = GameObject.Find("blocks");
+				GameObject desc = GameObject.Find("descriptions");
+
+				Color[] playercolors = { new Color32(0, 134, 227, 255), new Color32(96, 40, 250, 255), Color.red, new Color32(147, 229, 30, 255), Color.yellow, Color.magenta };
+
+				for(var i=0; i< blocks.transform.childCount; i++)
+				{
+					SpriteRenderer thisBlock = blocks.transform.GetChild(i).GetComponent<SpriteRenderer>();
+					thisBlock.color = playercolors[i];
+				}
+
+				for(var j=0; j< desc.transform.childCount; j++)
+				{
+					TextMeshProUGUI thisText = desc.transform.GetChild(j).GetComponent<TextMeshProUGUI>();
+					thisText.font = fontAsset;
+				} 
+
+
 				break;
 
 
@@ -408,11 +459,10 @@ public class MenuController : MonoBehaviour
 	{
 		//check what menu this back button is part of
 		GameObject thisMenu = button.transform.parent.gameObject;
-
-		if (SecondaryCamera.enabled)
-		{
-			SecondaryCamera.enabled = false;
-		}
+		
+		//set background to default if needed
+		if (current_wallpaper.texture != original_wallpaper)
+			current_wallpaper.texture = original_wallpaper;
 
 		//loop through menu list, stop when this menu is found, set this menu inactive, set previous menu active(WIP)
 		for (var i = 0; i < menuList.Count; i++)

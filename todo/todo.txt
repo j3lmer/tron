@@ -11,7 +11,9 @@ maak kleurenlijst voor powerups
 
 maak controllijst
 
+indexoutofrangeexeption stoprandomplayer powerup
 
+soms stopt de bot met achter de speler aangaan in favor of wachten tot je iets tegenkomt en aan de kant gaan
 
 
 
