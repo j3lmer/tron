@@ -45,7 +45,7 @@ public class BotController : MonoBehaviour, IBotControllable
 
     private void Start()
     {
-        thisBot = GetComponent<Speler>();   
+        thisBot = GetComponent<Speler>();
         path = new NavMeshPath();
         Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         targetPlayer = Target.GetComponent<Speler>();
@@ -60,19 +60,19 @@ public class BotController : MonoBehaviour, IBotControllable
         switch (diff)
         {
             case 0:
-                RandomTime = Random.Range(0.75f, 1);
+                RandomTime = Random.Range(0.25f, 0.30f);
                 break;
 
             case 1:
-                RandomTime = Random.Range(0.5f, 0.75f);
+                RandomTime = Random.Range(0.20f, 0.25f);
                 break;
 
             case 2:
-                RandomTime = Random.Range(0, 0.25f);
+                RandomTime = Random.Range(0.20f, 0.15f);
                 break;
 
             default:
-                RandomTime = Random.Range(0.25f, 0.5f);
+                RandomTime = Random.Range(0.20f, 0.15f);
                 break;
         }
     }
@@ -84,9 +84,7 @@ public class BotController : MonoBehaviour, IBotControllable
     public void findPath()
     {
         if (this.enabled)
-        {
             checkObtrusions();
-        }
     }
 
 
@@ -96,8 +94,10 @@ public class BotController : MonoBehaviour, IBotControllable
         //haal lastdirection op
         //kijk een klein stukje voor je of je iets raakt en vertel het
 
+
         while (thisBot.Alive)
         {
+
             targetpos = Target.position + targetPlayer.lastdir * 10;
             ld = thisBot.lastdir;
 
@@ -173,7 +173,7 @@ public class BotController : MonoBehaviour, IBotControllable
                 }
             }
 
-            await new WaitForSeconds(0.15f);
+            await new WaitForSeconds(RandomTime);
         }
 
     }
@@ -200,10 +200,15 @@ public class BotController : MonoBehaviour, IBotControllable
         }
         while (hitOne || hitTwo)
         {
-            await new WaitUntil(() => !hitOne && !hitTwo);
+            RaycastHit2D hitBLeft = Physics2D.Raycast(transform.position - ld*2, dirLeft, 2);
+            RaycastHit2D hitBRight = Physics2D.Raycast(transform.position - ld*2, dirRight, 2);
+
+            print("aan het wachten");
+            await new WaitUntil(() => !hitOne && !hitTwo && hitBLeft && hitBRight);
+            print("we gaan weer door");
             NavMesh.CalculatePath(transform.position + ld, targetpos, NavMesh.AllAreas, path);
             move();
-            print("moving again");
+            
         }
     }
 
@@ -265,7 +270,7 @@ public class BotController : MonoBehaviour, IBotControllable
                             if (side1.corners.Length < side2.corners.Length)
                                 s.directionChanger(sideOne);
                             else
-                                s.directionChanger(sideTwo);                            
+                                s.directionChanger(sideTwo);
                         }
                         break;
                 }

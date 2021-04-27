@@ -24,9 +24,10 @@ public class NavController : MonoBehaviour
 
     async void WaitForSurface()
     {
-        while(surface.size.magnitude <= 0.0f)
+        var t = FindObjectOfType<Timer>();
+        while(surface.size.magnitude <= 0.0f && t.TimerText != "GO")
         {
-            await new WaitForEndOfFrame();
+            await new WaitForFixedUpdate();
         }
 
         foreach (BotController bot in Bots)

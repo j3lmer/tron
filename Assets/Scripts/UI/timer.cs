@@ -16,6 +16,13 @@ public class Timer : MonoBehaviour
 	public AudioClip zero;
 	public AudioClip gameplayMusic;
 
+	//GETTER
+	public string TimerText
+	{
+		get { return timer.text; }
+	}
+	
+
     private void Start()
     {
 		loadClips();
@@ -28,6 +35,7 @@ public class Timer : MonoBehaviour
         }
         else
         {
+			
 			timer.text = "";
 			enabled = false;
 		}		

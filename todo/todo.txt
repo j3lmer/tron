@@ -7,11 +7,7 @@ kies orientatie uit positie speler relatief tot jezelf ipv of je boven of onder 
 
 muziek gaat uit na 1 speler dood
 
-maak kleurenlijst voor powerups
 
-maak controllijst
-
-indexoutofrangeexeption stoprandomplayer powerup
 
 soms stopt de bot met achter de speler aangaan in favor of wachten tot je iets tegenkomt en aan de kant gaan
 
@@ -53,7 +49,11 @@ wincondities herschrijven
 done:
 
 
+maak kleurenlijst voor powerups
 
+maak controllijst
+
+indexoutofrangeexeption stoprandomplayer powerup
 
 vuur 3 raycasts uit, 1 voor en 2 links en rechts op 45deg angle
 

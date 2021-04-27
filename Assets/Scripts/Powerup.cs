@@ -103,43 +103,29 @@ public class Powerup : MonoBehaviour
     {
         GameObject thisPlayer = speler.gameObject;
 
-        GameObject[] spelers = GameObject.FindGameObjectsWithTag("Player");
+        Speler[] spelers = FindObjectsOfType<Speler>();
 
-        int random = Random.Range(0, spelers.Length - 1);
+        if(spelers.Length > 1)
+		{
+            int random = Random.Range(0, spelers.Length - 1);
 
-        GameObject selectedplayer = spelers[random];
+            Speler selectedplayer = spelers[random];
 
-        if (selectedplayer == thisPlayer)
-        {
-            for (var i = 0; i < spelers.Length; i++)
+            while (selectedplayer == thisPlayer)
             {
-                var t = spelers[i];
-                if (t == selectedplayer)
-                {
-                    try
-                    {
-                        if (spelers[i + 1] != null)
-                        {
-                            selectedplayer = spelers[i + 1];
-                        }
-                    }
-                    catch
-                    {
-                        selectedplayer = spelers[i - 1];
-                    }
-                    break;
-                }
+                selectedplayer = spelers[random];
             }
+
+            Vector2 selectedVelocity = selectedplayer.GetComponent<Rigidbody2D>().velocity;
+            selectedplayer.GetComponent<Rigidbody2D>().velocity = new Vector2();
+            selectedplayer.GetComponent<SpelerController>().enabled = false;
+
+            await new WaitForSeconds(2);
+
+            selectedplayer.GetComponent<Rigidbody2D>().velocity = selectedVelocity;
+            selectedplayer.GetComponent<SpelerController>().enabled = true;
         }
-
-        Vector2 selectedVelocity = selectedplayer.GetComponent<Rigidbody2D>().velocity;
-        selectedplayer.GetComponent<Rigidbody2D>().velocity = new Vector2();
-        selectedplayer.GetComponent<SpelerController>().enabled = false;
-
-        await new WaitForSeconds(2);
-
-        selectedplayer.GetComponent<Rigidbody2D>().velocity = selectedVelocity;
-        selectedplayer.GetComponent<SpelerController>().enabled = true;
+       
 
     }
 
