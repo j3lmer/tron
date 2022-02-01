@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace finalScreen
 {
-	public class finalScreen : MonoBehaviour
+	public class FinalScreen : MonoBehaviour
 	{
 		public Canvas canvas;
 		public TMP_FontAsset winfont;
@@ -49,10 +49,8 @@ namespace finalScreen
 
 		private void Update()
 		{
-			if (_blinking)
-			{
-				BlinkLetter();
-			}
+			if (!_blinking) return;
+			BlinkLetter();
 		}
 
 
@@ -67,17 +65,9 @@ namespace finalScreen
 			var wintext = message.transform.Find("winText").gameObject.GetComponent<TMP_Text>();
 			wintext.font = winfont;
 
-			if (winner != "Gelijkspel!")
-			{
-				wintext.text = winner + " heeft gewonnen!";
-			}
-			else
-			{
-				wintext.text = winner;
-			}
+			wintext.text = winner != "Gelijkspel!" ? winner + " heeft gewonnen!" : winner;
 
 			_winner = winner;
-		
 		}
 
 
@@ -103,40 +93,7 @@ namespace finalScreen
 
 		private void SetNameInput()
 		{
-		
-			if (_winner.ToLower().Contains("speler"))
-			{			
-				if (sm.Instance)
-				{
-					sm.Instance.EffectsSource.Play();
-				}
-				_invisible[0].SetActive(true);
-				GameObject.Find("okKnop").SetActive(false);
-				GameObject.Find("Message").transform.Find("winText").gameObject.SetActive(false);
-
-				var ok2 = _invisible[1];
-				ok2.SetActive(true);
-				ok2.GetComponent<Button>().onClick.AddListener(SaveAndTransition);
-
-
-
-				Button nextLetterButton = GameObject.Find("nBtn").gameObject.GetComponent<Button>();
-				nextLetterButton.onClick.AddListener(NextLetter);
-
-				Button prevLetterButton = GameObject.Find("pBtn").gameObject.GetComponent<Button>();
-				prevLetterButton.onClick.AddListener(PrevLetter);
-
-				Button selectNextButton = GameObject.Find("fBtn").gameObject.GetComponent<Button>();
-				selectNextButton.onClick.AddListener(SelectNext);
-
-
-
-				_selected = GameObject.Find("Message").transform.Find("A").gameObject;
-				_blinking = true;
-				fillLetters();
-			
-			}
-			else
+			if (!_winner.ToLower().Contains("speler"))
 			{
 				print("bot found, not setting");
 				if (sm.Instance)
@@ -145,7 +102,37 @@ namespace finalScreen
 				}
 
 				SceneManager.LoadScene(0);
-			}		
+				return;
+			}
+			
+			if (sm.Instance)
+			{
+				sm.Instance.EffectsSource.Play();
+			}
+
+			_invisible[0].SetActive(true);
+			GameObject.Find("okKnop").SetActive(false);
+			GameObject.Find("Message").transform.Find("winText").gameObject.SetActive(false);
+
+			var ok2 = _invisible[1];
+			ok2.SetActive(true);
+			ok2.GetComponent<Button>().onClick.AddListener(SaveAndTransition);
+
+
+			Button nextLetterButton = GameObject.Find("nBtn").gameObject.GetComponent<Button>();
+			nextLetterButton.onClick.AddListener(NextLetter);
+
+			Button prevLetterButton = GameObject.Find("pBtn").gameObject.GetComponent<Button>();
+			prevLetterButton.onClick.AddListener(PrevLetter);
+
+			Button selectNextButton = GameObject.Find("fBtn").gameObject.GetComponent<Button>();
+			selectNextButton.onClick.AddListener(SelectNext);
+
+
+			_selected = GameObject.Find("Message").transform.Find("A").gameObject;
+			_blinking = true;
+			fillLetters();
+		
 		}	
 
 	
@@ -239,15 +226,15 @@ namespace finalScreen
 				newPlayer.score += _winCoins;
 
 				spelerObj.AllSpelersList.Add(newPlayer);
-				json = SaveToString(spelerObj);
+				json = JsonUtility.ToJson(spelerObj);
 
 			}
 
 			File.WriteAllText(jsonPath, json);
 
-			string SaveToString(Spelers Spelers)
+			string SaveToString(Spelers spelers)
 			{
-				return JsonUtility.ToJson(Spelers);
+				return JsonUtility.ToJson(spelers);
 			}
 		}
 

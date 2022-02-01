@@ -84,12 +84,10 @@ public class Speler : MonoBehaviour, IMovable
 
     public void directionChanger(Vector3 direction)
     {
-		if (Alive)
-		{
-            _rb.velocity = direction * _speed;
-            _lastDirection = direction;
-            spawnWall();
-        }
+        if (!Alive) return;
+        _rb.velocity = direction * _speed;
+        _lastDirection = direction;
+        spawnWall();
     }
 
 
@@ -100,19 +98,17 @@ public class Speler : MonoBehaviour, IMovable
 
     public void spawnWall()
     {
-        if(Alive)
-        {
-            var position = transform.position;
-            _lastWallEnd = position;
-            GameObject w = Instantiate(_wallPrefab, position , Quaternion.identity);
-            _wall = w.GetComponent<Collider2D>();
-            w.tag = "playerWall";
-            w.layer = 0;
-			var obs = w.AddComponent<NavMeshObstacle>();
-			obs.carving = true;
-			obs.carveOnlyStationary = false;
-		}
-	}
+        if (!Alive) return;
+        var position = transform.position;
+        _lastWallEnd = position;
+        GameObject w = Instantiate(_wallPrefab, position , Quaternion.identity);
+        _wall = w.GetComponent<Collider2D>();
+        w.tag = "playerWall";
+        w.layer = 0;
+        var obs = w.AddComponent<NavMeshObstacle>();
+        obs.carving = true;
+        obs.carveOnlyStationary = false;
+    }
 
     public void fitColliderBetween(Collider2D co, Vector3 a, Vector3 b)
     {
@@ -121,6 +117,7 @@ public class Speler : MonoBehaviour, IMovable
 
         // Scale it (horizontally or vertically)
         float dist = Vector2.Distance(a, b);
+        
         if (a.x != b.x)
             co.transform.localScale = new Vector2(dist+0.99f, 1);
         else
@@ -129,65 +126,56 @@ public class Speler : MonoBehaviour, IMovable
 
 
 
-    public void OnTriggerEnter2D(Collider2D collider)
+    public void OnTriggerEnter2D(Collider2D playerCollider)
     {
-		if (collider != _wall)
-		{
-			if (!Invincible)
-			{
-				if (!collider.CompareTag("Powerup"))
-				{
-					die();
-                    print(gameObject + " being killed by " + collider.name);
-                }
-			}
-		}
-	}
+        if (playerCollider == _wall) return;
+        if (Invincible) return;
+        if (playerCollider.CompareTag("Powerup")) return;
+        
+        die();
+        print(gameObject + " being killed by " + playerCollider.name);
+    }
 
 
     public async void die()
     {
-        if (gameObject)
+        if (!gameObject) return;
+        AudioClip derezz = Resources.Load<AudioClip>("music/derezz");
+
+        if (sm.Instance != null)
         {
-           
-            AudioClip derezz = Resources.Load<AudioClip>("music/derezz");
+            sm.Instance.MusicSource.Stop();
+            sm.Instance.Play(derezz);
+        }
 
-            if (sm.Instance != null)
+        try
+        {
+            GetComponent<SpelerController>().enabled = false;
+        }
+        catch
+        {
+            GetComponent<BotController>().enabled = false;
+            GetComponent<BotController>().gameObject.SetActive(false);
+        }
+
+
+        Color c = GetComponent<SpriteRenderer>().color;
+        c.a = 0;
+        GetComponent<SpriteRenderer>().color = c;
+
+        string wallname = wallprefab.name;
+        GameObject[] walls = GameObject.FindGameObjectsWithTag("playerWall");
+
+        foreach (GameObject wall in walls)
+        {
+            if (wall.name.Contains(wallname))
             {
-                sm.Instance.MusicSource.Stop();
-                sm.Instance.Play(derezz);
+                wall.SetActive(false);
             }
-
-            try
-            {
-                GetComponent<SpelerController>().enabled = false;
-            }
-            catch
-            {
-                GetComponent<BotController>().enabled = false;
-                GetComponent<BotController>().gameObject.SetActive(false);
-            }
-
-
-            Color c = GetComponent<SpriteRenderer>().color;
-            c.a = 0;
-            GetComponent<SpriteRenderer>().color = c;
-
-            string wallname = wallprefab.name;
-            GameObject[] walls = GameObject.FindGameObjectsWithTag("playerWall");
-
-            foreach (GameObject wall in walls)
-            {
-                if (wall.name.Contains(wallname))
-                {
-                    wall.SetActive(false);
-                }
-            }
+        }
             
-            await new WaitForSeconds(1);
-            Alive = false;
-            PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") - 1);
-           
-        }		
+        await new WaitForSeconds(1);
+        Alive = false;
+        PlayerPrefs.SetInt("AlivePlayers", PlayerPrefs.GetInt("AlivePlayers") - 1);
     }
 }
