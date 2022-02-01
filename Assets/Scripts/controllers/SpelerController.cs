@@ -1,66 +1,67 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class SpelerController : MonoBehaviour
+namespace controllers
 {
-    Speler speler;
-
-    KeyCode up, left, down, right;
-
-    private void Start()
+    public class SpelerController : MonoBehaviour
     {
-        speler = gameObject.GetComponent<Speler>();
-    }   
+        Speler _speler;
 
-    private void Update()
-    {
-        checkInputs();       
-    }
+        KeyCode _up, _left, _down, _right;
 
-    void checkInputs()
-    {
-        if (Input.GetKeyDown(up))
+        private void Start()
         {
-            if (speler.lastdir != Vector3.down)
+            _speler = gameObject.GetComponent<Speler>();
+        }   
+
+        private void Update()
+        {
+            CheckInputs();       
+        }
+
+        void CheckInputs()
+        {
+            if (Input.GetKeyDown(_up))
             {
-                speler.directionChanger(Vector3.up);
+                if (_speler.lastdir != Vector3.down)
+                {
+                    _speler.directionChanger(Vector3.up);
                 
+                }
             }
-        }
 
-        if (Input.GetKeyDown(down))
-        {
-            if (speler.lastdir != Vector3.up)
+            if (Input.GetKeyDown(_down))
             {
-                speler.directionChanger(Vector3.down);
+                if (_speler.lastdir != Vector3.up)
+                {
+                    _speler.directionChanger(Vector3.down);
+                }
             }
-        }
 
-        if (Input.GetKeyDown(left))
-        {
+            if (Input.GetKeyDown(_left))
+            {
             
-            if (speler.lastdir != Vector3.right)
-            {
-                speler.directionChanger(Vector3.left);
+                if (_speler.lastdir != Vector3.right)
+                {
+                    _speler.directionChanger(Vector3.left);
+                }
             }
+            if (Input.GetKeyDown(_right))
+            {
+                if (_speler.lastdir != Vector3.left)
+                {
+                    _speler.directionChanger(Vector3.right);
+                }
+            }
+
         }
-        if (Input.GetKeyDown(right))
+
+
+        public void SetKeyCodes(KeyCode[] keycodes)
         {
-            if (speler.lastdir != Vector3.left)
-            {
-                speler.directionChanger(Vector3.right);
-            }
+            _up = keycodes[0];
+            _left = keycodes[1];
+            _down = keycodes[2];
+            _right = keycodes[3];
         }
-
-    }
-
-
-    public void setKeyCodes(KeyCode[] keycodes)
-    {
-        up = keycodes[0];
-        left = keycodes[1];
-        down = keycodes[2];
-        right = keycodes[3];
     }
 }

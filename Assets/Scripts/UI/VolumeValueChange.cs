@@ -4,18 +4,18 @@ using UnityEngine.UI;
 public class VolumeValueChange : MonoBehaviour {
 
     // Reference to Audio Source component
-    private AudioSource audioSrc;
+    private AudioSource _audioSrc;
 
     // Music volume variable that will be modified
     // by dragging slider knob
-    private float musicVolume = 1f;
+    private float _musicVolume = 1f;
 
 
 	// Use this for initialization
 	void Start () {
 
         // Assign Audio Source component to control it
-        audioSrc = sm.Instance.MusicSource;        
+        _audioSrc = sm.Instance.MusicSource;        
 	}
 
 	
@@ -23,7 +23,7 @@ public class VolumeValueChange : MonoBehaviour {
 	void Update () {
 
         // Setting volume option of Audio Source to be equal to musicVolume
-        audioSrc.volume = musicVolume;
+        _audioSrc.volume = _musicVolume;
 	}
 
     // Method that is called by slider game object
@@ -31,7 +31,7 @@ public class VolumeValueChange : MonoBehaviour {
     // and sets it as musicValue
     public void SetVolume(float vol)
     {
-        musicVolume = vol;
+        _musicVolume = vol;
     }
 }
 

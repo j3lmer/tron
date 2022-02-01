@@ -7,7 +7,7 @@ public class Timer : MonoBehaviour
 {
 	public TextMeshProUGUI timer;
 
-	sm sm;
+	sm _sm;
 
 	///audioclips
 	public AudioClip three;
@@ -19,10 +19,10 @@ public class Timer : MonoBehaviour
     private void Start()
     {
 		loadClips();
-		sm = sm.Instance;
+		_sm = sm.Instance;
 		timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
 
-		if(sm != null)
+		if(_sm != null)
         {
 			startTimer();
         }
@@ -38,27 +38,27 @@ public class Timer : MonoBehaviour
 		Time.timeScale = 0f;
 		timer.text = "3";
 		timer.color = Color.cyan;
-		sm.Play(three);
+		_sm.Play(three);
 
 		await new WaitForSecondsRealtime(1);
 		timer.text = "2";
 		timer.color = Color.red;
-		sm.Play(two);
+		_sm.Play(two);
 
 		await new WaitForSecondsRealtime(1);
 		timer.text = "1";
 		timer.color = Color.yellow;
-		sm.Play(one);
+		_sm.Play(one);
 
 		await new WaitForSecondsRealtime(1);
 		timer.text = "GO!";
 		timer.color = Color.green;
 		Time.timeScale = 1f;
-		sm.Play(zero);
+		_sm.Play(zero);
 
 		await new WaitForSecondsRealtime(1);
-		sm.EffectsSource.clip = null;
-		sm.PlayMusic(gameplayMusic);
+		_sm.EffectsSource.clip = null;
+		_sm.PlayMusic(gameplayMusic);
 		timer.text = "";
 
 		enabled = false;		

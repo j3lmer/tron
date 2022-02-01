@@ -2741,7 +2741,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 124778573}
         m_TargetAssemblyTypeName: finalScreen, Assembly-CSharp
-        m_MethodName: saveAndTransition
+        m_MethodName: SaveAndTransition
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

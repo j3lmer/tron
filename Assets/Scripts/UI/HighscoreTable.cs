@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using UnityEngine.UI;
 using System.Linq;
+using finalScreen;
 using UnityEngine.SceneManagement;
 
 public class HighscoreTable : MonoBehaviour
@@ -33,12 +34,12 @@ public class HighscoreTable : MonoBehaviour
 		//bouw de leaderboard van json( of maak een nieuwe)
 		//luister naar clicks op de backbutton, en executeer dan de back functie
 		entryTemplate.gameObject.SetActive(false);
-		setFonts();
-		makeLeaderboard();
+		SetFonts();
+		MakeLeaderboard();
 		backButton.onClick.AddListener(back);
 	}
 
-	private void setFonts()
+	private void SetFonts()
 	{
 		//maak array van alle texts binnen entrytemplate
 		Text[] texts = entryTemplate.GetComponentsInChildren<Text>();
@@ -71,14 +72,14 @@ public class HighscoreTable : MonoBehaviour
 		SceneManager.LoadScene("MainMenu");
 	}
 
-	private void makeLeaderboard()
+	private void MakeLeaderboard()
 	{
 		float templateHeight = 35f; // ruimte tussen entrys
 
 		string jsonPath = Application.dataPath + "/json/saveFile.json"; // path waar de json file moet (gaan) staan
 		string json; // initialised empty string voor json conversion
 
-		spelers spelerObj; //initialised speler class object voor spelers
+		Spelers spelerObj; //initialised speler class object voor spelers
 
 		Transform entryTransform; //CHECKEN WAT DEZE 2 SPECIAFIEK ZIJN
 		RectTransform entryRectTransform;
@@ -92,13 +93,13 @@ public class HighscoreTable : MonoBehaviour
 			json = File.ReadAllText(jsonPath);
 
 			//zet deze dan om naar c# compatible code
-			spelerObj = JsonUtility.FromJson<spelers>(json);
+			spelerObj = JsonUtility.FromJson<Spelers>(json);
 
 			//als er niet niks in het bestand staat...
 			if (spelerObj != null)
 			{
 				//maak dan een nieuwe lijst en sorteer deze op volgorde van de hoogste score, naar de laagste
-				List<playerData> GesorteerdeLijst = spelerObj.AllSpelersList.OrderByDescending(o => o.score).ToList();
+				List<PlayerData> gesorteerdeLijst = spelerObj.AllSpelersList.OrderByDescending(o => o.score).ToList();
 
 				//maak dan tijdelijk kleuren aan om mee te geven wanneer de eerste 3 entrys moeten veranderd worden naar deze kleuren
 				Color32 gold = new Color32(255, 215, 0, 255);
@@ -106,7 +107,7 @@ public class HighscoreTable : MonoBehaviour
 				Color32 bronze = new Color32(205, 127, 50, 255);
 
 				//loop dan door de gesorteerde lijst heen...
-				for (var j = 0; j < GesorteerdeLijst.Count; j++)
+				for (var j = 0; j < gesorteerdeLijst.Count; j++)
 				{
 					//en maak voor elke speler een nieuwe entry aan // TODO: MEER DOCUMENTATIE HIER
 					entryTransform = Instantiate(entryTemplate, entryContainer);
@@ -136,11 +137,11 @@ public class HighscoreTable : MonoBehaviour
 					}
 
 					//verhoog de score bij 10 zodat het meer waard lijkt
-					var eindscore = GesorteerdeLijst[j].score * 10;
+					var eindscore = gesorteerdeLijst[j].score * 10;
 
 					//zet de score, naam en positietext neer waar het hoort in de entry
 					var score = scoretext.GetComponent<Text>().text = eindscore.ToString();
-					var name = naamtext.GetComponent<Text>().text = GesorteerdeLijst[j].naam;
+					var name = naamtext.GetComponent<Text>().text = gesorteerdeLijst[j].naam;
 					var posI = postext.GetComponent<Text>().text = pos.ToString();
 
 					//stoppen wanneer max van 10 is bereikt

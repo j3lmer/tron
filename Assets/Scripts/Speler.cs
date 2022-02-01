@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using controllers;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.AI;
@@ -8,35 +9,35 @@ public class Speler : MonoBehaviour, IMovable
 {
     //------------------------------------this player variables
     //THIS PLAYERS LAST DIRECTION CHANGE
-    Vector3 LastDirection;
+    Vector3 _lastDirection;
     
     //THIS PLAYERS RIGIDBODY
-    Rigidbody2D rb;
+    Rigidbody2D _rb;
 
     //THIS PLAYERS CURRENT SPEED
-    int speed;
+    int _speed;
 
     //CURRENT INVINCIBILITY LEVEL
-    bool invincible = false;
+    bool _invincible = false;
 
     //GETTER/SETTERS
     public Vector3 lastdir
     {
-        get { return LastDirection; }
-        set { LastDirection = value; }
+        get { return _lastDirection; }
+        set { _lastDirection = value; }
     }
     public int Speed 
     {
-        get { return speed; }
-        set { speed = value; }
+        get { return _speed; }
+        set { _speed = value; }
     }
     public bool Invincible
     {
-        get { return invincible; }
-        set { invincible = value; }
+        get { return _invincible; }
+        set { _invincible = value; }
     }
 
-    bool alive;
+    bool _alive;
    
 
     //------------------------------------end player variables
@@ -45,30 +46,30 @@ public class Speler : MonoBehaviour, IMovable
 
     //------------------------------------Wall variables
     //THIS PLAYERS WALLPREFAB
-    GameObject wallPrefab;
+    GameObject _wallPrefab;
 
     //THIS WALLS COLLIDER
-    Collider2D wall;
+    Collider2D _wall;
 
     //LOCATION WHERE THE LAST WALL ENDED
-    Vector2 lastWallEnd;
+    Vector2 _lastWallEnd;
 
     //GETTER/SETTERS
     public bool Alive
 	{
-		get { return alive; }
-		set { alive = value; }
+		get { return _alive; }
+		set { _alive = value; }
 	}
 
     public GameObject wallprefab
     {
-        get { return wallPrefab; }
-        set { wallPrefab = value; }
+        get { return _wallPrefab; }
+        set { _wallPrefab = value; }
     }
     public Collider2D Wall
     {
-        get { return wall; }
-        set { wall = value; }
+        get { return _wall; }
+        set { _wall = value; }
     }
     //------------------------------------end wall variables\
 
@@ -76,8 +77,8 @@ public class Speler : MonoBehaviour, IMovable
     private void Awake()
     {
         //fill in some local variables
-        rb = GetComponent<Rigidbody2D>();
-        speed = 16;
+        _rb = GetComponent<Rigidbody2D>();
+        _speed = 16;
         Alive = true;
     }    
 
@@ -85,8 +86,8 @@ public class Speler : MonoBehaviour, IMovable
     {
 		if (Alive)
 		{
-            rb.velocity = direction * speed;
-            LastDirection = direction;
+            _rb.velocity = direction * _speed;
+            _lastDirection = direction;
             spawnWall();
         }
     }
@@ -94,16 +95,17 @@ public class Speler : MonoBehaviour, IMovable
 
     private void Update()
     {                                                             
-        fitColliderBetween(wall, lastWallEnd, transform.position);
+        fitColliderBetween(_wall, _lastWallEnd, transform.position);
     }
 
     public void spawnWall()
     {
         if(Alive)
         {
-            lastWallEnd = transform.position;
-            GameObject w = Instantiate(wallPrefab, transform.position , Quaternion.identity);
-            wall = w.GetComponent<Collider2D>();
+            var position = transform.position;
+            _lastWallEnd = position;
+            GameObject w = Instantiate(_wallPrefab, position , Quaternion.identity);
+            _wall = w.GetComponent<Collider2D>();
             w.tag = "playerWall";
             w.layer = 0;
 			var obs = w.AddComponent<NavMeshObstacle>();
@@ -129,11 +131,11 @@ public class Speler : MonoBehaviour, IMovable
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
-		if (collider != wall)
+		if (collider != _wall)
 		{
 			if (!Invincible)
 			{
-				if (collider.tag != "Powerup")
+				if (!collider.CompareTag("Powerup"))
 				{
 					die();
                     print(gameObject + " being killed by " + collider.name);

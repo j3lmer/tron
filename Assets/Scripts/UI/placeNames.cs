@@ -19,7 +19,7 @@ public class placeNames : MonoBehaviour
 
 	List<TextMeshProUGUI> texts = new List<TextMeshProUGUI>();
 
-	bool setnames = false;
+	bool _setnames = false;
 
 
     // Start is called before the first frame update.
@@ -28,9 +28,9 @@ public class placeNames : MonoBehaviour
 
 
 		//set font colors to correct colors.
-		setColors();
+		SetColors();
 		//set the right font.
-		setFont();
+		SetFont();
 
        		
     }
@@ -40,25 +40,22 @@ public class placeNames : MonoBehaviour
 	{
 		if(PlayerPrefs.GetInt("placedPlayers") == 1)
 		{
-			if (!setnames)
+			if (!_setnames)
 			{
 				//set the text to the player names.
-				setNames();
-				setnames = true;
+				SetNames();
+				_setnames = true;
 			}
 		}
 	}
 
 
-	void setNames()
+	void SetNames()
 	{
 		//grab all players and the length of the array
 		List<GameObject> contestants = GameObject.FindGameObjectsWithTag("Player").ToList();
 		var bots = GameObject.FindGameObjectsWithTag("Bot");
-		foreach (GameObject bot in bots)
-		{
-			contestants.Add(bot);
-		}
+		contestants.AddRange(bots);
 
 		int contLength = contestants.Count;
 
@@ -93,7 +90,7 @@ public class placeNames : MonoBehaviour
 		}	
 	}
 
-	void setColors()//zet de juiste font kleur
+	void SetColors()//zet de juiste font kleur
 	{ 
 
 		pink.color = Pink;
@@ -103,6 +100,6 @@ public class placeNames : MonoBehaviour
     }
 
 
-	void setFont()//zet font naar juiste font
+	void SetFont()//zet font naar juiste font
 	{ pink.font = cyan.font = yellow.font = green.font = particiFont; }
 }

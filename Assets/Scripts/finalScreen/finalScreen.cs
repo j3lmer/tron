@@ -2,426 +2,429 @@
 using System.IO;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class finalScreen : MonoBehaviour
+namespace finalScreen
 {
-	public Canvas canvas;
-	public TMP_FontAsset winfont;
-
-	public AudioClip click;
-	public AudioClip finalMusic;
-
-	private bool blinking;
-	private float timer;
-
-	private GameObject Selected;
-	private int al = 0;
-	private int bl = 0;
-	private int cl = 0;
-
-	string Winner;
-	int WinCoins;
-
-	private readonly string letters = "ABCDEFGHIJKLMNOPQRSTUVWQXYZ0123456789!?";
-
-	List<GameObject> Invisible;
-
-	// Start is called before the first frame update
-	private void Start()
+	public class finalScreen : MonoBehaviour
 	{
-		StopAllCoroutines();
+		public Canvas canvas;
+		public TMP_FontAsset winfont;
 
-		canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-		setWinner();
+		public AudioClip click;
+		public AudioClip finalMusic;
 
-		init();
-		if (sm.Instance)
+		private bool _blinking;
+		private float _timer;
+
+		private GameObject _selected;
+		private int _al = 0;
+		private int _bl = 0;
+		private int _cl = 0;
+
+		string _winner;
+		int _winCoins;
+
+		private readonly string letters = "ABCDEFGHIJKLMNOPQRSTUVWQXYZ0123456789!?";
+
+		List<GameObject> _invisible;
+
+		// Start is called before the first frame update
+		private void Start()
 		{
-			sm.Instance.MusicSource.clip = finalMusic;
-			sm.Instance.EffectsSource.clip = click;
-			sm.Instance.MusicSource.Play();
-		}
-	}
+			StopAllCoroutines();
 
-	private void Update()
-	{
-		if (blinking)
-		{
-			blinkLetter();
-		}
-	}
+			canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+			SetWinner();
 
-
-	private void setWinner()
-	{
-		var winner = PlayerPrefs.GetString("winner");
-
-		WinCoins = PlayerPrefs.GetInt("winnercoins");
-
-		//message ophalenen hier uit wintext
-		var message = GameObject.Find("Message");
-		var wintext = message.transform.Find("winText").gameObject.GetComponent<TMP_Text>();
-		wintext.font = winfont;
-
-		if (winner != "Gelijkspel!")
-		{
-			wintext.text = winner + " heeft gewonnen!";
-		}
-		else
-		{
-			wintext.text = winner;
-		}
-
-		Winner = winner;
-		
-	}
-
-
-
-	private void init()
-	{
-		List<GameObject> invis = new List<GameObject>();
-		Invisible = invis;
-
-		var nInp = GameObject.Find("nameInput");
-		var ok2 = GameObject.Find("okKnop2");
-		
-
-		Invisible.Add(nInp);
-		Invisible.Add(ok2);
-
-		nInp.SetActive(false);
-		ok2.SetActive(false);
-
-
-		GameObject.Find("okKnop").GetComponent<Button>().onClick.AddListener(delegate { setNameInput(); });
-	}
-
-	private void setNameInput()
-	{
-		
-		if (Winner.ToLower().Contains("speler"))
-		{			
-            if (sm.Instance)
-            {
-				sm.Instance.EffectsSource.Play();
-			}
-			Invisible[0].SetActive(true);
-			GameObject.Find("okKnop").SetActive(false);
-			GameObject.Find("Message").transform.Find("winText").gameObject.SetActive(false);
-
-			var ok2 = Invisible[1];
-			ok2.SetActive(true);
-			ok2.GetComponent<Button>().onClick.AddListener(saveAndTransition);
-
-
-
-			Button nextLetterButton = GameObject.Find("nBtn").gameObject.GetComponent<Button>();
-			nextLetterButton.onClick.AddListener(nextLetter);
-
-			Button prevLetterButton = GameObject.Find("pBtn").gameObject.GetComponent<Button>();
-			prevLetterButton.onClick.AddListener(prevLetter);
-
-			Button selectNextButton = GameObject.Find("fBtn").gameObject.GetComponent<Button>();
-			selectNextButton.onClick.AddListener(selectNext);
-
-
-
-			Selected = GameObject.Find("Message").transform.Find("A").gameObject;
-			blinking = true;
-			fillLetters();
-			
-		}
-        else
-        {
-			print("bot found, not setting");
+			Init();
 			if (sm.Instance)
 			{
-				sm.Instance.MusicSource.Stop();
+				sm.Instance.MusicSource.clip = finalMusic;
+				sm.Instance.EffectsSource.clip = click;
+				sm.Instance.MusicSource.Play();
 			}
-
-			SceneManager.LoadScene(0);
-		}		
-	}	
-
-	
-
-	public void saveAndTransition()
-	{
-		if (sm.Instance)
-		{
-			sm.Instance.EffectsSource.Play();
-		}
-		TMP_Text A = GameObject.Find("A").GetComponent<TMP_Text>();
-		TMP_Text B = GameObject.Find("B").GetComponent<TMP_Text>();
-		TMP_Text C = GameObject.Find("C").GetComponent<TMP_Text>();
-		var winnername = A.text + B.text + C.text;
-
-		saveData(winnername);
-		SceneManager.LoadScene(0);
-	}
-
-	private void saveData(string winner)
-	{
-		string jsonPath = Application.dataPath + "/json/saveFile.json";
-		string json = "";
-		spelers spelerObj = new spelers();
-		bool foundWinner = false;
-
-		if (!Directory.Exists(Application.dataPath + "/json/"))
-		{
-			Directory.CreateDirectory(Application.dataPath + "/json/");
 		}
 
-
-		if (File.Exists(jsonPath))
+		private void Update()
 		{
-			print($"File found @ {jsonPath}, Reading..");
-
-			json = File.ReadAllText(jsonPath);
-			spelerObj = JsonUtility.FromJson<spelers>(json);
-
-			if (spelerObj != null)
+			if (_blinking)
 			{
-				for (var i = 0; i < spelerObj.AllSpelersList.Count; i++)
-				{
-					if (spelerObj.AllSpelersList != null && spelerObj.AllSpelersList[i] != null)
-					{
-						var thisObj = spelerObj.AllSpelersList[i];
-						if(thisObj.naam == winner)
-						{
-							thisObj.score += 10;
-							thisObj.score += WinCoins;
-							foundWinner = true;
-						}
-					}
-				}
-				if (!foundWinner)
-				{
-					playerData nieuweSpeler = new playerData();
-					nieuweSpeler.naam = winner;
-					nieuweSpeler.score += 10;
-					nieuweSpeler.score += WinCoins;
+				BlinkLetter();
+			}
+		}
 
-					spelerObj.AllSpelersList.Add(nieuweSpeler);
-				}
 
-				json = SaveToString(spelerObj);
+		private void SetWinner()
+		{
+			var winner = PlayerPrefs.GetString("winner");
+
+			_winCoins = PlayerPrefs.GetInt("winnercoins");
+
+			//message ophalenen hier uit wintext
+			var message = GameObject.Find("Message");
+			var wintext = message.transform.Find("winText").gameObject.GetComponent<TMP_Text>();
+			wintext.font = winfont;
+
+			if (winner != "Gelijkspel!")
+			{
+				wintext.text = winner + " heeft gewonnen!";
 			}
 			else
 			{
-				Debug.Log("SpelerObject is leeg");
-				playerData newPlayer = new playerData();
+				wintext.text = winner;
+			}
+
+			_winner = winner;
+		
+		}
+
+
+
+		private void Init()
+		{
+			List<GameObject> invis = new List<GameObject>();
+			_invisible = invis;
+
+			var nInp = GameObject.Find("nameInput");
+			var ok2 = GameObject.Find("okKnop2");
+		
+
+			_invisible.Add(nInp);
+			_invisible.Add(ok2);
+
+			nInp.SetActive(false);
+			ok2.SetActive(false);
+
+
+			GameObject.Find("okKnop").GetComponent<Button>().onClick.AddListener(delegate { SetNameInput(); });
+		}
+
+		private void SetNameInput()
+		{
+		
+			if (_winner.ToLower().Contains("speler"))
+			{			
+				if (sm.Instance)
+				{
+					sm.Instance.EffectsSource.Play();
+				}
+				_invisible[0].SetActive(true);
+				GameObject.Find("okKnop").SetActive(false);
+				GameObject.Find("Message").transform.Find("winText").gameObject.SetActive(false);
+
+				var ok2 = _invisible[1];
+				ok2.SetActive(true);
+				ok2.GetComponent<Button>().onClick.AddListener(SaveAndTransition);
+
+
+
+				Button nextLetterButton = GameObject.Find("nBtn").gameObject.GetComponent<Button>();
+				nextLetterButton.onClick.AddListener(NextLetter);
+
+				Button prevLetterButton = GameObject.Find("pBtn").gameObject.GetComponent<Button>();
+				prevLetterButton.onClick.AddListener(PrevLetter);
+
+				Button selectNextButton = GameObject.Find("fBtn").gameObject.GetComponent<Button>();
+				selectNextButton.onClick.AddListener(SelectNext);
+
+
+
+				_selected = GameObject.Find("Message").transform.Find("A").gameObject;
+				_blinking = true;
+				fillLetters();
+			
+			}
+			else
+			{
+				print("bot found, not setting");
+				if (sm.Instance)
+				{
+					sm.Instance.MusicSource.Stop();
+				}
+
+				SceneManager.LoadScene(0);
+			}		
+		}	
+
+	
+
+		public void SaveAndTransition()
+		{
+			if (sm.Instance)
+			{
+				sm.Instance.EffectsSource.Play();
+			}
+			TMP_Text A = GameObject.Find("A").GetComponent<TMP_Text>();
+			TMP_Text B = GameObject.Find("B").GetComponent<TMP_Text>();
+			TMP_Text C = GameObject.Find("C").GetComponent<TMP_Text>();
+			var winnername = A.text + B.text + C.text;
+
+			SaveData(winnername);
+			SceneManager.LoadScene(0);
+		}
+
+		private void SaveData(string winner)
+		{
+			string jsonPath = Application.dataPath + "/json/saveFile.json";
+			string json = "";
+			Spelers spelerObj = new Spelers();
+			bool foundWinner = false;
+
+			if (!Directory.Exists(Application.dataPath + "/json/"))
+			{
+				Directory.CreateDirectory(Application.dataPath + "/json/");
+			}
+
+
+			if (File.Exists(jsonPath))
+			{
+				print($"File found @ {jsonPath}, Reading..");
+
+				json = File.ReadAllText(jsonPath);
+				spelerObj = JsonUtility.FromJson<Spelers>(json);
+
+				if (spelerObj != null)
+				{
+					for (var i = 0; i < spelerObj.AllSpelersList.Count; i++)
+					{
+						if (spelerObj.AllSpelersList != null && spelerObj.AllSpelersList[i] != null)
+						{
+							var thisObj = spelerObj.AllSpelersList[i];
+							if(thisObj.naam == winner)
+							{
+								thisObj.score += 10;
+								thisObj.score += _winCoins;
+								foundWinner = true;
+							}
+						}
+					}
+					if (!foundWinner)
+					{
+						PlayerData nieuweSpeler = new PlayerData();
+						nieuweSpeler.naam = winner;
+						nieuweSpeler.score += 10;
+						nieuweSpeler.score += _winCoins;
+
+						spelerObj.AllSpelersList.Add(nieuweSpeler);
+					}
+
+					json = SaveToString(spelerObj);
+				}
+				else
+				{
+					Debug.Log("SpelerObject is leeg");
+					PlayerData newPlayer = new PlayerData();
+					newPlayer.naam = winner;
+					newPlayer.score += 10;
+					newPlayer.score += _winCoins;
+
+					spelerObj.AllSpelersList.Add(newPlayer);
+					json = SaveToString(spelerObj);
+				}
+			}
+			else
+			{
+				print($"No file found @ {jsonPath}. Generating new file..");
+				if (!File.Exists(jsonPath))
+				{
+					var fs = new FileStream(jsonPath, FileMode.Create);
+					fs.Dispose();
+				}
+
+				PlayerData newPlayer = new PlayerData();
 				newPlayer.naam = winner;
 				newPlayer.score += 10;
-				newPlayer.score += WinCoins;
+				newPlayer.score += _winCoins;
 
 				spelerObj.AllSpelersList.Add(newPlayer);
 				json = SaveToString(spelerObj);
+
 			}
-		}
-		else
-		{
-			print($"No file found @ {jsonPath}. Generating new file..");
-			if (!File.Exists(jsonPath))
+
+			File.WriteAllText(jsonPath, json);
+
+			string SaveToString(Spelers Spelers)
 			{
-				var fs = new FileStream(jsonPath, FileMode.Create);
-				fs.Dispose();
+				return JsonUtility.ToJson(Spelers);
+			}
+		}
+
+
+		private void BlinkLetter()
+		{
+			_timer = _timer + Time.deltaTime;
+			if (_timer >= 0.5)
+			{
+				Color color = _selected.GetComponent<TMP_Text>().color;
+				color.a = Mathf.Clamp(1, 0, 1);
+				_selected.GetComponent<TMP_Text>().color = color;
+			}
+			if (_timer >= 1)
+			{
+				Color color = _selected.GetComponent<TMP_Text>().color;
+				color.a = Mathf.Clamp(0.5f, 0, 1);
+				_selected.GetComponent<TMP_Text>().color = color;
+				_timer = 0;
+			}
+		}
+
+		private void NextLetter()
+		{
+			if (sm.Instance)
+			{
+				sm.Instance.EffectsSource.Play();
+			}		
+			char[] alphabet = letters.ToCharArray();
+			GameObject A = GameObject.Find("A");
+			GameObject B = GameObject.Find("B");
+			GameObject C = GameObject.Find("C");
+
+			if (_selected == A)
+			{
+				if (_al == 39)
+				{
+					_al = 0;
+				}
+				_al++;
+
+				char currentChar = alphabet[_al];
+				string currentLetter = currentChar.ToString();
+				A.GetComponent<TMP_Text>().text = currentLetter;
 			}
 
-			playerData newPlayer = new playerData();
-			newPlayer.naam = winner;
-			newPlayer.score += 10;
-			newPlayer.score += WinCoins;
+			if (_selected == B)
+			{
+				if (_bl == 39)
+				{
+					_bl = 0;
+				}
+				_bl++;
 
-			spelerObj.AllSpelersList.Add(newPlayer);
-			json = SaveToString(spelerObj);
+				char currentChar = alphabet[_bl];
+				string currentLetter = currentChar.ToString();
+				B.GetComponent<TMP_Text>().text = currentLetter;
+			}
 
+			if (_selected == C)
+			{
+				if (_cl == 39)
+				{
+					_cl = 0;
+				}
+				_cl++;
+
+				char currentChar = alphabet[_cl];
+				string currentLetter = currentChar.ToString();
+				C.GetComponent<TMP_Text>().text = currentLetter;
+			}
 		}
 
-		File.WriteAllText(jsonPath, json);
-
-		string SaveToString(spelers Spelers)
+		private void PrevLetter()
 		{
-			return JsonUtility.ToJson(Spelers);
+			if (sm.Instance)
+			{
+				sm.Instance.EffectsSource.Play();
+			}
+			char[] alphabet = letters.ToCharArray();
+			GameObject A = GameObject.Find("A");
+			GameObject B = GameObject.Find("B");
+			GameObject C = GameObject.Find("C");
+
+			if (_selected == A)
+			{
+				if (_al == 0)
+				{
+					_al = 39;
+				}
+				_al--;
+
+				char currentChar = alphabet[_al];
+				string currentLetter = currentChar.ToString();
+				A.GetComponent<TMP_Text>().text = currentLetter;
+			}
+
+			if (_selected == B)
+			{
+				if (_bl == 0)
+				{
+					_bl = 39;
+				}
+				_bl--;
+
+				char currentChar = alphabet[_bl];
+				string currentLetter = currentChar.ToString();
+				B.GetComponent<TMP_Text>().text = currentLetter;
+			}
+
+			if (_selected == C)
+			{
+				if (_cl == 0)
+				{
+					_cl = 39;
+				}
+				_cl--;
+
+				char currentChar = alphabet[_cl];
+				string currentLetter = currentChar.ToString();
+				C.GetComponent<TMP_Text>().text = currentLetter;
+			}
 		}
-	}
 
-
-	private void blinkLetter()
-	{
-		timer = timer + Time.deltaTime;
-		if (timer >= 0.5)
+		private void SelectNext()
 		{
-			Color color = Selected.GetComponent<TMP_Text>().color;
+			if (sm.Instance)
+			{
+				sm.Instance.EffectsSource.Play();
+			}
+			GameObject A = GameObject.Find("A");
+			GameObject B = GameObject.Find("B");
+			GameObject C = GameObject.Find("C");
+
+			var color = _selected.GetComponent<TMP_Text>().color;
 			color.a = Mathf.Clamp(1, 0, 1);
-			Selected.GetComponent<TMP_Text>().color = color;
+			_selected.GetComponent<TMP_Text>().color = color;
+
+			if (_selected == A)
+			{
+				_selected = B;
+			}
+			else if (_selected == B)
+			{
+				_selected = C;
+			}
+			else if (_selected == C)
+			{
+				_selected = A;
+			}
 		}
-		if (timer >= 1)
+
+		private void fillLetters()
 		{
-			Color color = Selected.GetComponent<TMP_Text>().color;
-			color.a = Mathf.Clamp(0.5f, 0, 1);
-			Selected.GetComponent<TMP_Text>().color = color;
-			timer = 0;
+			Transform messageTransform = GameObject.Find("Message").transform;
+
+			for (var i = 0; i < messageTransform.childCount; i++)
+			{
+				var thisKid = messageTransform.GetChild(i);
+				if (thisKid.name != "winText")
+				{
+					thisKid.GetComponent<TMP_Text>().text = "A";
+				}
+			}
 		}
 	}
 
-	private void nextLetter()
+	[System.Serializable]
+	public class PlayerData
 	{
-        if (sm.Instance)
-        {
-			sm.Instance.EffectsSource.Play();
-		}		
-		char[] Alphabet = letters.ToCharArray();
-		GameObject A = GameObject.Find("A");
-		GameObject B = GameObject.Find("B");
-		GameObject C = GameObject.Find("C");
-
-		if (Selected == A)
-		{
-			if (al == 39)
-			{
-				al = 0;
-			}
-			al++;
-
-			char currentChar = Alphabet[al];
-			string currentLetter = currentChar.ToString();
-			A.GetComponent<TMP_Text>().text = currentLetter;
-		}
-
-		if (Selected == B)
-		{
-			if (bl == 39)
-			{
-				bl = 0;
-			}
-			bl++;
-
-			char currentChar = Alphabet[bl];
-			string currentLetter = currentChar.ToString();
-			B.GetComponent<TMP_Text>().text = currentLetter;
-		}
-
-		if (Selected == C)
-		{
-			if (cl == 39)
-			{
-				cl = 0;
-			}
-			cl++;
-
-			char currentChar = Alphabet[cl];
-			string currentLetter = currentChar.ToString();
-			C.GetComponent<TMP_Text>().text = currentLetter;
-		}
+		public string naam;
+		public float score;
 	}
 
-	private void prevLetter()
+	[System.Serializable]
+	public class Spelers
 	{
-		if (sm.Instance)
-		{
-			sm.Instance.EffectsSource.Play();
-		}
-		char[] Alphabet = letters.ToCharArray();
-		GameObject A = GameObject.Find("A");
-		GameObject B = GameObject.Find("B");
-		GameObject C = GameObject.Find("C");
-
-		if (Selected == A)
-		{
-			if (al == 0)
-			{
-				al = 39;
-			}
-			al--;
-
-			char currentChar = Alphabet[al];
-			string currentLetter = currentChar.ToString();
-			A.GetComponent<TMP_Text>().text = currentLetter;
-		}
-
-		if (Selected == B)
-		{
-			if (bl == 0)
-			{
-				bl = 39;
-			}
-			bl--;
-
-			char currentChar = Alphabet[bl];
-			string currentLetter = currentChar.ToString();
-			B.GetComponent<TMP_Text>().text = currentLetter;
-		}
-
-		if (Selected == C)
-		{
-			if (cl == 0)
-			{
-				cl = 39;
-			}
-			cl--;
-
-			char currentChar = Alphabet[cl];
-			string currentLetter = currentChar.ToString();
-			C.GetComponent<TMP_Text>().text = currentLetter;
-		}
+		public List<PlayerData> AllSpelersList = new List<PlayerData>();
 	}
-
-	private void selectNext()
-	{
-		if (sm.Instance)
-		{
-			sm.Instance.EffectsSource.Play();
-		}
-		GameObject A = GameObject.Find("A");
-		GameObject B = GameObject.Find("B");
-		GameObject C = GameObject.Find("C");
-
-		var color = Selected.GetComponent<TMP_Text>().color;
-		color.a = Mathf.Clamp(1, 0, 1);
-		Selected.GetComponent<TMP_Text>().color = color;
-
-		if (Selected == A)
-		{
-			Selected = B;
-		}
-		else if (Selected == B)
-		{
-			Selected = C;
-		}
-		else if (Selected == C)
-		{
-			Selected = A;
-		}
-	}
-
-	private void fillLetters()
-	{
-		Transform messageTransform = GameObject.Find("Message").transform;
-
-		for (var i = 0; i < messageTransform.childCount; i++)
-		{
-			var thisKid = messageTransform.GetChild(i);
-			if (thisKid.name != "winText")
-			{
-				thisKid.GetComponent<TMP_Text>().text = "A";
-			}
-		}
-	}
-}
-
-[System.Serializable]
-public class playerData
-{
-	public string naam;
-	public float score;
-}
-
-[System.Serializable]
-public class spelers
-{
-	public List<playerData> AllSpelersList = new List<playerData>();
 }

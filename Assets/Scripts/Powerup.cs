@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using controllers;
 using UnityEngine;
 
 public class Powerup : MonoBehaviour
@@ -10,49 +11,47 @@ public class Powerup : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D co)
     {
         Speler speler = co.gameObject.GetComponent<Speler>();
-        if (speler)
+        if (!speler) return;
+        switch (gameObject.name)
         {
-            switch (gameObject.name)
-            {
-                case "SpeedBoost":
-                    speedboost(speler);
-                    break;
+            case "SpeedBoost":
+                Speedboost(speler);
+                break;
 
-                case "Invincible":
-                    setInvincible(speler);
-                    break;
+            case "Invincible":
+                SetInvincible(speler);
+                break;
 
-                case "stopPlayer":
-                    stopRandomPlayer(speler);
-                    break;
+            case "stopPlayer":
+                StopRandomPlayer(speler);
+                break;
 
-                case "poison":
-                    speler.die();
-                    break;
+            case "poison":
+                speler.die();
+                break;
 
-                case "points":                   
-                    var coins = PlayerPrefs.GetInt(speler.name + "CollectedCoins");
-                    coins += 1;
-                    PlayerPrefs.SetInt(speler.name + "CollectedCoins", coins);
-                    break;
+            case "points":                   
+                var coins = PlayerPrefs.GetInt(speler.name + "CollectedCoins");
+                coins += 1;
+                PlayerPrefs.SetInt(speler.name + "CollectedCoins", coins);
+                break;
 
-                case "RemoveWalls":
-                    removeWalls();
-                    break;
-            }
+            case "RemoveWalls":
+                RemoveWalls();
+                break;
+        }
 
-            if (sm.Instance != null && gameObject.name != "poison")
-            {
-                AudioClip powerUp = Resources.Load<AudioClip>("music/powerup");
-                sm.Instance.Play(powerUp);
-            }
+        if (sm.Instance != null && gameObject.name != "poison")
+        {
+            AudioClip powerUp = Resources.Load<AudioClip>("music/powerup");
+            sm.Instance.Play(powerUp);
+        }
 
-            Destroy(gameObject);
-        }       
+        Destroy(gameObject);
     }
 
 
-	async void speedboost(Speler speler)
+	async void Speedboost(Speler speler)
     {
 		speler.Speed = 30;
 		speler.directionChanger(speler.lastdir);
@@ -63,15 +62,15 @@ public class Powerup : MonoBehaviour
 		speler.directionChanger(speler.lastdir);
 	}    
 
-    async void setInvincible(Speler speler)
+    async void SetInvincible(Speler speler)
     {
         speler.Invincible = true;
-        doInvincible(speler);
+        DoInvincible(speler);
         await new WaitForSeconds(4);
         speler.Invincible = false;
     }
 
-    async void doInvincible(Speler speler)
+    async void DoInvincible(Speler speler)
     {
         string wallname = speler.Wall.name;
         while (speler.Invincible)
@@ -99,7 +98,7 @@ public class Powerup : MonoBehaviour
         }
     }
 
-    async void stopRandomPlayer(Speler speler)
+    async void StopRandomPlayer(Speler speler)
     {
         GameObject thisPlayer = speler.gameObject;
 
@@ -143,7 +142,7 @@ public class Powerup : MonoBehaviour
 
     }
 
-    void removeWalls()
+    void RemoveWalls()
     {
         GameObject[] walls = GameObject.FindGameObjectsWithTag("playerWall");
 
